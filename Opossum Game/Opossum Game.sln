@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32630.192
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Opossum Game", "Opossum Game.csproj", "{5E5256B7-AC16-43D7-82BA-552E6B3B031B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5E5256B7-AC16-43D7-82BA-552E6B3B031B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E5256B7-AC16-43D7-82BA-552E6B3B031B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E5256B7-AC16-43D7-82BA-552E6B3B031B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E5256B7-AC16-43D7-82BA-552E6B3B031B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7C12D526-D8B2-4E30-8CC5-F469141E0941}
+	EndGlobalSection
+EndGlobal
