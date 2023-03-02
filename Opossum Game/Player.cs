@@ -15,5 +15,12 @@ namespace Opossum_Game
     /// </summary>
     internal class Player
     {
+        //fields
+
+        //properties
+
+        //constructor
+
+        //methods
     }
 }
