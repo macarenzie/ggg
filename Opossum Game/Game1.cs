@@ -4,6 +4,27 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Opossum_Game
 {
+    /// <summary>
+    /// Worked on by: McKenzie Lam
+    /// </summary>
+    #region Enums
+    public enum GameState
+    {
+        Menu,
+        Load,
+        Game,
+        GameLose,
+        GameWin
+    }
+    public enum PlayerState
+    {
+        Front,
+        Back,
+        Left,
+        Right,
+        PlayDead
+    }
+    #endregion
     public class Game1 : Game
     {
         private GraphicsDeviceManager _graphics;
