@@ -10,16 +10,15 @@ using Microsoft.Xna.Framework.Input;
 namespace Opossum_Game
 {
     /// <summary>
-    /// Objects for the player to hide under, can't walk over normally.
-    /// Range detection--can press key to snap under object if close enough.
-    /// Collision method will mess with player position--instead of stopping player movement, 
-    /// will just change position opposite to the current player movement direction. Keeps it separate from the player class.
+    /// Class for objects that the player can interact with. 
+    /// Includes hiding spots and collectibles.
     /// </summary>
-    internal class ObstacleObject
+    internal class InteractibleObject
     {
         //Fields
         private Texture2D obstacleTexture;
         private Rectangle obstacleDimensions;
+        private bool isCollectible;
 
         //Constructor
         ///<summary>
@@ -27,10 +26,12 @@ namespace Opossum_Game
         ///</summary>
         ///<param name="obstacleTexture" the texture displayed for the created object
         ///<param name="obstacleDimensions" the dimensions of the object, used for drawing and checking collision
-        public ObstacleObject (Texture2D obstacleTexture, Rectangle obstacleDimensions)
+        ///<param name="isCollectible" shows if an object can be collected by the player</param>
+        public InteractibleObject (Texture2D obstacleTexture, Rectangle obstacleDimensions, bool isCollectible)
         {
             this.obstacleTexture = obstacleTexture;
             this.obstacleDimensions = obstacleDimensions;
+            this.isCollectible = isCollectible;
         }
 
         //May not need any more methods. Depends on what's being put in player class.
