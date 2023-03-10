@@ -47,6 +47,9 @@ namespace Opossum_Game
             if (mouse.X > rectangle.X && mouse.X < rectangle.X + rectangle.Width &&
                 mouse.Y > rectangle.Y && mouse.Y < rectangle.Y + rectangle.Height)
             {
+                //switch the texture of the button here
+
+                //return true
                 return true;
             }
 

@@ -22,6 +22,11 @@ namespace Opossum_Game
         private int health;
         private int foodCollected;
 
+        //player movement stuff
+        private KeyboardState currKB;
+        private KeyboardState prevKB;
+        private PlayerState playerState;
+
         //properties
         /// <summary>
         /// The amount of food the player has collected
@@ -51,59 +56,6 @@ namespace Opossum_Game
             foodCollected = 0;
             this.pSprite = pSprite;
             this.pLocation = pLocation;
-        }
-
-        //methods
-        /// <summary>
-        /// Will call in the Game1 Update block
-        /// WASD controls, Player does not move if edges are touching
-        /// </summary>
-        /// <param name="prevState"></param>
-        /// <param name="curState"></param>
-        public void Update(KeyState prevState, KeyState curState)
-        {
-            //if collision true, do not change position
-            if (true)           //TEMP; change to Collision();
-            {
-                pLocation.X += 0;
-                pLocation.Y += 0;
-            }
-
-            //else
-            else
-            {
-                //W
-
-                //A
-
-                //S
-
-                //D
-            }
-        }
-
-        /// <summary>
-        /// Draw the player to the screen, highlight if collision with light is true
-        /// </summary>
-        public void Draw(SpriteBatch sb)
-        {
-            sb.Begin();
-
-            //TODO: IF COLLISION IS TRUE
-            sb.Draw(
-                pSprite,
-                pLocation,
-                Color.Red
-                );
-
-            //TODO: IF COLLSION IS FALSE
-            sb.Draw(
-                pSprite,
-                pLocation,
-                Color.White
-                );
-
-            sb.End();
         }
 
         /// <summary>
@@ -178,6 +130,102 @@ namespace Opossum_Game
             KeyState curState, Rectangle otherObstacle)
         {
 
+        }
+
+        /// <summary>
+        /// processes EVERYTHING that affects player movement
+        /// </summary>
+        private void ProcessInput()
+        {
+            //get current kbState
+            currKB = Keyboard.GetState();
+
+            //---------------------------------------------------------------
+            switch (playerState)
+            {
+                //===================================================================
+                case PlayerState.Left:
+                    //if A is pressed
+                    if (currKB.IsKeyDown(Keys.A) && prevKB.IsKeyUp(Keys.A))
+                    {
+                        playerState = PlayerState.Left;
+                        pLocation.X -= 5;
+                    }
+                    break;
+                //===================================================================
+                case PlayerState.Right:
+                    //if D is pressed
+                    if (currKB.IsKeyDown(Keys.D) && prevKB.IsKeyUp(Keys.D))
+                    {
+                        playerState = PlayerState.Right;
+                        pLocation.X += 5;
+                    }
+                    break;
+                case PlayerState.Front:
+                    //if W is pressed
+                    if (currKB.IsKeyDown(Keys.W) && prevKB.IsKeyUp(Keys.W))
+                    {
+                        playerState = PlayerState.Front;
+                        pLocation.Y -= 5;
+                    }
+                    break;
+                //===================================================================
+                case PlayerState.Back:
+                    //if S is pressed
+                    if (currKB.IsKeyDown(Keys.S) && prevKB.IsKeyUp(Keys.S))
+                    {
+                        playerState = PlayerState.Back;
+                        pLocation.X += 5;
+                    }
+                    break;
+                //===================================================================
+                //will update this when enemy obstacles have been made
+                //case PlayerState.PlayDead:
+                //    if (Collision() == true)
+                //    {
+                //        pLocation.X += 0;
+                //        pLocation.Y += 0;
+                //    }
+                //    break;
+            }
+            //---------------------------------------------------------------
+
+            //update prevKB
+            prevKB = currKB;
+        }
+
+        /// <summary>
+        /// all update stuff wtihin player
+        /// </summary>
+        /// <param name="prevState"></param>
+        /// <param name="curState"></param>
+        public void Update(GameTime gametTime)
+        {
+            ProcessInput();
+        }
+
+        /// <summary>
+        /// Draw the player to the screen, highlight if collision with light is true
+        /// </summary>
+        public void Draw(SpriteBatch sb)
+        {
+            sb.Begin();
+
+            //TODO: IF COLLISION IS TRUE
+            sb.Draw(
+                pSprite,
+                pLocation,
+                Color.Red
+                );
+
+            //TODO: IF COLLSION IS FALSE
+            sb.Draw(
+                pSprite,
+                pLocation,
+                Color.White
+                );
+
+            sb.End();
         }
     }
 }
