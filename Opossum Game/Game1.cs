@@ -30,6 +30,21 @@ namespace Opossum_Game
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
+        // button fields
+        // start button
+        private Texture2D startButtonBase;
+        private Texture2D startButtonRollOver;
+
+        // options button
+        private Texture2D optionsButtonBase;
+        private Texture2D optionsButtonRollOver;
+
+        // collectible fields
+
+        // player fields
+
+        // level fields
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -49,6 +64,23 @@ namespace Opossum_Game
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+
+            // button sprites
+            // start button
+            startButtonBase = 
+                Content.Load<Texture2D>("startButtonBase");
+            startButtonRollOver = 
+                Content.Load<Texture2D>("startButtonRollOver");
+
+            // option button
+            optionsButtonBase = 
+                Content.Load<Texture2D>("optionButtonBase");
+            optionsButtonRollOver = 
+                Content.Load<Texture2D>("optionButtonRollOver");
+
+            // player sprite
+
+            // collectible sprites
         }
 
         protected override void Update(GameTime gameTime)
