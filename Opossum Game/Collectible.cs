@@ -16,7 +16,22 @@ namespace Opossum_Game
     /// Use collision to highlight(?) if player is in range, sets bool to true for flag to check if object can be collected.
     /// Actual collection command is in player class.
     /// </summary>
-    internal class Collectible : ObstacleObject
+    internal class Collectible
     {
+        //Fields
+        private Texture2D collectibleTexture;
+        private Rectangle collectibleDimensions;
+
+        //Constructor
+        ///<summary>
+        ///Creates individual collectible objects
+        ///</summary>
+        ///<param name="collectibleTexture" texture of the specified collectible
+        ///<param name="collectibleDimensions" dimensions of the object used for drawing and collision checking
+        public Collectible (Texture2D collectibleTexture, Rectangle collectibleDimensions)
+        {
+            this.collectibleTexture = collectibleTexture;
+            this.collectibleDimensions = collectibleDimensions;
+        }
     }
 }

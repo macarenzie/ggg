@@ -17,5 +17,22 @@ namespace Opossum_Game
     /// </summary>
     internal class ObstacleObject
     {
+        //Fields
+        private Texture2D obstacleTexture;
+        private Rectangle obstacleDimensions;
+
+        //Constructor
+        ///<summary>
+        ///Creates individual obstacle objects.
+        ///</summary>
+        ///<param name="obstacleTexture" the texture displayed for the created object
+        ///<param name="obstacleDimensions" the dimensions of the object, used for drawing and checking collision
+        public ObstacleObject (Texture2D obstacleTexture, Rectangle obstacleDimensions)
+        {
+            this.obstacleTexture = obstacleTexture;
+            this.obstacleDimensions = obstacleDimensions;
+        }
+
+        //May not need any more methods. Depends on what's being put in player class.
     }
 }
