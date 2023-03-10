@@ -15,5 +15,6 @@ namespace Opossum_Game
     /// </summary>
     internal class LevelManager
     {
+        // redundant class (delete after discussion)
     }
 }
