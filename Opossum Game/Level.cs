@@ -61,12 +61,13 @@ namespace Opossum_Game
                 /*      split the data
                  *      determine what kind of data it is
                  *      
-                 *      if ( collectible )
-                 *          create collectible object
-                 *          add to collectible list
-                 *      if ( obstacle )
-                 *          create obstace object
-                 *          add to obstacle list
+                 *      if ( interactable object )
+                 *        if ( collectible )
+                 *            create collectible object
+                 *            add to collectible list
+                 *         if ( obstacle )
+                 *           create obstace object
+                 *              add to obstacle list
                  *          
                  *      if ( enemy )
                  *          create enemy object
