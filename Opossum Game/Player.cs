@@ -62,7 +62,7 @@ namespace Opossum_Game
         /// Checking if the edge's of the player and another object are touching
         /// Exists to keep FSM if statements clean
         /// </summary>
-        /// <param name="otherObject"></param>
+        /// <param name="otherObject">The enemy or obstacle's Rectangle field (property)</param>
         /// <returns>If the player's edge is in contact with another obstacle's edge</returns>
         public bool Collision(Rectangle otherObject)
         {
