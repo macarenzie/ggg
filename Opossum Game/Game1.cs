@@ -4,10 +4,46 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Opossum_Game
 {
+    /// <summary>
+    /// Worked on by: McKenzie Lam
+    /// </summary>
+    #region Enums
+    public enum GameState
+    {
+        Menu,
+        Load,
+        Game,
+        GameLose,
+        GameWin
+    }
+    public enum PlayerState
+    {
+        Front,
+        Back,
+        Left,
+        Right,
+        PlayDead
+    }
+    #endregion
     public class Game1 : Game
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+
+        // button fields
+        // start button
+        private Texture2D startButtonBase;
+        private Texture2D startButtonRollOver;
+
+        // options button
+        private Texture2D optionsButtonBase;
+        private Texture2D optionsButtonRollOver;
+
+        // collectible fields
+
+        // player fields
+
+        // level fields
 
         public Game1()
         {
@@ -28,6 +64,23 @@ namespace Opossum_Game
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+
+            // button sprites
+            // start button
+            startButtonBase = 
+                Content.Load<Texture2D>("startButtonBase");
+            startButtonRollOver = 
+                Content.Load<Texture2D>("startButtonRollOver");
+
+            // option button
+            optionsButtonBase = 
+                Content.Load<Texture2D>("optionButtonBase");
+            optionsButtonRollOver = 
+                Content.Load<Texture2D>("optionButtonRollOver");
+
+            // player sprite
+
+            // collectible sprites
         }
 
         protected override void Update(GameTime gameTime)
