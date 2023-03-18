@@ -64,7 +64,7 @@ namespace Opossum_Game
         /// </summary>
         /// <param name="otherObject">The enemy or obstacle's Rectangle field (property)</param>
         /// <returns>If the player's edge is in contact with another obstacle's edge</returns>
-        public bool Collision(Rectangle otherObject)
+        public bool EdgeCollision(Rectangle otherObject)
         {
             //TODO: 3.18.2023: Maybe have overlap, but in the draw logic keep the edges clipped
             //This logic is not implemented yet -Jamie
@@ -95,14 +95,16 @@ namespace Opossum_Game
         /// Press space to collect food if other object is in range
         /// </summary>
         /// <param name="key"></param>
-        public void Collect(KeyboardState prevState, KeyboardState curState, Rectangle otherObject)
+        public void Collect(KeyboardState prevState, KeyboardState curState, InteractibleObject otherObject)
         {
             //TODO: Check for press and release of space bar
             //Only collect if collectible is in range, check if collectible is collectible
             //Complete IsInRange() method before this one
-            if(prevState == Keyboard.GetState().IsKeyDown(Keys.Space) &&
-               curState == KeyboardState.IsKeyDown(Keys.Space) && 
-                IsInRange(otherObject))
+            if(prevState == KeyboardState.IsKeyDown(Keys.Space) &&
+               curState == KeyboardState.IsKeyDown(Keys.Space) 
+                //IsInRange(otherObject.Rectangle) &&
+                //otherObject is collectible
+                )
             {
                 foodCollected++;
             }
@@ -223,23 +225,29 @@ namespace Opossum_Game
         /// <summary>
         /// Draw the player to the screen, highlight if collision with light is true
         /// </summary>
-        public void Draw(SpriteBatch sb)
+        public void Draw(SpriteBatch sb, Rectangle lightSource)
         {
             sb.Begin();
 
-            //TODO: IF COLLISION IS TRUE
-            sb.Draw(
+            //IF COLLISION IS TRUE
+            if (pLocation.Intersects(lightSource))
+            {
+                sb.Draw(
                 pSprite,
                 pLocation,
                 Color.Red
                 );
+            }
 
-            //TODO: IF COLLSION IS FALSE
-            sb.Draw(
+            //IF COLLSION IS FALSE
+            else
+            {
+                sb.Draw(
                 pSprite,
                 pLocation,
                 Color.White
                 );
+            }
 
             sb.End();
         }
