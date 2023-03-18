@@ -100,8 +100,8 @@ namespace Opossum_Game
             //TODO: Check for press and release of space bar
             //Only collect if collectible is in range, check if collectible is collectible
             //Complete IsInRange() method before this one
-            if(prevState == KeyboardState.IsKeyDown(Keys.Space) &&
-               curState == KeyboardState.IsKeyDown(Keys.Space) 
+            if(prevState.IsKeyDown(Keys.Space) &&
+               curState.IsKeyUp(Keys.Space) 
                 //IsInRange(otherObject.Rectangle) &&
                 //otherObject is collectible
                 )
@@ -144,10 +144,26 @@ namespace Opossum_Game
         /// Check if IsInRange is true
         /// Press and release space bar
         /// </summary>
-        public void Hide(Keys space, KeyState prevState, 
-            KeyState curState, Rectangle otherObstacle)
+        public void Hide(KeyboardState prevState, 
+            KeyboardState curState, Rectangle otherObstacle)
         {
+            //get mid points lined up
+            if (IsInRange(otherObstacle)
+                // && otherObstacle is Hideable
+                )
+            {
+                if(prevState.IsKeyDown(Keys.Space) && curState.IsKeyUp(Keys.Space))
+                {
+                    //These obstacles have to be the same size or larger than the player 
+                    //Centers the player with the obstacle
+                    pLocation.X = (otherObstacle.X + (otherObstacle.Width / 2)) 
+                        - (pLocation.Width/2);
 
+                    pLocation.Y = (otherObstacle.Y + (otherObstacle.Height / 2)) 
+                        - (pLocation.Height / 2);
+
+                }
+            }
         }
 
         /// <summary>
