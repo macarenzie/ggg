@@ -67,11 +67,21 @@ namespace Opossum_Game
         public bool Collision(Rectangle otherObject)
         {
             //TODO: CHECKING FOR COLLISION OF EACH EDGE, NOT A FULL ON OVERLAP. 
-            if (pLocation.Intersects(otherObject)           //CURRENT CONDITION A PLACEHOLDER
-                //Left edge
-                //Right edge
-                //Top edge
-                //Bottom edge
+
+            //3.18.2023: Maybe have overlap, but in the draw logic keep the edges clipped
+            //This logic is not implemented yet
+            if (
+                //LEFT OR RIGHT EDGE
+                ((((pLocation.X + pLocation.Width) == otherObject.X) ||             //left
+                (pLocation.X == (otherObject.X + otherObject.Width))) &&            //right
+                (pLocation.Y <= (otherObject.Y + otherObject.Height)) &&            //between length edges
+                (pLocation.Y >= otherObject.Y)) ||
+
+                //TOP OR BOTTOM EDGE
+                ((((pLocation.Y + pLocation.Height) == otherObject.Y) ||          //Top
+                (pLocation.Y == (otherObject.Y + otherObject.Height))) &&         //Bottom
+                (pLocation.X <= (otherObject.X + otherObject.Width)) &&           //Between width edges
+                (pLocation.X >= otherObject.X))
                 )
             {
                 return true;
