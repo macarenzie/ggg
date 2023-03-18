@@ -66,21 +66,19 @@ namespace Opossum_Game
         /// <returns>If the player's edge is in contact with another obstacle's edge</returns>
         public bool Collision(Rectangle otherObject)
         {
-            //TODO: CHECKING FOR COLLISION OF EACH EDGE, NOT A FULL ON OVERLAP. 
-
-            //3.18.2023: Maybe have overlap, but in the draw logic keep the edges clipped
-            //This logic is not implemented yet
+            //TODO: 3.18.2023: Maybe have overlap, but in the draw logic keep the edges clipped
+            //This logic is not implemented yet -Jamie
             if (
                 //LEFT OR RIGHT EDGE
-                ((((pLocation.X + pLocation.Width) == otherObject.X) ||             //left
-                (pLocation.X == (otherObject.X + otherObject.Width))) &&            //right
-                (pLocation.Y <= (otherObject.Y + otherObject.Height)) &&            //between length edges
+                ((((pLocation.X + pLocation.Width) == otherObject.X) ||      //left
+                (pLocation.X == (otherObject.X + otherObject.Width))) &&     //right
+                (pLocation.Y <= (otherObject.Y + otherObject.Height)) &&     //between length edges
                 (pLocation.Y >= otherObject.Y)) ||
 
                 //TOP OR BOTTOM EDGE
-                ((((pLocation.Y + pLocation.Height) == otherObject.Y) ||          //Top
-                (pLocation.Y == (otherObject.Y + otherObject.Height))) &&         //Bottom
-                (pLocation.X <= (otherObject.X + otherObject.Width)) &&           //Between width edges
+                ((((pLocation.Y + pLocation.Height) == otherObject.Y) ||     //Top
+                (pLocation.Y == (otherObject.Y + otherObject.Height))) &&    //Bottom
+                (pLocation.X <= (otherObject.X + otherObject.Width)) &&      //Between width edges
                 (pLocation.X >= otherObject.X))
                 )
             {
@@ -97,12 +95,17 @@ namespace Opossum_Game
         /// Press space to collect food if other object is in range
         /// </summary>
         /// <param name="key"></param>
-        public void Collect(Keys space, KeyState prevState, KeyState curState)
+        public void Collect(KeyboardState prevState, KeyboardState curState, Rectangle otherObject)
         {
             //TODO: Check for press and release of space bar
             //Only collect if collectible is in range, check if collectible is collectible
             //Complete IsInRange() method before this one
-            foodCollected++;
+            if(prevState == Keyboard.GetState().IsKeyDown(Keys.Space) &&
+               curState == KeyboardState.IsKeyDown(Keys.Space) && 
+                IsInRange(otherObject))
+            {
+                foodCollected++;
+            }
         }
 
         /// <summary>
@@ -114,12 +117,15 @@ namespace Opossum_Game
         /// <returns></returns>
         public bool IsInRange(Rectangle otherObject)
         {
+            //These numbers can be adjusted when visuals are implemented and do what looks good
             float dx = Math.Abs((this.pLocation.Width / 2) - (otherObject.Width / 2));
             float dy = Math.Abs((this.pLocation.Height / 2) - (otherObject.Height / 2));
+
             if (
                 //TODO: Check distance between objects
-                //distance is based on midpoint of each object
-                (dx + 20) >= (this.pLocation.X + this.pLocation.Width) - (otherObject.X + otherObject.Width) //incomplete
+                //distance is based on midpoint of each object??
+                (dx + 20) >= (pLocation.X + pLocation.Width) - (otherObject.X + otherObject.Width)
+                && (dy + 20) >= (pLocation.Y + pLocation.Width) - (otherObject.Y + otherObject.Height)
                 )
             {
                 return true;
