@@ -6,6 +6,7 @@ namespace Opossum_Game
 {
     /// <summary>
     /// Worked on by: McKenzie Lam
+    /// Hui Lin: worked on enums and current state game state stuff
     /// </summary>
     #region Enums
     public enum GameState
@@ -42,6 +43,7 @@ namespace Opossum_Game
         // collectible fields
 
         // player fields
+        private GameState currentState;
 
         // level fields
 
@@ -89,6 +91,17 @@ namespace Opossum_Game
                 Exit();
 
             // TODO: Add your update logic here
+            switch (currentState)
+            {
+                case GameState.Menu:
+                    break;
+                case GameState.Load:
+                    break;
+                case GameState.GameLose:
+                    break;
+                case GameState.GameWin:
+                    break;
+            }
 
             base.Update(gameTime);
         }
