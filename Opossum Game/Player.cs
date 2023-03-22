@@ -64,7 +64,8 @@ namespace Opossum_Game
         /// </summary>
         /// <param name="otherObject">The enemy or obstacle's Rectangle field (property)</param>
         /// <returns>If the player's edge is in contact with another obstacle's edge</returns>
-        public bool EdgeCollision(Rectangle otherObject)
+        //TODO: We may not need this method. Commented out for now in case we need to pull any code from it. -Julia
+        /*public bool EdgeCollision(Rectangle otherObject)
         {
             //TODO: 3.18.2023: Maybe have overlap, but in the draw logic keep the edges clipped
             //This logic is not implemented yet -Jamie
@@ -89,6 +90,30 @@ namespace Opossum_Game
             {
                 return false;
             }
+        } */
+
+        /// <summary>
+        /// Method used to detect if the player is colliding with an obstacle.
+        /// Assumes there is a list of InteractibleObjects to loop through and check.
+        /// </summary>
+        //TODO: Is there an InteractibleObjects list? Or does this condition need to be changed? -Julia
+        //TODO: How to determine what edge to block movement from? May need 4 separate bools and a revamp of this method. -Julia
+        public bool ObstacleCollision(List<InteractibleObject> objects)
+        {
+            //Loops through the entire provided list
+            for (int i = 0; i < objects.Count; i++)
+            {
+                //Only checks collision if the object is an obstacle
+                if (objects[i] is Obstacle)
+                {
+                    if (pLocation.Intersects(objects[i].ObjectDimensions))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -169,6 +194,7 @@ namespace Opossum_Game
         /// <summary>
         /// processes EVERYTHING that affects player movement
         /// </summary>
+        //TODO: Implement edge collision--block the player from moving off screen (left/right edges), or change panel (top/bottom edges) -Julia
         private void ProcessInput()
         {
             //get current kbState
