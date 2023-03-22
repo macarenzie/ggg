@@ -180,37 +180,102 @@ namespace Opossum_Game
                 //===================================================================
                 case PlayerState.Left:
                     //if A is pressed
-                    if (currKB.IsKeyDown(Keys.A) && prevKB.IsKeyUp(Keys.A))
+                    if (currKB.IsKeyDown(Keys.A))
                     {
-                        playerState = PlayerState.Left;
                         pLocation.X -= 5;
+
+                        //no moving in negative x direction if A is released
+                        if(currKB.IsKeyUp(Keys.A) && prevKB.IsKeyDown(Keys.A))
+                        {
+                            pLocation.X += 0;
+                        }
                     }
+
+                    //TRANSITIONS
+                    if (currKB.IsKeyDown(Keys.D) && prevKB.IsKeyUp(Keys.D))
+                        playerState = PlayerState.Right;
+
+                    if (currKB.IsKeyDown(Keys.W) && prevKB.IsKeyUp(Keys.W))
+                        playerState = PlayerState.Front;
+
+                    if (currKB.IsKeyDown(Keys.S) && prevKB.IsKeyUp(Keys.S))
+                        playerState = PlayerState.Back;
+
                     break;
                 //===================================================================
                 case PlayerState.Right:
                     //if D is pressed
-                    if (currKB.IsKeyDown(Keys.D) && prevKB.IsKeyUp(Keys.D))
+                    if (currKB.IsKeyDown(Keys.D))
                     {
-                        playerState = PlayerState.Right;
                         pLocation.X += 5;
+
+                        //No moving in positive x direction if D is released
+                        if(currKB.IsKeyUp(Keys.D) && prevKB.IsKeyDown(Keys.D))
+                        {
+                            pLocation.X += 0;
+                        }
                     }
+
+                    //TRANSITIONS
+                    if (currKB.IsKeyDown(Keys.A) && prevKB.IsKeyUp(Keys.A))
+                        playerState = PlayerState.Left;
+
+                    if (currKB.IsKeyDown(Keys.W) && prevKB.IsKeyUp(Keys.W))
+                        playerState = PlayerState.Front;
+
+                    if (currKB.IsKeyDown(Keys.S) && prevKB.IsKeyUp(Keys.S))
+                        playerState = PlayerState.Back;
+
                     break;
+
                 case PlayerState.Front:
                     //if W is pressed
-                    if (currKB.IsKeyDown(Keys.W) && prevKB.IsKeyUp(Keys.W))
+                    if (currKB.IsKeyDown(Keys.W))
                     {
-                        playerState = PlayerState.Front;
                         pLocation.Y -= 5;
+
+                        //No moving in the negative y direction if W is released
+                        if(currKB.IsKeyUp(Keys.W) && prevKB.IsKeyDown(Keys.W))
+                        {
+                            pLocation.Y += 0;
+                        }
                     }
+
+                    //TRANSITIONS
+                    if (currKB.IsKeyDown(Keys.A) && prevKB.IsKeyUp(Keys.A))
+                        playerState = PlayerState.Left;
+
+                    if (currKB.IsKeyDown(Keys.D) && prevKB.IsKeyUp(Keys.D))
+                        playerState = PlayerState.Right;
+
+                    if (currKB.IsKeyDown(Keys.S) && prevKB.IsKeyUp(Keys.S))
+                        playerState = PlayerState.Back;
+
                     break;
                 //===================================================================
                 case PlayerState.Back:
                     //if S is pressed
-                    if (currKB.IsKeyDown(Keys.S) && prevKB.IsKeyUp(Keys.S))
+                    if (currKB.IsKeyDown(Keys.S))
                     {
-                        playerState = PlayerState.Back;
-                        pLocation.X += 5;
+                        pLocation.Y += 5;
+
+                        //No moving in the positive Y direction if S is released
+                        if(currKB.IsKeyUp(Keys.S) && prevKB.IsKeyDown(Keys.S))
+                        {
+                            pLocation.Y += 0;
+                        }
                     }
+
+                    //TRANSITIONS
+                    if (currKB.IsKeyDown(Keys.A) && prevKB.IsKeyUp(Keys.A))
+                        playerState = PlayerState.Left;
+
+                    if (currKB.IsKeyDown(Keys.D) && prevKB.IsKeyUp(Keys.D))
+                        playerState = PlayerState.Right;
+
+                    if (currKB.IsKeyDown(Keys.W) && prevKB.IsKeyUp(Keys.W))
+                        playerState = PlayerState.Front;
+
                     break;
                 //===================================================================
                 //will update this when enemy obstacles have been made
@@ -243,8 +308,6 @@ namespace Opossum_Game
         /// </summary>
         public void Draw(SpriteBatch sb, Rectangle lightSource)
         {
-            sb.Begin();
-
             //IF COLLISION IS TRUE
             if (pLocation.Intersects(lightSource))
             {
@@ -265,7 +328,6 @@ namespace Opossum_Game
                 );
             }
 
-            sb.End();
         }
     }
 }
