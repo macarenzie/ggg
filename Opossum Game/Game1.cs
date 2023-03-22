@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Input;
 namespace Opossum_Game
 {
     /// <summary>
-    /// Worked on by: McKenzie Lam
+    /// McKenzie: added enums and started loading in content
     /// Hui Lin: worked on enums and current state game state stuff
     /// </summary>
     #region Enums
@@ -45,11 +45,16 @@ namespace Opossum_Game
         private Texture2D optionsButtonRollOver;
 
         // collectible fields
+        private Texture2D collectibleBurger;
+        private Texture2D collectibleCandy;
+        private Texture2D collectibleChips;
 
         // player fields
         private GameState currentState;
+        private Texture2D pSprite;
 
         // level fields
+        
 
         public Game1()
         {

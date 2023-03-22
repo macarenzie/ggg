@@ -23,6 +23,7 @@ namespace Opossum_Game
         // collectible list
         // obstacle list
         // enemy list
+        // player object
 
         // properties ---------------------------------------------------------
 
@@ -33,7 +34,6 @@ namespace Opossum_Game
          *      - then utilize properties to draw each respective list
          */
         // ********************************************************************
-
 
         // collectible list (get only)
 
