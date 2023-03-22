@@ -11,7 +11,6 @@ namespace Opossum_Game
 {
     /// <summary>
     /// Will represent the object the player is controlling
-    /// Interfaces: ICollide
     /// Majority Written by: Jamie Zheng
     /// </summary>
     internal class Player
@@ -100,10 +99,10 @@ namespace Opossum_Game
             //TODO: Check for press and release of space bar
             //Only collect if collectible is in range, check if collectible is collectible
             //Complete IsInRange() method before this one
-            if(prevState.IsKeyDown(Keys.Space) &&
+            if(prevState.IsKeyDown(Keys.Space) &&               //key release check
                curState.IsKeyUp(Keys.Space) &&
-                IsInRange(otherObject.ObjectDimensions) &&
-                otherObject is Collectible
+                IsInRange(otherObject.ObjectDimensions) &&      //Check if in range
+                otherObject is Collectible                      //Check object is collectible
                 )
             {
                 foodCollected++;
