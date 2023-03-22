@@ -103,7 +103,7 @@ namespace Opossum_Game
             if(prevState.IsKeyDown(Keys.Space) &&
                curState.IsKeyUp(Keys.Space) 
                 //IsInRange(otherObject.Rectangle) &&
-                //otherObject is collectible
+                //otherObject is Collectible
                 )
             {
                 foodCollected++;
