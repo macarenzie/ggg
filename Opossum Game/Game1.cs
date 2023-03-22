@@ -62,7 +62,7 @@ namespace Opossum_Game
         // font fields
         private SpriteFont comicsans30;
 
-
+        private Player player;
 
         public Game1()
         {
@@ -110,6 +110,8 @@ namespace Opossum_Game
 
             // player sprite
             pSprite = Content.Load<Texture2D>("pSprite");
+            // here bc pSprite is loaded here
+            player = new Player(pSprite, new Rectangle()); 
 
             // collectible sprites
             collectibleBurger = Content.Load<Texture2D>("collectibleBurger");
@@ -162,6 +164,7 @@ namespace Opossum_Game
 
                     break;
                 case GameState.Game:
+                    player.Update(gameTime);
 
                     // PLACEHOLDER TO TEST TRANSITIONS
                     if (SingleKeyPress(Keys.W, kbstate, previousKbState))
@@ -216,6 +219,7 @@ namespace Opossum_Game
                     // TEMP
                     _spriteBatch.DrawString(comicsans30, string.Format("GAMEPLAY SCREEN"), new Vector2(10, 100), Color.Red);
                     _spriteBatch.DrawString(comicsans30, string.Format("PRESS 'W' FOR GAME WIN OR 'L' FOR GAME LOSE"), new Vector2(10, 200), Color.Red);
+                    player.Draw(_spriteBatch, new Rectangle()); //rectangle temp
                     break;
                 case GameState.GameLose:
                     _spriteBatch.DrawString(comicsans30, string.Format("GAME LOSE SCREEN"), new Vector2(10, 100), Color.Red);
