@@ -12,7 +12,7 @@ namespace Opossum_Game
     public enum GameState
     {
         Menu,
-        Load,
+        Options,
         Game,
         GameLose,
         GameWin
@@ -54,7 +54,11 @@ namespace Opossum_Game
         private Texture2D pSprite;
 
         // level fields
-        
+
+        // keyboard state tracking
+        private KeyboardState kbstate;
+        private KeyboardState previousKbState;
+
 
         public Game1()
         {
@@ -122,12 +126,54 @@ namespace Opossum_Game
             switch (currentState)
             {
                 case GameState.Menu:
+                    // if player presses start button
+
+                    // PLACEHOLDER CODE TO TEST GAME STATE TRANSITIONS
+                    if (SingleKeyPress(Keys.G, kbstate, previousKbState))
+                    {
+                        currentState = GameState.Game;
+                    }
+
+                    if (SingleKeyPress(Keys.O, kbstate, previousKbState))
+                    {
+                        currentState = GameState.Options;
+                    }
+
+                    // if player presses options button
                     break;
-                case GameState.Load:
+                case GameState.Options:
+
+                    // PLACEHOLDER TO TEST TRANSITIONS
+                    if (SingleKeyPress(Keys.M, kbstate, previousKbState))
+                    {
+                        currentState = GameState.Menu;
+                    }
+
+                    break;
+                case GameState.Game:
+
+                    // PLACEHOLDER TO TEST TRANSITIONS
+                    if (SingleKeyPress(Keys.W, kbstate, previousKbState))
+                    {
+                        currentState = GameState.GameWin;
+                    }
+                    // PLACEHOLDER TO TEST TRANSITIONS
+                    if (SingleKeyPress(Keys.L, kbstate, previousKbState))
+                    {
+                        currentState = GameState.GameLose;
+                    }
                     break;
                 case GameState.GameLose:
+                    if (SingleKeyPress(Keys.M, kbstate, previousKbState))
+                    {
+                        currentState = GameState.Menu;
+                    }
                     break;
                 case GameState.GameWin:
+                    if (SingleKeyPress(Keys.M, kbstate, previousKbState))
+                    {
+                        currentState = GameState.Menu;
+                    }
                     break;
             }
 
@@ -147,8 +193,10 @@ namespace Opossum_Game
                     _spriteBatch.Draw(startScreen, new Rectangle(0, 0, 900, 900), Color.White);
                     startButtonBase.Draw(_spriteBatch);
                     break;
-                case GameState.Load:
+                case GameState.Options:
                     
+                    break;
+                case GameState.Game:
                     break;
                 case GameState.GameLose:
                     break;
@@ -157,6 +205,20 @@ namespace Opossum_Game
             }
             _spriteBatch.End();
             base.Draw(gameTime);
+        }
+
+        // methods ------------------------------------------------------------
+        private bool SingleKeyPress (
+            Keys key, KeyboardState currentState, KeyboardState previousState)
+        {
+            if (currentState.IsKeyDown(key) && previousState.IsKeyUp(key))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }
