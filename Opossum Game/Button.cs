@@ -9,9 +9,14 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Opossum_Game
 {
+    /// <summary>
+    /// Representing a button
+    /// Has roll-over built in 
+    /// </summary>
     internal class Button
     {
         private Texture2D button;
+        private Texture2D rolloverButton;
         private Rectangle rectangle;
 
         /// <summary>
@@ -20,8 +25,9 @@ namespace Opossum_Game
         /// <param name="image"> button image </param>
         /// <param name="rectangle"> rectangle of button </param>
         /// <param name="graphics"> size of the screen </param>
-        public Button(Texture2D image, Rectangle rectangle)
+        public Button(Texture2D image, Rectangle rectangle, Texture2D rollOverVersion)
         {
+            this.rolloverButton = rollOverVersion;
             this.button = image;
             this.rectangle = rectangle;
 
@@ -29,31 +35,42 @@ namespace Opossum_Game
 
         /// <summary>
         /// draws the button to the screen
+        /// Changes texture if mouse is over the button
         /// </summary>
         /// <param name="sb"> sprite batch parameter </param>
         public void Draw(SpriteBatch sb)
         {
-            sb.Draw(button, rectangle, Color.White);
+            //Rollover texture
+            if (MouseContains())
+            {
+                sb.Draw(rolloverButton, rectangle, Color.White);
+            }
+
+            //Regular texture
+            else
+            {
+                sb.Draw(button, rectangle, Color.White);
+            }
         }
 
         /// <summary>
-        /// checks if the position of the mouse is withing button bounds
+        /// checks if the position of the mouse is within button bounds
         /// </summary>
         /// <returns> bool based on conditions </returns>
-        public bool MousePosition()
+        public bool MouseContains()
         {
             //might change this to contains for easier reading - ariel
             MouseState mouse = Mouse.GetState();
             if (mouse.X > rectangle.X && mouse.X < rectangle.X + rectangle.Width &&
                 mouse.Y > rectangle.Y && mouse.Y < rectangle.Y + rectangle.Height)
             {
-                //switch the texture of the button here
-
                 //return true
                 return true;
             }
-
-            return false;
+            else
+            {
+                return false;
+            }
         }
 
         /// <summary>

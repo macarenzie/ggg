@@ -12,7 +12,7 @@ namespace Opossum_Game
     public enum GameState
     {
         Menu,
-        Load,
+        Options,
         Game,
         GameLose,
         GameWin
@@ -54,7 +54,15 @@ namespace Opossum_Game
         private Texture2D pSprite;
 
         // level fields
-        
+
+        // keyboard state tracking
+        private KeyboardState kbstate;
+        private KeyboardState previousKbState;
+
+        // font fields
+        private SpriteFont comicsans30;
+
+
 
         public Game1()
         {
@@ -73,6 +81,7 @@ namespace Opossum_Game
             // TODO: Add your initialization logic here
 
             base.Initialize();
+            currentState = GameState.Menu;
         }
 
         protected override void LoadContent()
@@ -90,7 +99,8 @@ namespace Opossum_Game
             startButtonBase = new Button(startButtonBase2D, new Rectangle((_graphics.PreferredBackBufferWidth / 2) - (startButtonBase2D.Width / 4),
                                                                           (_graphics.PreferredBackBufferHeight / 2) - (startButtonBase2D.Height / 4),
                                                                           startButtonBase2D.Width / 2,
-                                                                          startButtonBase2D.Height / 2));
+                                                                          startButtonBase2D.Height / 2), 
+                                                                          startButtonRollOver);
 
             // option button
             optionsButtonBase = 
@@ -109,6 +119,9 @@ namespace Opossum_Game
             //start screen
             startScreen =
                 Content.Load<Texture2D>("startScreen");
+
+            // temporary font
+            comicsans30 = Content.Load<SpriteFont>("comicsans30");
         }
 
         protected override void Update(GameTime gameTime)
@@ -117,17 +130,61 @@ namespace Opossum_Game
                 Exit();
 
             // TODO: Add your update logic here
-            currentState = GameState.Menu;
+            
+            kbstate = Keyboard.GetState();
+            
 
             switch (currentState)
             {
                 case GameState.Menu:
+                    // if player presses start button
+
+                    // PLACEHOLDER CODE TO TEST GAME STATE TRANSITIONS
+                    if (SingleKeyPress(Keys.G, kbstate, previousKbState))
+                    {
+                        currentState = GameState.Game;
+                    }
+
+                    if (SingleKeyPress(Keys.O, kbstate, previousKbState))
+                    {
+                        currentState = GameState.Options;
+                    }
+
+                    // if player presses options button
                     break;
-                case GameState.Load:
+                case GameState.Options:
+
+                    // PLACEHOLDER TO TEST TRANSITIONS
+                    if (SingleKeyPress(Keys.M, kbstate, previousKbState))
+                    {
+                        currentState = GameState.Menu;
+                    }
+
+                    break;
+                case GameState.Game:
+
+                    // PLACEHOLDER TO TEST TRANSITIONS
+                    if (SingleKeyPress(Keys.W, kbstate, previousKbState))
+                    {
+                        currentState = GameState.GameWin;
+                    }
+                    // PLACEHOLDER TO TEST TRANSITIONS
+                    if (SingleKeyPress(Keys.L, kbstate, previousKbState))
+                    {
+                        currentState = GameState.GameLose;
+                    }
                     break;
                 case GameState.GameLose:
+                    if (SingleKeyPress(Keys.M, kbstate, previousKbState))
+                    {
+                        currentState = GameState.Menu;
+                    }
                     break;
                 case GameState.GameWin:
+                    if (SingleKeyPress(Keys.M, kbstate, previousKbState))
+                    {
+                        currentState = GameState.Menu;
+                    }
                     break;
             }
 
@@ -146,17 +203,45 @@ namespace Opossum_Game
                 case GameState.Menu:
                     _spriteBatch.Draw(startScreen, new Rectangle(0, 0, 900, 900), Color.White);
                     startButtonBase.Draw(_spriteBatch);
+
+                    // TEMP
+                    _spriteBatch.DrawString(comicsans30, string.Format("PRESS 'G' FOR GAME OR 'O' FOR OPTIONS"), new Vector2 (10, 100), Color.Red);
                     break;
-                case GameState.Load:
-                    
+                case GameState.Options:
+                    // TEMP
+                    _spriteBatch.DrawString(comicsans30, string.Format("OPTIONS SCREEN"), new Vector2(10, 100), Color.Red);
+                    _spriteBatch.DrawString(comicsans30, string.Format("PRESS 'M' FOR MAIN MENU"), new Vector2(10, 200), Color.Red);
+                    break;
+                case GameState.Game:
+                    // TEMP
+                    _spriteBatch.DrawString(comicsans30, string.Format("GAMEPLAY SCREEN"), new Vector2(10, 100), Color.Red);
+                    _spriteBatch.DrawString(comicsans30, string.Format("PRESS 'W' FOR GAME WIN OR 'L' FOR GAME LOSE"), new Vector2(10, 200), Color.Red);
                     break;
                 case GameState.GameLose:
+                    _spriteBatch.DrawString(comicsans30, string.Format("GAME LOSE SCREEN"), new Vector2(10, 100), Color.Red);
+                    _spriteBatch.DrawString(comicsans30, string.Format("PRESS 'M' FOR MAIN MENU"), new Vector2(10, 200), Color.Red);
                     break;
                 case GameState.GameWin:
+                    _spriteBatch.DrawString(comicsans30, string.Format("GAME WIN SCREEN"), new Vector2(10, 100), Color.Red);
+                    _spriteBatch.DrawString(comicsans30, string.Format("PRESS 'M' FOR MAIN MENU"), new Vector2(10, 200), Color.Red);
                     break;
             }
             _spriteBatch.End();
             base.Draw(gameTime);
+        }
+
+        // methods ------------------------------------------------------------
+        private bool SingleKeyPress (
+            Keys key, KeyboardState currentState, KeyboardState previousState)
+        {
+            if (currentState.IsKeyDown(key) && previousState.IsKeyUp(key))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }
