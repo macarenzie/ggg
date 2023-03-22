@@ -35,9 +35,10 @@ namespace Opossum_Game
 
 
         // start menu and buttons
-        private Texture2D startButtonBase;
+        private Texture2D startButtonBase2D;
         private Texture2D startButtonRollOver;
         private Texture2D startScreen;
+        private Button startButtonBase;
 
         // options button
         private Texture2D optionsButtonBase;
@@ -55,11 +56,20 @@ namespace Opossum_Game
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+
+            //change window size
+            _graphics.PreferredBackBufferHeight = 900;
+            _graphics.PreferredBackBufferWidth = 900;
+
         }
 
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            //900 / 2 = 450
+            //450 - 250 X 
+            //450 - 100  Y
+            
 
             base.Initialize();
         }
@@ -72,10 +82,11 @@ namespace Opossum_Game
 
             // button sprites
             // start button
-            startButtonBase = 
+            startButtonBase2D = 
                 Content.Load<Texture2D>("startButtonBase");
             startButtonRollOver = 
                 Content.Load<Texture2D>("startButtonRollOver");
+            startButtonBase = new Button(startButtonBase2D, new Rectangle(200, 350, 250, 100));
 
             // option button
             optionsButtonBase = 
@@ -98,6 +109,8 @@ namespace Opossum_Game
                 Exit();
 
             // TODO: Add your update logic here
+            currentState = GameState.Menu;
+
             switch (currentState)
             {
                 case GameState.Menu:
@@ -124,6 +137,7 @@ namespace Opossum_Game
             {
                 case GameState.Menu:
                     _spriteBatch.Draw(startScreen, new Rectangle(0, 0, 900, 900), Color.White);
+                    startButtonBase.Draw(_spriteBatch);
                     break;
                 case GameState.Load:
                     break;
