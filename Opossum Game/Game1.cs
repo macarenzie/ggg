@@ -71,10 +71,6 @@ namespace Opossum_Game
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            //900 / 2 = 450
-            //450 - 250 X 
-            //450 - 100  Y
-            
 
             base.Initialize();
         }
@@ -91,7 +87,10 @@ namespace Opossum_Game
                 Content.Load<Texture2D>("startButtonBase");
             startButtonRollOver = 
                 Content.Load<Texture2D>("startButtonRollOver");
-            startButtonBase = new Button(startButtonBase2D, new Rectangle(200, 350, 250, 100));
+            startButtonBase = new Button(startButtonBase2D, new Rectangle((_graphics.PreferredBackBufferWidth / 2) - (startButtonBase2D.Width / 4),
+                                                                          (_graphics.PreferredBackBufferHeight / 2) - (startButtonBase2D.Height / 4),
+                                                                          startButtonBase2D.Width / 2,
+                                                                          startButtonBase2D.Height / 2));
 
             // option button
             optionsButtonBase = 
@@ -149,6 +148,7 @@ namespace Opossum_Game
                     startButtonBase.Draw(_spriteBatch);
                     break;
                 case GameState.Load:
+                    
                     break;
                 case GameState.GameLose:
                     break;
