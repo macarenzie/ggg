@@ -32,9 +32,12 @@ namespace Opossum_Game
         private SpriteBatch _spriteBatch;
 
         // button fields
-        // start button
+
+
+        // start menu and buttons
         private Texture2D startButtonBase;
         private Texture2D startButtonRollOver;
+        private Texture2D startScreen;
 
         // options button
         private Texture2D optionsButtonBase;
@@ -88,6 +91,10 @@ namespace Opossum_Game
             // player sprite
 
             // collectible sprites
+
+            //start screen
+            startScreen =
+                Content.Load<Texture2D>("startScreen");
         }
 
         protected override void Update(GameTime gameTime)
@@ -116,7 +123,21 @@ namespace Opossum_Game
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-
+            //switch statement for diff screens and buttons that need to be drawn. 
+            _spriteBatch.Begin();
+            switch (currentState)
+            {
+                case GameState.Menu:
+                    _spriteBatch.Draw(startScreen, new Rectangle(0, 0, 900, 900), Color.White);
+                    break;
+                case GameState.Load:
+                    break;
+                case GameState.GameLose:
+                    break;
+                case GameState.GameWin:
+                    break;
+            }
+            _spriteBatch.End();
             base.Draw(gameTime);
         }
     }
