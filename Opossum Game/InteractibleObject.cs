@@ -10,30 +10,25 @@ using Microsoft.Xna.Framework.Input;
 namespace Opossum_Game
 {
     /// <summary>
-    /// Class for objects that the player can interact with. 
-    /// Includes hiding spots and collectibles.
+    /// Abstract class for objects the player is able to interact with in some form. 
+    /// Utilized as the parent class for obstacles and collectibles.
     /// </summary>
-    internal class InteractibleObject
+    internal abstract class InteractibleObject
     {
         //Fields
-        private Texture2D obstacleTexture;
-        private Rectangle obstacleDimensions;
-        private bool isCollectible;
+        protected Texture2D objectTexture;
+        protected Rectangle objectDimensions;
 
         //Constructor
         ///<summary>
         ///Creates individual obstacle objects.
         ///</summary>
-        ///<param name="obstacleTexture" the texture displayed for the created object
-        ///<param name="obstacleDimensions" the dimensions of the object, used for drawing and checking collision
-        ///<param name="isCollectible" shows if an object can be collected by the player</param>
-        public InteractibleObject (Texture2D obstacleTexture, Rectangle obstacleDimensions, bool isCollectible)
+        ///<param name="objectTexture" the texture displayed for the created object
+        ///<param name="objectDimensions" the dimensions of the object, used for drawing and checking collision
+        public InteractibleObject (Texture2D objectTexture, Rectangle objectDimensions)
         {
-            this.obstacleTexture = obstacleTexture;
-            this.obstacleDimensions = obstacleDimensions;
-            this.isCollectible = isCollectible;
-        }
-
-        //May not need any more methods. Depends on what's being put in player class.
+            this.objectTexture = objectTexture;
+            this.objectDimensions = objectDimensions;
+        } 
     }
 }
