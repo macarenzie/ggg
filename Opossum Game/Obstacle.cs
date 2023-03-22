@@ -17,9 +17,9 @@ namespace Opossum_Game
     internal class Obstacle : InteractibleObject
     {
         //Parameterized constructor
-        public Obstacle() : base (Texture2D objectTexture, Rectangle objectDimensions)
-        {
-
-        }
+        //Only utilizes fields from the parent class at present
+        public Obstacle(Texture2D objectTexture, Rectangle objectDimensions) 
+            : base (objectTexture, objectDimensions) { }
+        
     }
 }
