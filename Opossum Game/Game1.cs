@@ -100,8 +100,12 @@ namespace Opossum_Game
                 Content.Load<Texture2D>("optionButtonRollOver");
 
             // player sprite
+            pSprite = Content.Load<Texture2D>("pSprite");
 
             // collectible sprites
+            collectibleBurger = Content.Load<Texture2D>("collectibleBurger");
+            collectibleCandy = Content.Load<Texture2D>("collectibleCandy");
+            collectibleChips = Content.Load<Texture2D>("collectibleChips");
 
             //start screen
             startScreen =
