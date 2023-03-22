@@ -101,9 +101,9 @@ namespace Opossum_Game
             //Only collect if collectible is in range, check if collectible is collectible
             //Complete IsInRange() method before this one
             if(prevState.IsKeyDown(Keys.Space) &&
-               curState.IsKeyUp(Keys.Space) 
-                //IsInRange(otherObject.Rectangle) &&
-                //otherObject is Collectible
+               curState.IsKeyUp(Keys.Space) &&
+                IsInRange(otherObject.ObjectDimensions) &&
+                otherObject is Collectible
                 )
             {
                 foodCollected++;
