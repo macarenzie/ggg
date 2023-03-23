@@ -124,7 +124,7 @@ namespace Opossum_Game
             // player sprite
             pSprite = Content.Load<Texture2D>("pSprite");
             // here bc pSprite is loaded here
-            //player = new Player(pSprite, new Rectangle()); 
+            player = new Player(pSprite, new Rectangle(10, 10, pSprite.Width / 4, pSprite.Height / 4)); 
 
             // collectible sprites
             collectibleBurger = Content.Load<Texture2D>("collectibleBurger");
@@ -179,7 +179,7 @@ namespace Opossum_Game
 
                     break;
                 case GameState.Game:
-                    //player.Update(gameTime);
+                    player.Update(gameTime);
 
                     // PLACEHOLDER TO TEST TRANSITIONS
                     if (SingleKeyPress(Keys.Z, kbstate, previousKbState))
@@ -257,6 +257,7 @@ namespace Opossum_Game
                         string.Format("PRESS 'Z' FOR GAME WIN OR 'L' FOR GAME LOSE"), 
                         new Vector2(10, 200), 
                         Color.Red);
+                    player.Draw(_spriteBatch, new Rectangle()); //rectangle temp
                     break;
                 case GameState.GameLose:
                     _spriteBatch.DrawString(
