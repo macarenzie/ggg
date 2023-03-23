@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Input;
 namespace Opossum_Game
 {
     /// <summary>
-    /// McKenzie: added enums and started loading in content
+    /// McKenzie: added enums and started loading in content, worked on temp fsm for update and draw
     /// Hui Lin: worked on enums and current state game state stuff
     /// </summary>
     #region Enums
@@ -62,6 +62,9 @@ namespace Opossum_Game
         // font fields
         private SpriteFont comicsans30;
 
+        // window fields
+        private int windowWidth;
+        private int windowHeight;
 
 
         public Game1()
@@ -80,8 +83,15 @@ namespace Opossum_Game
         {
             // TODO: Add your initialization logic here
 
-            base.Initialize();
+            // store the dimesnions of the game window into a variable
+            windowWidth = _graphics.PreferredBackBufferWidth;
+            windowHeight = _graphics.PreferredBackBufferHeight;
+
+            // start the game state in menu
             currentState = GameState.Menu;
+
+            base.Initialize();
+            
         }
 
         protected override void LoadContent()
@@ -96,11 +106,14 @@ namespace Opossum_Game
                 Content.Load<Texture2D>("startButtonBase");
             startButtonRollOver = 
                 Content.Load<Texture2D>("startButtonRollOver");
-            startButtonBase = new Button(startButtonBase2D, new Rectangle((_graphics.PreferredBackBufferWidth / 2) - (startButtonBase2D.Width / 4),
-                                                                          (_graphics.PreferredBackBufferHeight / 2) - (startButtonBase2D.Height / 4),
-                                                                          startButtonBase2D.Width / 2,
-                                                                          startButtonBase2D.Height / 2), 
-                                                                          startButtonRollOver);
+            startButtonBase = new Button(
+                startButtonBase2D,      // initial button texture
+                new Rectangle(
+                    (windowWidth / 2) - (startButtonBase2D.Width / 4),          // x value
+                    (windowHeight / 2) - (startButtonBase2D.Height / 4),        // y value
+                    startButtonBase2D.Width / 2,    // width of button
+                    startButtonBase2D.Height / 2),  // height of button
+                startButtonRollOver);   // rollover button texture
 
             // option button
             optionsButtonBase = 
@@ -126,11 +139,13 @@ namespace Opossum_Game
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || 
+                Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
             // TODO: Add your update logic here
             
+            // get the current keyboard state
             kbstate = Keyboard.GetState();
             
 
@@ -164,7 +179,7 @@ namespace Opossum_Game
                 case GameState.Game:
 
                     // PLACEHOLDER TO TEST TRANSITIONS
-                    if (SingleKeyPress(Keys.W, kbstate, previousKbState))
+                    if (SingleKeyPress(Keys.Z, kbstate, previousKbState))
                     {
                         currentState = GameState.GameWin;
                     }
@@ -188,6 +203,9 @@ namespace Opossum_Game
                     break;
             }
 
+            // update the previous keyboard state
+            previousKbState = kbstate;
+
             base.Update(gameTime);
         }
 
@@ -205,25 +223,61 @@ namespace Opossum_Game
                     startButtonBase.Draw(_spriteBatch);
 
                     // TEMP
-                    _spriteBatch.DrawString(comicsans30, string.Format("PRESS 'G' FOR GAME OR 'O' FOR OPTIONS"), new Vector2 (10, 100), Color.Red);
+                    _spriteBatch.DrawString(
+                        comicsans30, 
+                        string.Format("PRESS 'G' FOR GAME OR 'O' FOR OPTIONS"), 
+                        new Vector2 (10, 100), 
+                        Color.Red);
                     break;
                 case GameState.Options:
                     // TEMP
-                    _spriteBatch.DrawString(comicsans30, string.Format("OPTIONS SCREEN"), new Vector2(10, 100), Color.Red);
-                    _spriteBatch.DrawString(comicsans30, string.Format("PRESS 'M' FOR MAIN MENU"), new Vector2(10, 200), Color.Red);
+                    _spriteBatch.DrawString(
+                        comicsans30, 
+                        string.Format("OPTIONS SCREEN"), 
+                        new Vector2(10, 100), 
+                        Color.Red);
+                    _spriteBatch.DrawString(
+                        comicsans30, 
+                        string.Format("PRESS 'M' FOR MAIN MENU"), 
+                        new Vector2(10, 200), 
+                        Color.Red);
                     break;
                 case GameState.Game:
                     // TEMP
-                    _spriteBatch.DrawString(comicsans30, string.Format("GAMEPLAY SCREEN"), new Vector2(10, 100), Color.Red);
-                    _spriteBatch.DrawString(comicsans30, string.Format("PRESS 'W' FOR GAME WIN OR 'L' FOR GAME LOSE"), new Vector2(10, 200), Color.Red);
+                    _spriteBatch.DrawString(
+                        comicsans30, 
+                        string.Format("GAMEPLAY SCREEN"), 
+                        new Vector2(10, 100), 
+                        Color.Red);
+                    _spriteBatch.DrawString(
+                        comicsans30, 
+                        string.Format("PRESS 'Z' FOR GAME WIN OR 'L' FOR GAME LOSE"), 
+                        new Vector2(10, 200), 
+                        Color.Red);
                     break;
                 case GameState.GameLose:
-                    _spriteBatch.DrawString(comicsans30, string.Format("GAME LOSE SCREEN"), new Vector2(10, 100), Color.Red);
-                    _spriteBatch.DrawString(comicsans30, string.Format("PRESS 'M' FOR MAIN MENU"), new Vector2(10, 200), Color.Red);
+                    _spriteBatch.DrawString(
+                        comicsans30, 
+                        string.Format("GAME LOSE SCREEN"), 
+                        new Vector2(10, 100), 
+                        Color.Red);
+                    _spriteBatch.DrawString(
+                        comicsans30, 
+                        string.Format("PRESS 'M' FOR MAIN MENU"), 
+                        new Vector2(10, 200), 
+                        Color.Red);
                     break;
                 case GameState.GameWin:
-                    _spriteBatch.DrawString(comicsans30, string.Format("GAME WIN SCREEN"), new Vector2(10, 100), Color.Red);
-                    _spriteBatch.DrawString(comicsans30, string.Format("PRESS 'M' FOR MAIN MENU"), new Vector2(10, 200), Color.Red);
+                    _spriteBatch.DrawString(
+                        comicsans30, 
+                        string.Format("GAME WIN SCREEN"), 
+                        new Vector2(10, 100), 
+                        Color.Red);
+                    _spriteBatch.DrawString(
+                        comicsans30, 
+                        string.Format("PRESS 'M' FOR MAIN MENU"), 
+                        new Vector2(10, 200), 
+                        Color.Red);
                     break;
             }
             _spriteBatch.End();
