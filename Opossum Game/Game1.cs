@@ -62,10 +62,10 @@ namespace Opossum_Game
         // font fields
         private SpriteFont comicsans30;
 
+        private Player player;
         // window fields
         private int windowWidth;
         private int windowHeight;
-
 
         public Game1()
         {
@@ -123,6 +123,8 @@ namespace Opossum_Game
 
             // player sprite
             pSprite = Content.Load<Texture2D>("pSprite");
+            // here bc pSprite is loaded here
+            //player = new Player(pSprite, new Rectangle()); 
 
             // collectible sprites
             collectibleBurger = Content.Load<Texture2D>("collectibleBurger");
@@ -177,6 +179,7 @@ namespace Opossum_Game
 
                     break;
                 case GameState.Game:
+                    //player.Update(gameTime);
 
                     // PLACEHOLDER TO TEST TRANSITIONS
                     if (SingleKeyPress(Keys.Z, kbstate, previousKbState))
