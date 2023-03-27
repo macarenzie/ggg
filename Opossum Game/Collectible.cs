@@ -12,7 +12,7 @@ namespace Opossum_Game
     /// <summary>
     /// Class for collectible objects that can be picked up by the player when in range.
     /// Can be walked over by the player.
-    /// Inherits from InheritableObject.
+    /// Inherits from InteractibleObject.
     /// </summary>
     internal class Collectible : InteractibleObject
     {
