@@ -38,11 +38,22 @@ namespace Opossum_Game
         private Texture2D startButtonBase2D;
         private Texture2D startButtonRollOver;
         private Texture2D startScreen;
-        private Button startButtonBase;
+        private Button startButton;
 
         // options button
         private Texture2D optionsButtonBase;
         private Texture2D optionsButtonRollOver;
+        private Button optionsButton;
+
+        // try again button
+        private Texture2D tryAgainBase;
+        private Texture2D tryAgainRollOver;
+        private Button tryAgainButton;
+
+        // quit button
+        private Texture2D quitBase;
+        private Texture2D quitRollover;
+        private Button quitButton;
 
         // collectible fields
         private Texture2D collectibleBurger;
@@ -106,7 +117,7 @@ namespace Opossum_Game
                 Content.Load<Texture2D>("startButtonBase");
             startButtonRollOver = 
                 Content.Load<Texture2D>("startButtonRollOver");
-            startButtonBase = new Button(
+            startButton = new Button(
                 startButtonBase2D,      // initial button texture
                 new Rectangle(
                     (windowWidth / 2) - (startButtonBase2D.Width / 4),          // x value
@@ -156,7 +167,7 @@ namespace Opossum_Game
                 case GameState.Menu:
                     // if player presses start button
                     
-                    if(startButtonBase.MouseClick())
+                    if(startButton.MouseClick())
                     {
                         currentState = GameState.Game;
                     }
@@ -228,7 +239,7 @@ namespace Opossum_Game
             {
                 case GameState.Menu:
                     _spriteBatch.Draw(startScreen, new Rectangle(0, 0, 900, 900), Color.White);
-                    startButtonBase.Draw(_spriteBatch);
+                    startButton.Draw(_spriteBatch);
 
                     // TEMP
                     _spriteBatch.DrawString(
