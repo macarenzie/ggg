@@ -59,10 +59,8 @@ namespace Opossum_Game
         /// <returns> bool based on conditions </returns>
         public bool MouseContains()
         {
-            //might change this to contains for easier reading - ariel
             MouseState mouse = Mouse.GetState();
-            if (mouse.X > rectangle.X && mouse.X < rectangle.X + rectangle.Width &&
-                mouse.Y > rectangle.Y && mouse.Y < rectangle.Y + rectangle.Height)
+            if (rectangle.Contains(mouse.Position))
             {
                 //return true
                 return true;

@@ -92,8 +92,6 @@ namespace Opossum_Game
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
             // store the dimesnions of the game window into a variable
             windowWidth = _graphics.PreferredBackBufferWidth;
             windowHeight = _graphics.PreferredBackBufferHeight;
@@ -108,8 +106,6 @@ namespace Opossum_Game
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            // TODO: use this.Content to load your game content here
 
             // button sprites
             // start button
@@ -155,25 +151,15 @@ namespace Opossum_Game
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || 
                 Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
-            // TODO: Add your update logic here
             
-            // get the current keyboard state
+            //UI FINITE STATE MACHINES --------------------------------------------------------------------------
             kbstate = Keyboard.GetState();
-            
 
             switch (currentState)
             {
                 case GameState.Menu:
-                    // if player presses start button
-                    
-                    if(startButton.MouseClick())
-                    {
-                        currentState = GameState.Game;
-                    }
-
-                    // PLACEHOLDER CODE TO TEST GAME STATE TRANSITIONS
-                    if (SingleKeyPress(Keys.G, kbstate, previousKbState))
+                    // if player presses start button 
+                    if (startButton.MouseClick() && startButton.MouseContains())
                     {
                         currentState = GameState.Game;
                     }
@@ -221,6 +207,7 @@ namespace Opossum_Game
                     }
                     break;
             }
+            //---------------------------------------------------------------------------------------------
 
             // update the previous keyboard state
             previousKbState = kbstate;
