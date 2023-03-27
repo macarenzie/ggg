@@ -224,6 +224,8 @@ namespace Opossum_Game
         /// Check if IsInRange is true
         /// Press and release space bar
         /// </summary>
+        /// 
+        //TODO: Implement a way to exit hide state, otherwise player will be stuck within object. -Julia
         public void Hide(KeyboardState prevState, 
             KeyboardState curState, Rectangle otherObstacle)
         {
