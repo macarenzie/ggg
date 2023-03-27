@@ -155,6 +155,11 @@ namespace Opossum_Game
             {
                 case GameState.Menu:
                     // if player presses start button
+                    
+                    if(startButtonBase.MouseClick())
+                    {
+                        currentState = GameState.Game;
+                    }
 
                     // PLACEHOLDER CODE TO TEST GAME STATE TRANSITIONS
                     if (SingleKeyPress(Keys.G, kbstate, previousKbState))
