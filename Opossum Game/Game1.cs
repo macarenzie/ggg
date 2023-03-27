@@ -7,6 +7,7 @@ namespace Opossum_Game
     /// <summary>
     /// McKenzie: added enums and started loading in content, worked on temp fsm for update and draw
     /// Hui Lin: worked on enums and current state game state stuff
+    /// Ariel: finalized UI fsm and implimented camera movement fsm
     /// </summary>
     #region Enums
     public enum GameState
@@ -26,18 +27,16 @@ namespace Opossum_Game
         PlayDead
     }
     #endregion
+
     public class Game1 : Game
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        // button fields
-
-
+        #region Buttons
         // start menu and buttons
         private Texture2D startButtonBase2D;
         private Texture2D startButtonRollOver;
-        private Texture2D startScreen;
         private Button startButton;
 
         // options button
@@ -54,29 +53,46 @@ namespace Opossum_Game
         private Texture2D quitBase;
         private Texture2D quitRollover;
         private Button quitButton;
+        #endregion
 
-        // collectible fields
+        #region Collectibles
         private Texture2D collectibleBurger;
         private Texture2D collectibleCandy;
         private Texture2D collectibleChips;
+        #endregion
 
-        // player fields
+        #region Player
         private GameState currentState;
         private Texture2D pSprite;
+        private Player player;
+        #endregion
 
-        // level fields
+        #region Level
+        // "camera" textures
+        private Texture2D gameScreen1;
+        private Texture2D gameScreen2;
+        private Texture2D gameScreen3;
+        #endregion
 
-        // keyboard state tracking
+        #region KBState
         private KeyboardState kbstate;
         private KeyboardState previousKbState;
+        #endregion
 
         // font fields
         private SpriteFont comicsans30;
 
-        private Player player;
-        // window fields
+        #region Window
+        //literal window
         private int windowWidth;
         private int windowHeight;
+
+        //all general window screens
+        private Texture2D menuScreen;
+        private Texture2D optionScreen;
+        private Texture2D winScreen;
+        private Texture2D loseScreen;
+        #endregion
 
         public Game1()
         {
@@ -107,7 +123,7 @@ namespace Opossum_Game
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // button sprites
+            #region Button
             // start button
             startButtonBase2D = 
                 Content.Load<Texture2D>("startButtonBase");
@@ -127,20 +143,29 @@ namespace Opossum_Game
                 Content.Load<Texture2D>("optionButtonBase");
             optionsButtonRollOver = 
                 Content.Load<Texture2D>("optionButtonRollOver");
+            #endregion
 
             // player sprite
             pSprite = Content.Load<Texture2D>("pSprite");
-            // here bc pSprite is loaded here
-            player = new Player(pSprite, new Rectangle(10, 10, pSprite.Width / 4, pSprite.Height / 4)); 
+            // player initialization
+            player = new Player(pSprite, new Rectangle(10, 10, pSprite.Width / 4, pSprite.Height / 4));
 
-            // collectible sprites
+            #region Collectibles
             collectibleBurger = Content.Load<Texture2D>("collectibleBurger");
             collectibleCandy = Content.Load<Texture2D>("collectibleCandy");
             collectibleChips = Content.Load<Texture2D>("collectibleChips");
+            #endregion
 
-            //start screen
-            startScreen =
-                Content.Load<Texture2D>("startScreen");
+            #region Game Screens
+            menuScreen = Content.Load<Texture2D>("startScreen");
+            //menuScreen
+            //optionScreen
+            //winScreen
+            //loseScreen
+            //gameScreen1
+            //gameScreen2
+            //gameScreen3
+            #endregion
 
             // temporary font
             comicsans30 = Content.Load<SpriteFont>("comicsans30");
@@ -151,8 +176,8 @@ namespace Opossum_Game
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || 
                 Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            
-            //UI FINITE STATE MACHINES --------------------------------------------------------------------------
+
+            #region UI FSM
             kbstate = Keyboard.GetState();
 
             switch (currentState)
@@ -164,129 +189,173 @@ namespace Opossum_Game
                         currentState = GameState.Game;
                     }
 
-                    if (SingleKeyPress(Keys.O, kbstate, previousKbState))
+                    if (SingleKeyPress(Keys.O, kbstate, previousKbState)
+                        /*optionsButton.MouseClick() && optionsButton.MouseContains()*/)
                     {
                         currentState = GameState.Options;
                     }
 
-                    // if player presses options button
+                    //to exit the game from menu
+                    //if (exitButton.MouseClick() && exitButton.MouseContains())
+                    //{
+                    //  Exit();
+                    //}
                     break;
                 case GameState.Options:
 
                     // PLACEHOLDER TO TEST TRANSITIONS
-                    if (SingleKeyPress(Keys.M, kbstate, previousKbState))
+                    if (SingleKeyPress(Keys.M, kbstate, previousKbState)
+                        /*menuButton.MouseClick() && menuButton.MouseContains()*/)
                     {
                         currentState = GameState.Menu;
                     }
+
+                    //for when we do have the gode mode stuff implemented
+                    //if (/*stealthModeButton.MouseClick() && stealthModeButton.MouseContains()*/)
+                    //{
+                    //    god mode on and off
+                    //}
 
                     break;
                 case GameState.Game:
                     player.Update(gameTime);
 
-                    // PLACEHOLDER TO TEST TRANSITIONS
+                    // game win conditions
                     if (SingleKeyPress(Keys.Z, kbstate, previousKbState))
                     {
                         currentState = GameState.GameWin;
                     }
-                    // PLACEHOLDER TO TEST TRANSITIONS
+                    // game lose conditions
                     if (SingleKeyPress(Keys.L, kbstate, previousKbState))
                     {
                         currentState = GameState.GameLose;
                     }
+
+                    //to go back to main menu from game screen
+                    if (SingleKeyPress(Keys.Escape, kbstate, previousKbState))
+                    {
+                        currentState = GameState.Menu;
+                    }
+
                     break;
                 case GameState.GameLose:
-                    if (SingleKeyPress(Keys.M, kbstate, previousKbState))
+                    //go back to menue
+                    if (SingleKeyPress(Keys.M, kbstate, previousKbState)
+                        /*menuButton.MouseClick() && menuButton.MouseContains()*/)
                     {
                         currentState = GameState.Menu;
                     }
+
+                    //to exit the game from gameLose
+                    //if (exitButton.MouseClick() && exitButton.MouseContains())
+                    //{
+                    //  Exit();
+                    //}
                     break;
                 case GameState.GameWin:
-                    if (SingleKeyPress(Keys.M, kbstate, previousKbState))
+                    if (SingleKeyPress(Keys.M, kbstate, previousKbState)
+                        /*menuButton.MouseClick() && menuButton.MouseContains()*/)
                     {
                         currentState = GameState.Menu;
                     }
+
+                    //to exit the game from gameWin
+                    //if (exitButton.MouseClick() && exitButton.MouseContains())
+                    //{
+                    //  Exit();
+                    //}
                     break;
             }
-            //---------------------------------------------------------------------------------------------
 
             // update the previous keyboard state
             previousKbState = kbstate;
+            #endregion
+
+            #region Camera Finite State Machine
+
+            #endregion
 
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Navy);
 
-            // TODO: Add your drawing code here
-            //switch statement for diff screens and buttons that need to be drawn. 
+            //theoretically the game screens should load, however! idk how were gonna consider obstacles +
+            //i think thats mckenzies job - ariel
+            #region UI FSM
             _spriteBatch.Begin();
             switch (currentState)
             {
                 case GameState.Menu:
-                    _spriteBatch.Draw(startScreen, new Rectangle(0, 0, 900, 900), Color.White);
+                    _spriteBatch.Draw(menuScreen, new Rectangle(0, 0, 900, 900), Color.White);
                     startButton.Draw(_spriteBatch);
-
-                    // TEMP
-                    _spriteBatch.DrawString(
-                        comicsans30, 
-                        string.Format("PRESS 'G' FOR GAME OR 'O' FOR OPTIONS"), 
-                        new Vector2 (10, 100), 
-                        Color.Red);
                     break;
                 case GameState.Options:
+                    //_spriteBatch.Draw(optionScreen, new Rectangle(0, 0, 900, 900), Color.White);
+
                     // TEMP
                     _spriteBatch.DrawString(
                         comicsans30, 
                         string.Format("OPTIONS SCREEN"), 
                         new Vector2(10, 100), 
-                        Color.Red);
+                        Color.White);
                     _spriteBatch.DrawString(
                         comicsans30, 
                         string.Format("PRESS 'M' FOR MAIN MENU"), 
                         new Vector2(10, 200), 
-                        Color.Red);
+                        Color.White);
                     break;
                 case GameState.Game:
+                    //_spriteBatch.Draw(gameScreen1, new Rectangle(0, 0, 900, 900), Color.White);
+
                     // TEMP
                     _spriteBatch.DrawString(
                         comicsans30, 
                         string.Format("GAMEPLAY SCREEN"), 
                         new Vector2(10, 100), 
-                        Color.Red);
+                        Color.White);
                     _spriteBatch.DrawString(
                         comicsans30, 
-                        string.Format("PRESS 'Z' FOR GAME WIN OR 'L' FOR GAME LOSE"), 
+                        string.Format("PRESS 'Z' FOR WIN OR 'L' FOR LOSE"), 
                         new Vector2(10, 200), 
-                        Color.Red);
+                        Color.White);
                     player.Draw(_spriteBatch, new Rectangle()); //rectangle temp
                     break;
                 case GameState.GameLose:
+                    //_spriteBatch.Draw(loseScreen, new Rectangle(0, 0, 900, 900), Color.White);
+
+                    //TEMP
                     _spriteBatch.DrawString(
                         comicsans30, 
                         string.Format("GAME LOSE SCREEN"), 
                         new Vector2(10, 100), 
-                        Color.Red);
+                        Color.White);
                     _spriteBatch.DrawString(
                         comicsans30, 
                         string.Format("PRESS 'M' FOR MAIN MENU"), 
                         new Vector2(10, 200), 
-                        Color.Red);
+                        Color.White);
                     break;
                 case GameState.GameWin:
+                    //_spriteBatch.Draw(winScreen, new Rectangle(0, 0, 900, 900), Color.White);
+
+                    //TEMP
                     _spriteBatch.DrawString(
                         comicsans30, 
                         string.Format("GAME WIN SCREEN"), 
                         new Vector2(10, 100), 
-                        Color.Red);
+                        Color.White);
                     _spriteBatch.DrawString(
                         comicsans30, 
                         string.Format("PRESS 'M' FOR MAIN MENU"), 
                         new Vector2(10, 200), 
-                        Color.Red);
+                        Color.White);
                     break;
             }
+            #endregion
+
             _spriteBatch.End();
             base.Draw(gameTime);
         }
