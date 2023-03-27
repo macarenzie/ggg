@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 
 namespace Opossum_Game
 {
@@ -78,6 +79,12 @@ namespace Opossum_Game
         private int windowWidth;
         private int windowHeight;
 
+        //List of interactible objects
+        private List<InteractibleObject> objects;
+
+        //String to hold collision direction
+        string obstacleCollision;
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -98,6 +105,10 @@ namespace Opossum_Game
 
             // start the game state in menu
             currentState = GameState.Menu;
+
+            //Initializing list and default collision state
+            objects = new List<InteractibleObject>();
+            obstacleCollision = "none";
 
             base.Initialize();
             
@@ -209,6 +220,40 @@ namespace Opossum_Game
             }
             //---------------------------------------------------------------------------------------------
 
+            //Collision detection -- utilizing keyboard input to ensure player is attempting to move.
+            //Adjusts player direction in the opposite direction of their movement--should result in player staying still.
+            //If player movement speed is adjusted, this needs to be adjusted as well!
+            //updates collision string
+            obstacleCollision = player.ObstacleCollision(objects);
+
+            //Only runs if collision isn't "none"
+            if (obstacleCollision != "none")
+            {
+                //Player moving down
+                if (obstacleCollision == "down" && kbstate.IsKeyDown(Keys.S))
+                {
+                    player.Y -= 5;
+                }
+
+                //Player moving up
+                if (obstacleCollision == "up" && kbstate.IsKeyDown(Keys.W))
+                {
+                    player.Y += 5;
+                }
+
+                //Player moving left
+                if (obstacleCollision == "left" && kbstate.IsKeyDown(Keys.A))
+                {
+                    player.X += 5;
+                }
+
+                //Player moving right
+                if (obstacleCollision == "right" && kbstate.IsKeyDown(Keys.D))
+                {
+                    player.X -= 5;
+                }
+            }
+            
             // update the previous keyboard state
             previousKbState = kbstate;
 

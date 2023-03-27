@@ -43,6 +43,20 @@ namespace Opossum_Game
             get { return health; }  
         }
 
+        //Player location on X axis
+        public int X
+        {
+            get { return pLocation.X; }
+            set { pLocation.X = value; }
+        }
+
+        //Player location on Y axis
+        public int Y
+        {
+            get { return pLocation.Y; }
+            set { pLocation.Y = value; }
+        }
+
         //constructor
         /// <summary>
         /// Creates what the player will control.
