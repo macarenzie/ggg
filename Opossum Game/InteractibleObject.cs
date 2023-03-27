@@ -19,10 +19,15 @@ namespace Opossum_Game
         protected Texture2D objectTexture;
         protected Rectangle objectDimensions;
 
-        //Properties for object dimension
+        //Properties
         public Rectangle ObjectDimensions
         {
             get { return objectDimensions; }
+        }
+
+        public Texture2D ObjectTexture
+        {
+            get { return objectTexture; }
         }
 
         //Constructor

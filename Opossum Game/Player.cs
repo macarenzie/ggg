@@ -91,28 +91,70 @@ namespace Opossum_Game
             }
         } */
 
-        /// <summary>
-        /// Method used to detect if the player is colliding with an obstacle.
-        /// Assumes there is a list of InteractibleObjects to loop through and check.
-        /// </summary>
-        //TODO: Is there an InteractibleObjects list? Or does this condition need to be changed? -Julia
-        //TODO: How to determine what edge to block movement from? May need 4 separate bools and a revamp of this method. -Julia
-        public bool ObstacleCollision(List<InteractibleObject> objects)
+        ///<summary>
+        ///Checks edge collision with obstacles.
+        ///Edits a string to represent which edge is in contact. 
+        ///The string is used in game1 to adjust player movement.
+        ///Assumes that the list provided is a list of interactibleObjects. This can be adjusted later if necessary.
+        ///</summary>
+        public string ObstacleCollision(List<InteractibleObject> objects)
         {
-            //Loops through the entire provided list
+            //Default representation for no collision
+            string collisionDirection = "none";
+
+            /*TODO: I pulled these height/width specifications from game1 on 3/27/23. 
+             * Please let me know if this changes, or collision won't work properly. -Julia*/
+            int playerWidth = pSprite.Width / 4;
+            int playerHeight = pSprite.Height / 4;
+
+            //Loops to check each object within the list
             for (int i = 0; i < objects.Count; i++)
             {
-                //Only checks collision if the object is an obstacle
+                //TODO: placeholder height/width specifications, based on player specifications--see above note. -Julia
+                int objectWidth = objects[i].ObjectTexture.Width / 4;
+                int objectHeight = objects[i].ObjectTexture.Height / 4;
+
+                //Only checks collision if the object is an obstacle. Skips any collectibles.
                 if (objects[i] is Obstacle)
                 {
-                    if (pLocation.Intersects(objects[i].ObjectDimensions))
+                    //Checks each individual edge
+                    //Player blocked in down direction
+                    //Player width factored into X direction to prevent clipping. 
+                    if(pLocation.Y + playerHeight == objects[i].ObjectDimensions.Y && 
+                        pLocation.X >= objects[i].ObjectDimensions.X + playerWidth &&
+                        pLocation.X <= objects[i].ObjectDimensions.X + objectWidth)
                     {
-                        return true;
+                        collisionDirection = "down";
+                    }
+
+                    //Player blocked in up direction
+                    else if (pLocation.Y == objects[i].ObjectDimensions.Y + objectHeight &&
+                         pLocation.X >= objects[i].ObjectDimensions.X + playerWidth &&
+                         pLocation.X <= objects[i].ObjectDimensions.X + objectWidth)
+                    {
+                        collisionDirection = "up";
+                    }
+
+                    //Player blocked in left direction
+                    else if (pLocation.X == objects[i].ObjectDimensions.X + objectWidth &&
+                        pLocation.Y >= objects[i].ObjectDimensions.Y + playerHeight &&
+                        pLocation.Y <= objects[i].ObjectDimensions.Y + objectHeight)
+                    {
+                        collisionDirection = "left";
+                    }
+
+                    //Player blocked in right direction
+                    else if (pLocation.X + playerWidth == objectWidth &&
+                        pLocation.Y >= objects[i].ObjectDimensions.Y + playerHeight &&
+                        pLocation.Y <= objects[i].ObjectDimensions.Y + objectHeight)
+                    {
+                        collisionDirection = "right";
                     }
                 }
             }
-
-            return false;
+            //Later objects in list shouldn't override an earlier detected collision.
+            //May add individual return commands to if blocks depending on how many obstacles, for efficiency's sake.
+            return collisionDirection;
         }
 
         /// <summary>
