@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Opossum_Game
 {
@@ -101,6 +102,14 @@ namespace Opossum_Game
         private Texture2D loseScreen;
         #endregion
 
+        #region LevelLoading
+        private StreamReader reader;
+        private List<InteractibleObject> interactibleObjectsList;
+        private List<Enemy> enemyList;
+        private string levelFile;
+        private Level level;
+        #endregion
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -125,6 +134,7 @@ namespace Opossum_Game
             //Initializing list and default collision state
             objects = new List<InteractibleObject>();
             obstacleCollision = "none";
+
 
             base.Initialize();
             
@@ -181,6 +191,10 @@ namespace Opossum_Game
 
             // temporary font
             comicsans30 = Content.Load<SpriteFont>("comicsans30");
+
+            // level loading
+            level.LoadLevel("testerLevel1");
+            player = level.Player;
         }
 
         protected override void Update(GameTime gameTime)
