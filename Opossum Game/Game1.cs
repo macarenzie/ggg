@@ -354,6 +354,16 @@ namespace Opossum_Game
                     switch (currentScreen)
                     {
                         case GameScreen.One:
+
+                            if (SingleKeyPress(Keys.Z, kbstate, previousKbState))
+                            {
+                                currentState = GameState.GameWin;
+                            }
+                            else if (SingleKeyPress(Keys.L, kbstate, previousKbState))
+                            {
+                                currentState = GameState.GameLose;
+                            }
+
                             if (player.Y == windowHeight)
                             {
                                 currentScreen = GameScreen.Two;
@@ -529,6 +539,19 @@ namespace Opossum_Game
                                 string.Format("GAMEPLAY SCREEN"),
                                 new Vector2(10, 100),
                                 Color.White);
+
+                            _spriteBatch.DrawString(
+                                comicsans30,
+                                string.Format("GAMEPLAY SCREEN"),
+                                new Vector2(10, 100),
+                                Color.White);
+
+                            _spriteBatch.DrawString(
+                                comicsans30,
+                                string.Format("PRESS 'Z' FOR WIN OR 'L' FOR LOSE"),
+                                new Vector2(10, 200),
+                                Color.White);
+
                             break;
 
                         case GameScreen.Two:
