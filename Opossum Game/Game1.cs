@@ -229,10 +229,10 @@ namespace Opossum_Game
                     }
 
                     //to exit the game from menu
-                    //if (quitButton.MouseClick() && quitButton.MouseContains())
-                    //{
-                    //  Exit();
-                    //}
+                    if (quitButton.MouseClick() && quitButton.MouseContains())
+                    {
+                        Exit();
+                    }
                     break;
                 case GameState.Options:
 
