@@ -166,7 +166,20 @@ namespace Opossum_Game
                 ) ;
 
             //try again button
-
+            tryAgainBase =
+                Content.Load<Texture2D>("tryAgainBase");
+            tryAgainRollOver =
+                Content.Load<Texture2D>("tryAgainRollOver");
+            tryAgainButton = new Button(
+                quitBase,
+                new Rectangle(
+                    ((windowWidth / 2) - 200) - (tryAgainBase.Width / 4),                   //x value
+                    ((windowHeight / 2) - 150) - (tryAgainBase.Height / 4),                 //y value
+                    tryAgainBase.Width / 2,     //width
+                    tryAgainBase.Height / 2     //height
+                    ),
+                tryAgainRollOver
+                );
 
 
             // option button
@@ -400,6 +413,7 @@ namespace Opossum_Game
                         Color.White
                         );
                     quitButton.Draw(_spriteBatch);
+                    tryAgainButton.Draw(_spriteBatch);
                     _spriteBatch.DrawString(
                         comicsans30, 
                         string.Format("GAME LOSE SCREEN"), 
