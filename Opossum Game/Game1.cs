@@ -185,7 +185,20 @@ namespace Opossum_Game
                 ) ;
 
             //try again button
-
+            tryAgainBase =
+                Content.Load<Texture2D>("tryAgainBase");
+            tryAgainRollOver =
+                Content.Load<Texture2D>("tryAgainRollOver");
+            tryAgainButton = new Button(
+                tryAgainBase,
+                new Rectangle(
+                    ((windowWidth / 2) - 200) - (tryAgainBase.Width / 4),                   //x value
+                    ((windowHeight / 2) + 150) - (tryAgainBase.Height / 4),                 //y value
+                    tryAgainBase.Width / 2,     //width
+                    tryAgainBase.Height / 2     //height
+                    ),
+                tryAgainRollOver
+                );
 
 
             // option button
@@ -193,6 +206,16 @@ namespace Opossum_Game
                 Content.Load<Texture2D>("optionButtonBase");
             optionsButtonRollOver = 
                 Content.Load<Texture2D>("optionButtonRollOver");
+            optionsButton = new Button(
+                optionsButtonBase,
+                new Rectangle(
+                    (windowWidth / 2) - (optionsButtonBase.Width / 4),
+                    (windowHeight / 2) + (optionsButtonBase.Height / 4),
+                    optionsButtonBase.Width / 2,
+                    optionsButtonBase.Height / 2
+                    ),
+                optionsButtonRollOver
+                );
             #endregion
 
             // player sprite
@@ -327,7 +350,7 @@ namespace Opossum_Game
                     //Adjusts player direction in the opposite direction of their movement--should result in player staying still.
                     //If player movement speed is adjusted, this needs to be adjusted as well!
                     //updates collision string
-                    obstacleCollision = player.ObstacleCollision(obstacleList);
+               //     obstacleCollision = player.ObstacleCollision(obstacleList);
 
                     //Only runs if collision isn't "none"
                     if (obstacleCollision != "none")
@@ -360,17 +383,17 @@ namespace Opossum_Game
 
                 case GameState.GameLose:
                     //go back to menue
-                    if (SingleKeyPress(Keys.M, kbstate, previousKbState)
-                        /*menuButton.MouseClick() && menuButton.MouseContains()*/)
+                    if (SingleKeyPress(Keys.M, kbstate, previousKbState) ||
+                        tryAgainButton.MouseClick() && tryAgainButton.MouseContains())
                     {
                         currentState = GameState.Menu;
                     }
 
                     //to exit the game from gameLose
-                    //if (exitButton.MouseClick() && exitButton.MouseContains())
-                    //{
-                    //  Exit();
-                    //}
+                    if (quitButton.MouseClick() && quitButton.MouseContains())
+                    {
+                      Exit();
+                    }
                     break;
                 case GameState.GameWin:
                     if (SingleKeyPress(Keys.M, kbstate, previousKbState)
@@ -411,6 +434,7 @@ namespace Opossum_Game
                 case GameState.Menu:
                     _spriteBatch.Draw(menuScreen, new Rectangle(0, 0, 900, 900), Color.White);
                     startButton.Draw(_spriteBatch);
+                    optionsButton.Draw(_spriteBatch);
                     break;
                 case GameState.Options:
                     //_spriteBatch.Draw(optionScreen, new Rectangle(0, 0, 900, 900), Color.White);
@@ -448,24 +472,17 @@ namespace Opossum_Game
 
                     break;
                 case GameState.GameLose:
-                    //_spriteBatch.Draw(loseScreen, new Rectangle(0, 0, 900, 900), Color.White);
-
-                    //TEMP
                     _spriteBatch.Draw(
                         loseScreen,
                         new Vector2(0,0),
                         Color.White
                         );
                     quitButton.Draw(_spriteBatch);
+                    tryAgainButton.Draw(_spriteBatch);
                     _spriteBatch.DrawString(
                         comicsans30, 
                         string.Format("GAME LOSE SCREEN"), 
                         new Vector2(10, 100), 
-                        Color.White);
-                    _spriteBatch.DrawString(
-                        comicsans30, 
-                        string.Format("PRESS 'M' FOR MAIN MENU"), 
-                        new Vector2(10, 200), 
                         Color.White);
                     break;
                 case GameState.GameWin:
