@@ -22,18 +22,27 @@ namespace Opossum_Game
         private StreamReader reader;
 
         // game object lists
-        private List<InteractibleObject> interactibleObjectsList;
+        private List<Collectible> collectiblesList;
+        private List<Obstacle> obstaclesList;
         private List<Enemy> enemyList;
         private Player player;
 
         private Texture2D filler;
 
         // properties ---------------------------------------------------------
-        public List<InteractibleObject> InteractibleObjectsList
+        public List<Collectible> CollectiblesList
         {
             get
             {
-                return interactibleObjectsList;
+                return collectiblesList;
+            }
+        }
+
+        public List<Obstacle> ObstacleList
+        {
+            get
+            {
+                return obstaclesList;
             }
         }
 
@@ -54,10 +63,10 @@ namespace Opossum_Game
         }
 
         // constructor --------------------------------------------------------
-        public Level(string fileName)
+        public Level()
         {
-            this.fileName = fileName;
-            interactibleObjectsList = new List<InteractibleObject>();
+            collectiblesList = new List<Collectible>();
+            obstaclesList = new List<Obstacle>();
             enemyList = new List<Enemy>();
         }
 
@@ -65,7 +74,7 @@ namespace Opossum_Game
         public void LoadLevel(string levelFile)
         {
             // read in the file
-            reader = new StreamReader("Content/Levels/" + levelFile);
+            reader = new StreamReader("../../../" + levelFile);
 
             // iterate through each line in the file
             while ((lineOfData = reader.ReadLine()) != null)
@@ -82,7 +91,7 @@ namespace Opossum_Game
                             int.Parse(objectData[1]),
                             0, 0));
 
-                    interactibleObjectsList.Add(obstacle);
+                    obstaclesList.Add(obstacle);
                 }
                 else if (objectData[2] == "collectible")
                 {
@@ -93,7 +102,7 @@ namespace Opossum_Game
                             int.Parse(objectData[1]),
                             0, 0));
 
-                    interactibleObjectsList.Add(collectible);
+                    collectiblesList.Add(collectible);
                 }
                 else if (objectData[2] == "enemy")
                 {

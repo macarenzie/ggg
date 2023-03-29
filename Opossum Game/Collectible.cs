@@ -16,6 +16,20 @@ namespace Opossum_Game
     /// </summary>
     internal class Collectible : InteractibleObject
     {
+        Texture2D texture;
+
+        public Texture2D Texture
+        {
+            get
+            {
+                return texture;
+            }
+            set
+            {
+                texture = value;
+            }
+        }
+
         //Parameterized constructor
         //Only utilizes fields from parent class at present
         public Collectible (Texture2D objectTexture, Rectangle objectDimensions) :
