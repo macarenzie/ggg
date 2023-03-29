@@ -52,7 +52,7 @@ namespace Opossum_Game
 
         // quit button
         private Texture2D quitBase;
-        private Texture2D quitRollover;
+        private Texture2D quitRollOver;
         private Button quitButton;
         #endregion
 
@@ -149,6 +149,26 @@ namespace Opossum_Game
                     startButtonBase2D.Height / 2),  // height of button
                 startButtonRollOver);   // rollover button texture
 
+            //quit button
+            quitBase =
+                Content.Load<Texture2D>("quitBase");
+            quitRollOver =
+                Content.Load<Texture2D>("quitRollOver");
+            quitButton = new Button(
+                quitBase,
+                new Rectangle(
+                    ((windowWidth / 2) + 200) - (quitBase.Width / 4),                   //x value
+                    ((windowHeight / 2) + 150) - (quitBase.Height / 4),                 //y value
+                    quitBase.Width / 2,     //width
+                    quitBase.Height / 2     //height
+                    ),
+                quitRollOver
+                ) ;
+
+            //try again button
+
+
+
             // option button
             optionsButtonBase = 
                 Content.Load<Texture2D>("optionButtonBase");
@@ -171,6 +191,7 @@ namespace Opossum_Game
             menuScreen = Content.Load<Texture2D>("startScreen");
             //menuScreen
             //optionScreen
+            optionScreen = Content.Load<Texture2D>("optionsScreen");
             //winScreen
             //loseScreen
             loseScreen = Content.Load<Texture2D>("gameOverScreen");
@@ -378,6 +399,7 @@ namespace Opossum_Game
                         new Vector2(0,0),
                         Color.White
                         );
+                    quitButton.Draw(_spriteBatch);
                     _spriteBatch.DrawString(
                         comicsans30, 
                         string.Format("GAME LOSE SCREEN"), 
