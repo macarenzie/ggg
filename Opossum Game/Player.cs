@@ -111,7 +111,7 @@ namespace Opossum_Game
         ///The string is used in game1 to adjust player movement.
         ///Assumes that the list provided is a list of interactibleObjects. This can be adjusted later if necessary.
         ///</summary>
-        public string ObstacleCollision(List<InteractibleObject> objects)
+        public string ObstacleCollision(List<Obstacle> objects)
         {
             //Default representation for no collision
             string collisionDirection = "none";
@@ -125,12 +125,12 @@ namespace Opossum_Game
             for (int i = 0; i < objects.Count; i++)
             {
                 //TODO: placeholder height/width specifications, based on player specifications--see above note. -Julia
-                int objectWidth = objects[i].ObjectTexture.Width / 4;
-                int objectHeight = objects[i].ObjectTexture.Height / 4;
+                int objectWidth = 200;
+                int objectHeight = 200;
 
                 //Only checks collision if the object is an obstacle. Skips any collectibles.
-                if (objects[i] is Obstacle)
-                {
+
+                
                     //Checks each individual edge
                     //Player blocked in down direction
                     //Player width factored into X direction to prevent clipping. 
@@ -164,7 +164,7 @@ namespace Opossum_Game
                     {
                         collisionDirection = "right";
                     }
-                }
+                
             }
             //Later objects in list shouldn't override an earlier detected collision.
             //May add individual return commands to if blocks depending on how many obstacles, for efficiency's sake.
@@ -252,6 +252,7 @@ namespace Opossum_Game
         /// processes EVERYTHING that affects player movement
         /// </summary>
         //TODO: Implement edge collision--block the player from moving off screen (left/right edges), or change panel (top/bottom edges) -Julia
+        //TODO: Diagonal movement doesn't work right now. Could potentially only use enum switch for draw purposes. -Julia
         private void ProcessInput()
         {
             //get current kbState
