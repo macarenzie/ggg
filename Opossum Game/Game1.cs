@@ -173,6 +173,7 @@ namespace Opossum_Game
             //optionScreen
             //winScreen
             //loseScreen
+            loseScreen = Content.Load<Texture2D>("gameOverScreen");
             //gameScreen1
             //gameScreen2
             //gameScreen3
@@ -372,6 +373,11 @@ namespace Opossum_Game
                     //_spriteBatch.Draw(loseScreen, new Rectangle(0, 0, 900, 900), Color.White);
 
                     //TEMP
+                    _spriteBatch.Draw(
+                        loseScreen,
+                        new Vector2(0,0),
+                        Color.White
+                        );
                     _spriteBatch.DrawString(
                         comicsans30, 
                         string.Format("GAME LOSE SCREEN"), 

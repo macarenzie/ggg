@@ -56,6 +56,18 @@
 /processorParam:TextureFormat=Compressed
 /build:comicsans30.spritefont
 
+#begin gameOverScreen.PNG
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gameOverScreen.PNG
+
 #begin optionButtonBase.PNG
 /importer:TextureImporter
 /processor:TextureProcessor
