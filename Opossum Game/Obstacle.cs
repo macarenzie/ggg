@@ -17,6 +17,7 @@ namespace Opossum_Game
     internal class Obstacle : InteractibleObject
     {
         Texture2D texture;
+        Rectangle position;
 
         public Texture2D Texture
         {
@@ -30,14 +31,26 @@ namespace Opossum_Game
             }
         }
 
+        public Rectangle Position
+        {
+            get
+            {
+                return position;
+            }
+            set
+            {
+                position = value;
+            }
+        }
+
         //Parameterized constructor
         //Only utilizes fields from the parent class at present
         public Obstacle(Texture2D objectTexture, Rectangle objectDimensions) 
             : base (objectTexture, objectDimensions) { }
         
-        public void Draw()
+        public override void Draw(SpriteBatch sb)
         {
-
+            sb.Draw(texture, position, Color.White);
         }
     }
 }
