@@ -387,9 +387,10 @@ namespace Opossum_Game
         }
 
         /// <summary>
-        /// Draw the player to the screen, highlight if collision with light is true
+        /// Draw the player to the screen, highlight if collision with light is true 
+        /// maybe have the light collision be handled in level manager. just a thought --Jamie
         /// </summary>
-        public void Draw(SpriteBatch sb, Rectangle lightSource)
+        public void Draw(SpriteBatch sb, Rectangle lightSource) 
         {
             //IF COLLISION IS TRUE
             if (pLocation.Intersects(lightSource))
