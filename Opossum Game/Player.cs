@@ -27,6 +27,18 @@ namespace Opossum_Game
         private PlayerState playerState;
 
         //properties
+        public Texture2D PSprite
+        {
+            get
+            {
+                return pSprite;
+            }
+            set
+            {
+                pSprite = value;
+            }
+        }
+
         /// <summary>
         /// The amount of food the player has collected
         /// </summary>

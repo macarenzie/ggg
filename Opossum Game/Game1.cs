@@ -110,7 +110,8 @@ namespace Opossum_Game
 
         #region LevelLoading
         private StreamReader reader;
-        private List<InteractibleObject> interactibleObjectsList;
+        private List<Collectible> collectiblesList;
+        private List<Obstacle> obstaclesList;
         private List<Enemy> enemyList;
         private string levelFile;
         private Level level;
@@ -229,8 +230,29 @@ namespace Opossum_Game
 
 
             // level loading
-            level.LoadLevel("testerLevel1");
+            level.LoadLevel("newTesterLevel");
             player = level.Player;
+            collectiblesList = level.CollectiblesList;
+            obstaclesList = level.ObstacleList;
+            enemyList = level.EnemyList;
+            
+            // assign the correct textures to the game objects
+            player.PSprite = pSprite;
+
+            foreach (Collectible obj in collectiblesList)
+            {
+                obj.Texture = collectibleCandy;
+            }
+
+            foreach (Obstacle obj in obstaclesList)
+            {
+                obj.Texture = collectibleChips;
+            }
+
+            foreach (Enemy enemy in enemyList)
+            {
+                // TO BE FILLED LATER
+            }
         }
 
         protected override void Update(GameTime gameTime)
@@ -422,7 +444,7 @@ namespace Opossum_Game
                     player.Draw(_spriteBatch, new Rectangle()); //rectangle temp
 
                     //test obstacle
-                    testObstacle.Draw(_spriteBatch);
+                    //testObstacle.Draw(_spriteBatch);
 
                     break;
                 case GameState.GameLose:
