@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Opossum_Game
 {
@@ -101,6 +102,20 @@ namespace Opossum_Game
         private Texture2D loseScreen;
         #endregion
 
+        //Obstacle test. Texture and rectangle and obstacle list
+        private List<Obstacle> obstacleList;
+        private Texture2D obstacleTexture;
+        private Rectangle obstacleDimensions;
+        private Obstacle testObstacle;
+
+        #region LevelLoading
+        private StreamReader reader;
+        private List<InteractibleObject> interactibleObjectsList;
+        private List<Enemy> enemyList;
+        private string levelFile;
+        private Level level;
+        #endregion
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -125,6 +140,9 @@ namespace Opossum_Game
             //Initializing list and default collision state
             objects = new List<InteractibleObject>();
             obstacleCollision = "none";
+
+            //Test for list collision
+            obstacleList = new List<Obstacle>();
 
             base.Initialize();
             
@@ -215,6 +233,17 @@ namespace Opossum_Game
 
             // temporary font
             comicsans30 = Content.Load<SpriteFont>("comicsans30");
+
+            //Temporary collision obstacle
+            obstacleTexture = Content.Load<Texture2D>("collectibleBurger");
+            obstacleDimensions = new Rectangle(400, 400, 200, 200);
+            testObstacle = new Obstacle(obstacleTexture, obstacleDimensions);
+            obstacleList.Add(testObstacle);
+
+
+            // level loading
+            level.LoadLevel("testerLevel1");
+            player = level.Player;
         }
 
         protected override void Update(GameTime gameTime)
@@ -242,10 +271,10 @@ namespace Opossum_Game
                     }
 
                     //to exit the game from menu
-                    //if (exitButton.MouseClick() && exitButton.MouseContains())
-                    //{
-                    //  Exit();
-                    //}
+                    if (quitButton.MouseClick() && quitButton.MouseContains())
+                    {
+                        Exit();
+                    }
                     break;
                 case GameState.Options:
 
@@ -283,7 +312,43 @@ namespace Opossum_Game
                         currentState = GameState.Menu;
                     }
 
+                    //Testing obstacle collision
+
+                    //Collision detection -- utilizing keyboard input to ensure player is attempting to move.
+                    //Adjusts player direction in the opposite direction of their movement--should result in player staying still.
+                    //If player movement speed is adjusted, this needs to be adjusted as well!
+                    //updates collision string
+                    obstacleCollision = player.ObstacleCollision(obstacleList);
+
+                    //Only runs if collision isn't "none"
+                    if (obstacleCollision != "none")
+                    {
+                        //Player moving down
+                        if (obstacleCollision == "down" && kbstate.IsKeyDown(Keys.S))
+                        {
+                            player.Y -= 5;
+                        }
+
+                        //Player moving up
+                        if (obstacleCollision == "up" && kbstate.IsKeyDown(Keys.W))
+                        {
+                            player.Y += 5;
+                        }
+
+                        //Player moving left
+                        if (obstacleCollision == "left" && kbstate.IsKeyDown(Keys.A))
+                        {
+                            player.X += 5;
+                        }
+
+                        //Player moving right
+                        if (obstacleCollision == "right" && kbstate.IsKeyDown(Keys.D))
+                        {
+                            player.X -= 5;
+                        }
+                    }
                     break;
+
                 case GameState.GameLose:
                     //go back to menue
                     if (SingleKeyPress(Keys.M, kbstate, previousKbState)
@@ -313,40 +378,6 @@ namespace Opossum_Game
                     break;
             }
 
-            //Collision detection -- utilizing keyboard input to ensure player is attempting to move.
-            //Adjusts player direction in the opposite direction of their movement--should result in player staying still.
-            //If player movement speed is adjusted, this needs to be adjusted as well!
-            //updates collision string
-            obstacleCollision = player.ObstacleCollision(objects);
-
-            //Only runs if collision isn't "none"
-            if (obstacleCollision != "none")
-            {
-                //Player moving down
-                if (obstacleCollision == "down" && kbstate.IsKeyDown(Keys.S))
-                {
-                    player.Y -= 5;
-                }
-
-                //Player moving up
-                if (obstacleCollision == "up" && kbstate.IsKeyDown(Keys.W))
-                {
-                    player.Y += 5;
-                }
-
-                //Player moving left
-                if (obstacleCollision == "left" && kbstate.IsKeyDown(Keys.A))
-                {
-                    player.X += 5;
-                }
-
-                //Player moving right
-                if (obstacleCollision == "right" && kbstate.IsKeyDown(Keys.D))
-                {
-                    player.X -= 5;
-                }
-            }
-            
             // update the previous keyboard state
             previousKbState = kbstate;
             #endregion
@@ -402,6 +433,10 @@ namespace Opossum_Game
                         new Vector2(10, 200), 
                         Color.White);
                     player.Draw(_spriteBatch, new Rectangle()); //rectangle temp
+
+                    //test obstacle
+                    testObstacle.Draw(_spriteBatch);
+
                     break;
                 case GameState.GameLose:
                     //_spriteBatch.Draw(loseScreen, new Rectangle(0, 0, 900, 900), Color.White);

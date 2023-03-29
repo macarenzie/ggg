@@ -54,9 +54,8 @@ namespace Opossum_Game
         }
 
         // constructor --------------------------------------------------------
-        public Level(string fileName)
+        public Level()
         {
-            this.fileName = fileName;
             interactibleObjectsList = new List<InteractibleObject>();
             enemyList = new List<Enemy>();
         }
@@ -65,7 +64,7 @@ namespace Opossum_Game
         public void LoadLevel(string levelFile)
         {
             // read in the file
-            reader = new StreamReader("Content/Levels/" + levelFile);
+            reader = new StreamReader("Content/" + levelFile);
 
             // iterate through each line in the file
             while ((lineOfData = reader.ReadLine()) != null)
