@@ -46,7 +46,11 @@ namespace Opossum_Game
         //Parameterized constructor
         //Only utilizes fields from parent class at present
         public Collectible (Texture2D objectTexture, Rectangle objectDimensions) :
-            base (objectTexture, objectDimensions) { }
+            base (objectTexture, objectDimensions) 
+        {
+            texture = objectTexture;
+            position = objectDimensions;
+        }
 
         public override void Draw(SpriteBatch sb)
         {

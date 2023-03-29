@@ -569,6 +569,7 @@ namespace Opossum_Game
                     //testObstacle.Draw(_spriteBatch);
 
                     // LEVEL TESTING ------------------------------------------
+                    /*
                     player.Draw(_spriteBatch);
                     foreach (Collectible obj in collectiblesList)
                     {
@@ -578,6 +579,7 @@ namespace Opossum_Game
                     {
                         obj.Draw(_spriteBatch);
                     }
+                    */
 
                     player.Draw(_spriteBatch); //rectangle temp
                     break;
