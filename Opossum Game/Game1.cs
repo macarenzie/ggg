@@ -107,6 +107,7 @@ namespace Opossum_Game
         private Texture2D obstacleTexture;
         private Rectangle obstacleDimensions;
         private Obstacle testObstacle;
+        private bool isColliding;
 
         #region LevelLoading
         private StreamReader reader;
@@ -238,12 +239,11 @@ namespace Opossum_Game
             obstacleTexture = Content.Load<Texture2D>("collectibleBurger");
             obstacleDimensions = new Rectangle(400, 400, 200, 200);
             testObstacle = new Obstacle(obstacleTexture, obstacleDimensions);
-            obstacleList.Add(testObstacle);
-
+            isColliding = false;
 
             // level loading
-            level.LoadLevel("testerLevel1");
-            player = level.Player;
+            /*level.LoadLevel("testerLevel1");
+            player = level.Player; */
         }
 
         protected override void Update(GameTime gameTime)
@@ -318,7 +318,7 @@ namespace Opossum_Game
                     //Adjusts player direction in the opposite direction of their movement--should result in player staying still.
                     //If player movement speed is adjusted, this needs to be adjusted as well!
                     //updates collision string
-                    obstacleCollision = player.ObstacleCollision(obstacleList);
+                    /*obstacleCollision = player.ObstacleCollision(obstacleList);
 
                     //Only runs if collision isn't "none"
                     if (obstacleCollision != "none")
@@ -346,6 +346,13 @@ namespace Opossum_Game
                         {
                             player.X -= 5;
                         }
+                    } */
+
+                    //Collision/hide check
+                    isColliding = player.IndividualCollision(testObstacle);
+                    if (isColliding)
+                    {
+                        player.Hide(kbstate, previousKbState, testObstacle.ObjectDimensions);
                     }
                     break;
 
