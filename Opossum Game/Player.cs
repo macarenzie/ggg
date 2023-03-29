@@ -381,7 +381,7 @@ namespace Opossum_Game
         /// </summary>
         /// <param name="prevState"></param>
         /// <param name="curState"></param>
-        public void Update(GameTime gametTime)
+        public void Update(GameTime gameTime)
         {
             ProcessInput();
         }
