@@ -375,46 +375,46 @@ namespace Opossum_Game
                                 currentState = GameState.Menu;
                             }
                             break;
-                        case GameScreen.Two:
-                            if (player.Y == windowHeight)
-                            {
-                                currentScreen = GameScreen.Three;
-                                player.ResetPosition();
-                            }
+                        //case GameScreen.Two:
+                        //    if (player.Y == windowHeight)
+                        //    {
+                        //        currentScreen = GameScreen.Three;
+                        //        player.ResetPosition();
+                        //    }
 
-                            if (SingleKeyPress(Keys.Escape, kbstate, previousKbState))
-                            {
-                                currentState = GameState.Menu;
-                            }
-                            break;
-                        case GameScreen.Three:
+                        //    if (SingleKeyPress(Keys.Escape, kbstate, previousKbState))
+                        //    {
+                        //        currentState = GameState.Menu;
+                        //    }
+                        //    break;
+                        //case GameScreen.Three:
 
-                            //if (player.Y == windowHeight)
-                            //{
-                            //    currentScreen = GameScreen.Three;
-                            //    player.ResetPosition();
-                            //}
+                        //    if (player.Y == windowHeight)
+                        //    {
+                        //        currentScreen = GameScreen.Three;
+                        //        player.ResetPosition();
+                        //    }
 
-                            //if (SingleKeyPress(Keys.Escape, kbstate, previousKbState))
-                            //{
-                            //    currentState = GameState.Menu;
-                            //}
+                        //    if (SingleKeyPress(Keys.Escape, kbstate, previousKbState))
+                        //    {
+                        //        currentState = GameState.Menu;
+                        //    }
 
-                            if (SingleKeyPress(Keys.Z, kbstate, previousKbState))
-                            {
-                                currentState = GameState.GameWin;
-                            }
-                            else if (SingleKeyPress(Keys.L, kbstate, previousKbState))
-                            {
-                                currentState = GameState.GameLose;
-                            }
+                        //    if (SingleKeyPress(Keys.Z, kbstate, previousKbState))
+                        //    {
+                        //        currentState = GameState.GameWin;
+                        //    }
+                        //    else if (SingleKeyPress(Keys.L, kbstate, previousKbState))
+                        //    {
+                        //        currentState = GameState.GameLose;
+                        //    }
 
-                            //to go back to main menu from game screen
-                            else if (SingleKeyPress(Keys.Escape, kbstate, previousKbState))
-                            {
-                                currentState = GameState.Menu;
-                            }
-                            break;
+                        //    //to go back to main menu from game screen
+                        //    else if (SingleKeyPress(Keys.Escape, kbstate, previousKbState))
+                        //    {
+                        //        currentState = GameState.Menu;
+                        //    }
+                        //    break;
                             #endregion
 
                     }
