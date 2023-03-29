@@ -123,18 +123,19 @@ namespace Opossum_Game
         ///The string is used in game1 to adjust player movement.
         ///Assumes that the list provided is a list of interactibleObjects. This can be adjusted later if necessary.
         ///</summary>
-        public string ObstacleCollision(List<Obstacle> objects)
-        {
+        
+        //public string ObstacleCollisionList(List<Obstacle> objects)
+        //{
             //Default representation for no collision
-            string collisionDirection = "none";
+            /*string collisionDirection = "none";
 
             /*TODO: I pulled these height/width specifications from game1 on 3/27/23. 
              * Please let me know if this changes, or collision won't work properly. -Julia*/
-            int playerWidth = pSprite.Width / 4;
-            int playerHeight = pSprite.Height / 4;
+            //int playerWidth = pSprite.Width / 4;
+            //int playerHeight = pSprite.Height / 4;
 
             //Loops to check each object within the list
-            for (int i = 0; i < objects.Count; i++)
+           /*for (int i = 0; i < objects.Count; i++)
             {
                 //TODO: placeholder height/width specifications, based on player specifications--see above note. -Julia
                 int objectWidth = 200;
@@ -181,6 +182,19 @@ namespace Opossum_Game
             //Later objects in list shouldn't override an earlier detected collision.
             //May add individual return commands to if blocks depending on how many obstacles, for efficiency's sake.
             return collisionDirection;
+        } */
+
+        //Method for detecting individual collision with obstacles
+        public bool IndividualCollision (Obstacle obstacle)
+        {
+            if (pLocation.Intersects(obstacle.ObjectDimensions)) //And !isHidden
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         /// <summary>
@@ -238,6 +252,7 @@ namespace Opossum_Game
         /// </summary>
         /// 
         //TODO: Implement a way to exit hide state, otherwise player will be stuck within object. -Julia
+        //^^ bool to allow for exit
         public void Hide(KeyboardState prevState, 
             KeyboardState curState, Rectangle otherObstacle)
         {
@@ -394,7 +409,7 @@ namespace Opossum_Game
         /// </summary>
         /// <param name="prevState"></param>
         /// <param name="curState"></param>
-        public void Update(GameTime gametTime)
+        public void Update(GameTime gameTime)
         {
             ProcessInput();
         }
@@ -403,9 +418,10 @@ namespace Opossum_Game
         /// Draw the player to the screen, highlight if collision with light is true 
         /// maybe have the light collision be handled in level manager. just a thought --Jamie
         /// </summary>
-        public void Draw(SpriteBatch sb, Rectangle lightSource) 
+        public void Draw(SpriteBatch sb) 
         {
             //IF COLLISION IS TRUE
+            /*
             if (pLocation.Intersects(lightSource))
             {
                 sb.Draw(
@@ -414,16 +430,14 @@ namespace Opossum_Game
                 Color.Red
                 );
             }
+            */
 
             //IF COLLSION IS FALSE
-            else
-            {
-                sb.Draw(
+            sb.Draw(
                 pSprite,
                 pLocation,
                 Color.White
                 );
-            }
 
         }
     }
