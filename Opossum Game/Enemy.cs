@@ -11,5 +11,9 @@ namespace Opossum_Game
 {
     internal class Enemy
     {
+        public Enemy(Texture2D texture, Rectangle position)
+        {
+
+        }
     }
 }
