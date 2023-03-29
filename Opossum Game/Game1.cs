@@ -191,6 +191,7 @@ namespace Opossum_Game
                     ),
                 quitRollOver
                 ) ;
+            
 
             //try again button
             tryAgainBase =
@@ -333,87 +334,91 @@ namespace Opossum_Game
                     //}
                     break;
 
-                //all options for the first game screen
-                case GameState.One:
-                    if (player.X == windowWidth && player.Y == windowHeight)
-                    {
-                        currentState = GameState.Two;
-                        player.ResetPosition();
-                    }
-
-                    if (SingleKeyPress(Keys.Escape, kbstate, previousKbState))
-                    {
-                        currentState = GameState.Menu;
-                    }
-                    break;
-
-                //all options for the second game screen
-                case GameState.Two:
-                    if (player.X == windowWidth && player.Y == windowHeight)
-                    {
-                        currentState = GameState.Two;
-                        player.ResetPosition();
-                    }
-
-                    if (SingleKeyPress(Keys.Escape, kbstate, previousKbState))
-                    {
-                        currentState = GameState.Menu;
-                    }
-                    break;
-
-                //all options for the third game screen
-                case GameState.Three:
-                    player.Update(gameTime);
-
-                    //TO DO : MUST UPDATE THIS SWITCH WITH THE WIN CONDITION LOGIC
-
-                    //temporary code
-                    if (SingleKeyPress(Keys.Z, kbstate, previousKbState))
-                    {
-                        currentState = GameState.GameWin;
-                    }
-                    else if (SingleKeyPress(Keys.L, kbstate, previousKbState))
-                    {
-                        currentState = GameState.GameLose;
-                    }
-
-                    //to go back to main menu from game screen
-                    else if (SingleKeyPress(Keys.Escape, kbstate, previousKbState))
-                    {
-                        currentState = GameState.Menu;
-                    }
-                    break;
-
-                    //Testing obstacle collision
-                //all posibilities for the game lose screen
-                case GameState.GameLose:
-                    //go back to menue
-                    if (SingleKeyPress(Keys.M, kbstate, previousKbState)
-                        /*menuButton.MouseClick() && menuButton.MouseContains()*/)
-                    {
-                        currentState = GameState.Menu;
-                    }
-
-                    //to exit the game from gameLose
-                    //if (exitButton.MouseClick() && exitButton.MouseContains())
-                    //{
-                    //  Exit();
-                    //}
-                    break;
-
-                //all posibilities for the game win screen
-                case GameState.GameWin:
-                    if (SingleKeyPress(Keys.M, kbstate, previousKbState)
-                        /*menuButton.MouseClick() && menuButton.MouseContains()*/)
-                    {
-                        currentState = GameState.Menu;
-                    }
-                    else if (quitButton.MouseClick() && quitButton.MouseContains())
-                    {
-                        Exit();
-                    }
-                    break;
-            }
+                // ** COMMENTING OUT FOR NOW (mckenzie) *******************************************************************************
+                //
+                ////all options for the first game screen
+                //case GameState.One:
+                //    if (player.X == windowWidth && player.Y == windowHeight)
+                //    {
+                //        currentState = GameState.Two;
+                //        player.ResetPosition();
+                //    }
+                //
+                //    if (SingleKeyPress(Keys.Escape, kbstate, previousKbState))
+                //    {
+                //        currentState = GameState.Menu;
+                //    }
+                //    break;
+                //
+                ////all options for the second game screen
+                //case GameState.Two:
+                //    if (player.X == windowWidth && player.Y == windowHeight)
+                //    {
+                //        currentState = GameState.Two;
+                //        player.ResetPosition();
+                //    }
+                //
+                //    if (SingleKeyPress(Keys.Escape, kbstate, previousKbState))
+                //    {
+                //        currentState = GameState.Menu;
+                //    }
+                //    break;
+                //
+                ////all options for the third game screen
+                //case GameState.Three:
+                //    player.Update(gameTime);
+                //
+                //    //TO DO : MUST UPDATE THIS SWITCH WITH THE WIN CONDITION LOGIC
+                //
+                //    //temporary code
+                //    if (SingleKeyPress(Keys.Z, kbstate, previousKbState))
+                //    {
+                //        currentState = GameState.GameWin;
+                //    }
+                //    else if (SingleKeyPress(Keys.L, kbstate, previousKbState))
+                //    {
+                //        currentState = GameState.GameLose;
+                //    }
+                //
+                //    //to go back to main menu from game screen
+                //    else if (SingleKeyPress(Keys.Escape, kbstate, previousKbState))
+                //    {
+                //        currentState = GameState.Menu;
+                //    }
+                //    break;
+                //
+                //    //Testing obstacle collision
+                ////all posibilities for the game lose screen
+                //case GameState.GameLose:
+                //    //go back to menue
+                //    if (SingleKeyPress(Keys.M, kbstate, previousKbState)
+                //        /*menuButton.MouseClick() && menuButton.MouseContains()*/)
+                //    {
+                //        currentState = GameState.Menu;
+                //    }
+                //
+                //    //to exit the game from gameLose
+                //    //if (exitButton.MouseClick() && exitButton.MouseContains())
+                //    //{
+                //    //  Exit();
+                //    //}
+                //    break;
+                //
+                ////all posibilities for the game win screen
+                //case GameState.GameWin:
+                //    if (SingleKeyPress(Keys.M, kbstate, previousKbState)
+                //        /*menuButton.MouseClick() && menuButton.MouseContains()*/)
+                //    {
+                //        currentState = GameState.Menu;
+                //    }
+                //    else if (quitButton.MouseClick() && quitButton.MouseContains())
+                //    {
+                //        Exit();
+                //    }
+                //    break;
+                //
+                    // ** COMMENTING OUT FOR NOW (mckenzie) *******************************************************************************
+            
 
                     //Collision detection -- utilizing keyboard input to ensure player is attempting to move.
                     //Adjusts player direction in the opposite direction of their movement--should result in player staying still.
@@ -567,12 +572,23 @@ namespace Opossum_Game
                         string.Format("PRESS 'Z' FOR WIN OR 'L' FOR LOSE"), 
                         new Vector2(10, 200), 
                         Color.White);
-                    player.Draw(_spriteBatch); //rectangle temp
+
 
                     //test obstacle
                     //testObstacle.Draw(_spriteBatch);
 
-                    player.Draw(_spriteBatch, new Rectangle()); //rectangle temp
+                    // LEVEL TESTING ------------------------------------------
+                    player.Draw(_spriteBatch);
+                    foreach (Collectible obj in collectiblesList)
+                    {
+                        obj.Draw(_spriteBatch);
+                    }
+                    foreach (Obstacle obj in obstaclesList)
+                    {
+                        obj.Draw(_spriteBatch);
+                    }
+
+                    player.Draw(_spriteBatch); //rectangle temp
                     break;
 
                 case GameState.Two:
@@ -581,7 +597,7 @@ namespace Opossum_Game
                         string.Format("GAMEPLAY SCREEN"),
                         new Vector2(10, 100),
                         Color.White);
-                    player.Draw(_spriteBatch, new Rectangle()); //rectangle temp
+                    player.Draw(_spriteBatch); //rectangle temp
                     break;
 
                 case GameState.Three:
@@ -597,7 +613,7 @@ namespace Opossum_Game
                         new Vector2(10, 200),
                         Color.White);
 
-                    player.Draw(_spriteBatch, new Rectangle()); //rectangle temp
+                    player.Draw(_spriteBatch); //rectangle temp
                     break;
 
                 case GameState.GameLose:
