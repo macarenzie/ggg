@@ -377,6 +377,15 @@ namespace Opossum_Game
         }
 
         /// <summary>
+        /// resets the players position to the center of the screen
+        /// </summary>
+        public void ResetPosition()
+        {
+            pLocation.X = 230;
+            pLocation.Y = 5;
+        }
+
+        /// <summary>
         /// all update stuff wtihin player
         /// </summary>
         /// <param name="prevState"></param>

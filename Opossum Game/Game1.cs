@@ -11,14 +11,20 @@ namespace Opossum_Game
     /// Ariel: finalized UI fsm and implimented camera movement fsm
     /// </summary>
     #region Enums
+
+    //for the general state of the game
     public enum GameState
     {
         Menu,
         Options,
-        Game,
         GameLose,
-        GameWin
+        GameWin,
+        One,
+        Two,
+        Three
     }
+
+    //the state of the player
     public enum PlayerState
     {
         Front,
@@ -26,13 +32,6 @@ namespace Opossum_Game
         Left,
         Right,
         PlayDead
-    }
-
-    public enum GameScreen
-    {
-        One,
-        Two,
-        Three
     }
     #endregion
 
@@ -70,7 +69,6 @@ namespace Opossum_Game
         #endregion
 
         #region Player
-        private GameState currentState;
         private Texture2D pSprite;
         private Player player;
         #endregion
@@ -106,6 +104,8 @@ namespace Opossum_Game
         private Texture2D optionScreen;
         private Texture2D winScreen;
         private Texture2D loseScreen;
+
+        private GameState currentState;
         #endregion
 
         public Game1()
@@ -222,11 +222,11 @@ namespace Opossum_Game
 
             switch (currentState)
             {
-                case GameState.Menu:
-                    // if player presses start button 
+                //all posibilities for the menu screen
+                case GameState.Menu: 
                     if (startButton.MouseClick() && startButton.MouseContains())
                     {
-                        currentState = GameState.Game;
+                        currentState = GameState.One;
                     }
 
                     if (SingleKeyPress(Keys.O, kbstate, previousKbState)
@@ -241,6 +241,8 @@ namespace Opossum_Game
                         Exit();
                     }
                     break;
+
+                //all posibilities for options
                 case GameState.Options:
 
                     // PLACEHOLDER TO TEST TRANSITIONS
@@ -255,29 +257,60 @@ namespace Opossum_Game
                     //{
                     //    god mode on and off
                     //}
-
                     break;
-                case GameState.Game:
+
+                //all options for the first game screen
+                case GameState.One:
+                    if (player.X == windowWidth && player.Y == windowHeight)
+                    {
+                        currentState = GameState.Two;
+                        player.ResetPosition();
+                    }
+
+                    if (SingleKeyPress(Keys.Escape, kbstate, previousKbState))
+                    {
+                        currentState = GameState.Menu;
+                    }
+                    break;
+
+                //all options for the second game screen
+                case GameState.Two:
+                    if (player.X == windowWidth && player.Y == windowHeight)
+                    {
+                        currentState = GameState.Two;
+                        player.ResetPosition();
+                    }
+
+                    if (SingleKeyPress(Keys.Escape, kbstate, previousKbState))
+                    {
+                        currentState = GameState.Menu;
+                    }
+                    break;
+
+                //all options for the third game screen
+                case GameState.Three:
                     player.Update(gameTime);
 
-                    // game win conditions
+                    //TO DO : MUST UPDATE THIS SWITCH WITH THE WIN CONDITION LOGIC
+
+                    //temporary code
                     if (SingleKeyPress(Keys.Z, kbstate, previousKbState))
                     {
                         currentState = GameState.GameWin;
                     }
-                    // game lose conditions
-                    if (SingleKeyPress(Keys.L, kbstate, previousKbState))
+                    else if (SingleKeyPress(Keys.L, kbstate, previousKbState))
                     {
                         currentState = GameState.GameLose;
                     }
 
                     //to go back to main menu from game screen
-                    if (SingleKeyPress(Keys.Escape, kbstate, previousKbState))
+                    else if (SingleKeyPress(Keys.Escape, kbstate, previousKbState))
                     {
                         currentState = GameState.Menu;
                     }
-
                     break;
+
+                //all posibilities for the game lose screen
                 case GameState.GameLose:
                     //go back to menue
                     if (SingleKeyPress(Keys.M, kbstate, previousKbState)
@@ -292,18 +325,18 @@ namespace Opossum_Game
                     //  Exit();
                     //}
                     break;
+
+                //all posibilities for the game win screen
                 case GameState.GameWin:
                     if (SingleKeyPress(Keys.M, kbstate, previousKbState)
                         /*menuButton.MouseClick() && menuButton.MouseContains()*/)
                     {
                         currentState = GameState.Menu;
                     }
-
-                    //to exit the game from gameWin
-                    //if (exitButton.MouseClick() && exitButton.MouseContains())
-                    //{
-                    //  Exit();
-                    //}
+                    else if (quitButton.MouseClick() && quitButton.MouseContains())
+                    {
+                        Exit();
+                    }
                     break;
             }
 
@@ -346,7 +379,33 @@ namespace Opossum_Game
             #endregion
 
             #region Camera Finite State Machine
+            //switches the "level" screen based on the position of the player
+            //also resets the player to the center
+            switch (currentState)
+            {
+                case GameState.One:
+                    if (player.X == windowWidth && player.Y == windowHeight)
+                    {
+                        currentState = GameState.Two;
+                        player.ResetPosition();
+                    }
+                    break;
+                case GameState.Two:
+                    if (player.X == windowWidth && player.Y == windowHeight)
+                    {
+                        currentState = GameState.Two;
+                        player.ResetPosition();
+                    }
+                    break;
+                case GameState.Three:
+                    if (player.X == windowWidth && player.Y == windowHeight)
+                    {
+                        currentState = GameState.Two;
+                        player.ResetPosition();
+                    }
+                    break;
 
+            }
             #endregion
 
             base.Update(gameTime);
@@ -398,9 +457,6 @@ namespace Opossum_Game
                     player.Draw(_spriteBatch, new Rectangle()); //rectangle temp
                     break;
                 case GameState.GameLose:
-                    //_spriteBatch.Draw(loseScreen, new Rectangle(0, 0, 900, 900), Color.White);
-
-                    //TEMP
                     _spriteBatch.Draw(
                         loseScreen,
                         new Vector2(0,0),
@@ -435,6 +491,7 @@ namespace Opossum_Game
                     break;
             }
             #endregion
+
 
             _spriteBatch.End();
             base.Draw(gameTime);
