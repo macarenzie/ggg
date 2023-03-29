@@ -190,10 +190,10 @@ namespace Opossum_Game
             tryAgainRollOver =
                 Content.Load<Texture2D>("tryAgainRollOver");
             tryAgainButton = new Button(
-                quitBase,
+                tryAgainBase,
                 new Rectangle(
                     ((windowWidth / 2) - 200) - (tryAgainBase.Width / 4),                   //x value
-                    ((windowHeight / 2) - 150) - (tryAgainBase.Height / 4),                 //y value
+                    ((windowHeight / 2) + 150) - (tryAgainBase.Height / 4),                 //y value
                     tryAgainBase.Width / 2,     //width
                     tryAgainBase.Height / 2     //height
                     ),
@@ -358,17 +358,17 @@ namespace Opossum_Game
 
                 case GameState.GameLose:
                     //go back to menue
-                    if (SingleKeyPress(Keys.M, kbstate, previousKbState)
-                        /*menuButton.MouseClick() && menuButton.MouseContains()*/)
+                    if (SingleKeyPress(Keys.M, kbstate, previousKbState) ||
+                        tryAgainButton.MouseClick() && tryAgainButton.MouseContains())
                     {
                         currentState = GameState.Menu;
                     }
 
                     //to exit the game from gameLose
-                    //if (exitButton.MouseClick() && exitButton.MouseContains())
-                    //{
-                    //  Exit();
-                    //}
+                    if (quitButton.MouseClick() && quitButton.MouseContains())
+                    {
+                      Exit();
+                    }
                     break;
                 case GameState.GameWin:
                     if (SingleKeyPress(Keys.M, kbstate, previousKbState)
@@ -442,7 +442,7 @@ namespace Opossum_Game
                     player.Draw(_spriteBatch, new Rectangle()); //rectangle temp
 
                     //test obstacle
-                    testObstacle.Draw(_spriteBatch);
+               //     testObstacle.Draw(_spriteBatch);
 
                     break;
                 case GameState.GameLose:
