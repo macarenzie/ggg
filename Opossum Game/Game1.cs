@@ -27,6 +27,13 @@ namespace Opossum_Game
         Right,
         PlayDead
     }
+
+    public enum GameScreen
+    {
+        One,
+        Two,
+        Three
+    }
     #endregion
 
     public class Game1 : Game
