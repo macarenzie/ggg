@@ -140,3 +140,8 @@
 /processorParam:TextureFormat=Color
 /build:startScreen.PNG
 
+#begin testerLevel1
+/importer:
+/processor:
+/build:testerLevel1
+
