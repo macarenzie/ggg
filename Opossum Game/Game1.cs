@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 
 namespace Opossum_Game
@@ -98,10 +99,11 @@ namespace Opossum_Game
         // font fields
         private SpriteFont comicsans30;
 
-        #region Window
+        #region Window and UI
         //literal window
         private int windowWidth;
         private int windowHeight;
+        private Stopwatch timer;
 
         //List of interactible objects
         private List<InteractibleObject> objects;
@@ -139,6 +141,8 @@ namespace Opossum_Game
         private Level level;
         #endregion
 
+
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -170,6 +174,8 @@ namespace Opossum_Game
             //Test for list collision
             obstacleList = new List<Obstacle>();
 
+            //Initializing timer
+            timer = new Stopwatch();
             
 
             base.Initialize();
