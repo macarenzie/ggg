@@ -296,8 +296,8 @@ namespace Opossum_Game
                         currentState = GameState.Game;
                     }
 
-                    if (SingleKeyPress(Keys.O, kbstate, previousKbState)
-                        /*optionsButton.MouseClick() && optionsButton.MouseContains()*/)
+                    if (SingleKeyPress(Keys.O, kbstate, previousKbState) ||
+                        optionsButton.MouseClick() && optionsButton.MouseContains())
                     {
                         currentState = GameState.Options;
                     }
@@ -444,7 +444,7 @@ namespace Opossum_Game
                     optionsButton.Draw(_spriteBatch);
                     break;
                 case GameState.Options:
-                    //_spriteBatch.Draw(optionScreen, new Rectangle(0, 0, 900, 900), Color.White);
+                    _spriteBatch.Draw(optionScreen, new Rectangle(0, 0, 900, 900), Color.White);
 
                     // TEMP
                     _spriteBatch.DrawString(
@@ -486,11 +486,6 @@ namespace Opossum_Game
                         );
                     quitButton.Draw(_spriteBatch);
                     tryAgainButton.Draw(_spriteBatch);
-                    _spriteBatch.DrawString(
-                        comicsans30, 
-                        string.Format("GAME LOSE SCREEN"), 
-                        new Vector2(10, 100), 
-                        Color.White);
                     break;
                 case GameState.GameWin:
                     //_spriteBatch.Draw(winScreen, new Rectangle(0, 0, 900, 900), Color.White);
