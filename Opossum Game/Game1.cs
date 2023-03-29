@@ -440,7 +440,7 @@ namespace Opossum_Game
                         new Vector2(10, 200), 
                         Color.White);
                     break;
-                case GameState.Game:
+                case GameState.One:
                     //_spriteBatch.Draw(gameScreen1, new Rectangle(0, 0, 900, 900), Color.White);
 
                     // TEMP
@@ -456,6 +456,32 @@ namespace Opossum_Game
                         Color.White);
                     player.Draw(_spriteBatch, new Rectangle()); //rectangle temp
                     break;
+
+                case GameState.Two:
+                    _spriteBatch.DrawString(
+                        comicsans30,
+                        string.Format("GAMEPLAY SCREEN"),
+                        new Vector2(10, 100),
+                        Color.White);
+                    player.Draw(_spriteBatch, new Rectangle()); //rectangle temp
+                    break;
+
+                case GameState.Three:
+
+                    _spriteBatch.DrawString(
+                        comicsans30,
+                        string.Format("GAMEPLAY SCREEN"),
+                        new Vector2(10, 100),
+                        Color.White);
+                    _spriteBatch.DrawString(
+                        comicsans30,
+                        string.Format("PRESS 'Z' FOR WIN OR 'L' FOR LOSE"),
+                        new Vector2(10, 200),
+                        Color.White);
+
+                    player.Draw(_spriteBatch, new Rectangle()); //rectangle temp
+                    break;
+
                 case GameState.GameLose:
                     _spriteBatch.Draw(
                         loseScreen,
