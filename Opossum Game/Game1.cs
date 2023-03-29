@@ -153,6 +153,8 @@ namespace Opossum_Game
             //Test for list collision
             obstacleList = new List<Obstacle>();
 
+            
+
             base.Initialize();
             
         }
@@ -261,29 +263,18 @@ namespace Opossum_Game
             isColliding = false;
 
             // level loading
+            level = new Level(
+                collectibleChips,   // collectible texture
+                collectibleBurger,  // obstacle texture
+                pSprite,            // player texture
+                collectibleCandy);  // enemy texture
             level.LoadLevel("newTesterLevel");
+            
+            // pass in the fields from the level class to the game1 class
             player = level.Player;
             collectiblesList = level.CollectiblesList;
             obstaclesList = level.ObstacleList;
             enemyList = level.EnemyList;
-            
-            // assign the correct textures to the game objects
-            player.PSprite = pSprite;
-
-            foreach (Collectible obj in collectiblesList)
-            {
-                obj.Texture = collectibleCandy;
-            }
-
-            foreach (Obstacle obj in obstaclesList)
-            {
-                obj.Texture = collectibleChips;
-            }
-
-            foreach (Enemy enemy in enemyList)
-            {
-                // TO BE FILLED LATER
-            }
         }
 
         protected override void Update(GameTime gameTime)

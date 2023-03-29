@@ -23,11 +23,13 @@ namespace Opossum_Game
         public Rectangle ObjectDimensions
         {
             get { return objectDimensions; }
+            set { objectDimensions = value; }
         }
 
         public Texture2D ObjectTexture
         {
             get { return objectTexture; }
+            set { objectTexture = value; }
         }
 
         //Constructor

@@ -27,7 +27,11 @@ namespace Opossum_Game
         private List<Enemy> enemyList;
         private Player player;
 
-        private Texture2D filler;
+        // game object textures
+        Texture2D collectibleTexture;
+        Texture2D obstacleTexture;
+        Texture2D playerTexture;
+        Texture2D enemyTexture;
 
         // properties ---------------------------------------------------------
         public List<Collectible> CollectiblesList
@@ -63,18 +67,27 @@ namespace Opossum_Game
         }
 
         // constructor --------------------------------------------------------
-        public Level()
+        public Level(
+            Texture2D collectibleTexture, 
+            Texture2D obstacleTexture, 
+            Texture2D playerTexture, 
+            Texture2D enemyTexture)
         {
             collectiblesList = new List<Collectible>();
             obstaclesList = new List<Obstacle>();
             enemyList = new List<Enemy>();
+
+            this.collectibleTexture = collectibleTexture;
+            this.obstacleTexture = obstacleTexture;
+            this.playerTexture = playerTexture;
+            this.enemyTexture = enemyTexture;
         }
 
         // methods ------------------------------------------------------------
         public void LoadLevel(string levelFile)
         {
             // read in the file
-            reader = new StreamReader("../../../" + levelFile);
+            reader = new StreamReader("../../../" + levelFile + ".txt");
 
             // iterate through each line in the file
             while ((lineOfData = reader.ReadLine()) != null)
@@ -85,44 +98,48 @@ namespace Opossum_Game
                 if (objectData[2] == "obstacle")
                 {
                     Obstacle obstacle = new Obstacle(
-                        filler,
+                        obstacleTexture,
                         new Rectangle(
                             int.Parse(objectData[0]),
                             int.Parse(objectData[1]),
-                            0, 0));
+                            obstacleTexture.Width, 
+                            obstacleTexture.Height));
 
                     obstaclesList.Add(obstacle);
                 }
                 else if (objectData[2] == "collectible")
                 {
                     Collectible collectible = new Collectible(
-                        filler,
+                        collectibleTexture,
                         new Rectangle(
                             int.Parse(objectData[0]),
                             int.Parse(objectData[1]),
-                            0, 0));
+                            collectibleTexture.Width, 
+                            collectibleTexture.Height));
 
                     collectiblesList.Add(collectible);
                 }
                 else if (objectData[2] == "enemy")
                 {
                     Enemy enemy = new Enemy(
-                        filler,
+                        enemyTexture,
                         new Rectangle(
                             int.Parse(objectData[0]),
                             int.Parse(objectData[1]),
-                            0, 0));
+                            enemyTexture.Width, 
+                            enemyTexture.Height));
 
                     EnemyList.Add(enemy);
                 }
                 else if (objectData[2] == "player")
                 {
                     player = new Player(
-                        filler, 
+                        playerTexture, 
                         new Rectangle(
                             int.Parse(objectData[0]),
                             int.Parse(objectData[1]),
-                            0, 0));
+                            playerTexture.Width / 2, 
+                            playerTexture.Height / 2));
                 }
             }
         }

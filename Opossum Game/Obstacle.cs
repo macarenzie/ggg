@@ -35,5 +35,9 @@ namespace Opossum_Game
         public Obstacle(Texture2D objectTexture, Rectangle objectDimensions) 
             : base (objectTexture, objectDimensions) { }
         
+        public void Draw()
+        {
+
+        }
     }
 }
