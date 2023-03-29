@@ -226,6 +226,7 @@ namespace Opossum_Game
         /// </summary>
         /// 
         //TODO: Implement a way to exit hide state, otherwise player will be stuck within object. -Julia
+        //^^ bool to allow for exit
         public void Hide(KeyboardState prevState, 
             KeyboardState curState, Rectangle otherObstacle)
         {
@@ -391,9 +392,10 @@ namespace Opossum_Game
         /// Draw the player to the screen, highlight if collision with light is true 
         /// maybe have the light collision be handled in level manager. just a thought --Jamie
         /// </summary>
-        public void Draw(SpriteBatch sb, Rectangle lightSource) 
+        public void Draw(SpriteBatch sb) 
         {
             //IF COLLISION IS TRUE
+            /*
             if (pLocation.Intersects(lightSource))
             {
                 sb.Draw(
@@ -402,16 +404,14 @@ namespace Opossum_Game
                 Color.Red
                 );
             }
+            */
 
             //IF COLLSION IS FALSE
-            else
-            {
-                sb.Draw(
+            sb.Draw(
                 pSprite,
                 pLocation,
                 Color.White
                 );
-            }
 
         }
     }

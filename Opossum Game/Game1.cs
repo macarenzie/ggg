@@ -406,7 +406,7 @@ namespace Opossum_Game
                         string.Format("PRESS 'Z' FOR WIN OR 'L' FOR LOSE"), 
                         new Vector2(10, 200), 
                         Color.White);
-                    player.Draw(_spriteBatch, new Rectangle()); //rectangle temp
+                    player.Draw(_spriteBatch); //rectangle temp
 
                     //test obstacle
                     testObstacle.Draw(_spriteBatch);
