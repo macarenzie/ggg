@@ -206,6 +206,16 @@ namespace Opossum_Game
                 Content.Load<Texture2D>("optionButtonBase");
             optionsButtonRollOver = 
                 Content.Load<Texture2D>("optionButtonRollOver");
+            optionsButton = new Button(
+                optionsButtonBase,
+                new Rectangle(
+                    (windowWidth / 2) - (optionsButtonBase.Width / 4),
+                    (windowHeight / 2) + (optionsButtonBase.Height / 4),
+                    optionsButtonBase.Width / 2,
+                    optionsButtonBase.Height / 2
+                    ),
+                optionsButtonRollOver
+                );
             #endregion
 
             // player sprite
@@ -409,6 +419,7 @@ namespace Opossum_Game
                 case GameState.Menu:
                     _spriteBatch.Draw(menuScreen, new Rectangle(0, 0, 900, 900), Color.White);
                     startButton.Draw(_spriteBatch);
+                    optionsButton.Draw(_spriteBatch);
                     break;
                 case GameState.Options:
                     //_spriteBatch.Draw(optionScreen, new Rectangle(0, 0, 900, 900), Color.White);
@@ -446,9 +457,6 @@ namespace Opossum_Game
 
                     break;
                 case GameState.GameLose:
-                    //_spriteBatch.Draw(loseScreen, new Rectangle(0, 0, 900, 900), Color.White);
-
-                    //TEMP
                     _spriteBatch.Draw(
                         loseScreen,
                         new Vector2(0,0),
@@ -460,11 +468,6 @@ namespace Opossum_Game
                         comicsans30, 
                         string.Format("GAME LOSE SCREEN"), 
                         new Vector2(10, 100), 
-                        Color.White);
-                    _spriteBatch.DrawString(
-                        comicsans30, 
-                        string.Format("PRESS 'M' FOR MAIN MENU"), 
-                        new Vector2(10, 200), 
                         Color.White);
                     break;
                 case GameState.GameWin:
