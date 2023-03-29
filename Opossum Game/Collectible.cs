@@ -52,9 +52,9 @@ namespace Opossum_Game
             position = objectDimensions;
         }
 
-        public override void Draw(SpriteBatch sb)
+        public override void Draw(SpriteBatch sb, Color color)
         {
-            sb.Draw(texture, position, Color.White);
+            sb.Draw(texture, position, color);
         }
     }
 }

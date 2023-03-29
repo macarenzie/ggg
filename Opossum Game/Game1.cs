@@ -581,7 +581,15 @@ namespace Opossum_Game
                     #endregion
 
                     //test obstacle
-                    //testObstacle.Draw(_spriteBatch);
+                    if (isColliding)
+                    {
+                        testObstacle.Draw(_spriteBatch, Color.Green);
+                    }
+                    else
+                    {
+                        testObstacle.Draw(_spriteBatch, Color.White);
+                    }
+                    
 
                     // LEVEL TESTING ------------------------------------------
                     /*
