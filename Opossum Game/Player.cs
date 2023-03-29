@@ -111,18 +111,19 @@ namespace Opossum_Game
         ///The string is used in game1 to adjust player movement.
         ///Assumes that the list provided is a list of interactibleObjects. This can be adjusted later if necessary.
         ///</summary>
-        public string ObstacleCollision(List<Obstacle> objects)
-        {
+        
+        //public string ObstacleCollisionList(List<Obstacle> objects)
+        //{
             //Default representation for no collision
-            string collisionDirection = "none";
+            /*string collisionDirection = "none";
 
             /*TODO: I pulled these height/width specifications from game1 on 3/27/23. 
              * Please let me know if this changes, or collision won't work properly. -Julia*/
-            int playerWidth = pSprite.Width / 4;
-            int playerHeight = pSprite.Height / 4;
+            //int playerWidth = pSprite.Width / 4;
+            //int playerHeight = pSprite.Height / 4;
 
             //Loops to check each object within the list
-            for (int i = 0; i < objects.Count; i++)
+           /*for (int i = 0; i < objects.Count; i++)
             {
                 //TODO: placeholder height/width specifications, based on player specifications--see above note. -Julia
                 int objectWidth = 200;
@@ -169,6 +170,19 @@ namespace Opossum_Game
             //Later objects in list shouldn't override an earlier detected collision.
             //May add individual return commands to if blocks depending on how many obstacles, for efficiency's sake.
             return collisionDirection;
+        } */
+
+        //Method for detecting individual collision with obstacles
+        public bool IndividualCollision (Obstacle obstacle)
+        {
+            if (pLocation.Intersects(obstacle.ObjectDimensions)) //And !isHidden
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         /// <summary>
