@@ -45,9 +45,9 @@ namespace Opossum_Game
         } 
 
         //Draw method
-        public virtual void Draw(SpriteBatch sb)
+        public virtual void Draw(SpriteBatch sb, Color color)
         {
-            sb.Draw(objectTexture, ObjectDimensions, Color.White);
+            sb.Draw(objectTexture, ObjectDimensions, color);
         }
     }
 }
