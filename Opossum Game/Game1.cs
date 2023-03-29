@@ -301,7 +301,8 @@ namespace Opossum_Game
             switch (currentState)
             {
                 //all posibilities for the menu screen
-                case GameState.Menu: 
+                case GameState.Menu:
+
                     if (startButton.MouseClick() && startButton.MouseContains())
                     {
                         currentState = GameState.Game;
@@ -339,6 +340,8 @@ namespace Opossum_Game
 
                 ////all options for the state of playing the game
                 case GameState.Game:
+
+                    player.Update(gameTime);
 
                     //collision stuff
                     isColliding = player.IndividualCollision(testObstacle);
@@ -407,6 +410,7 @@ namespace Opossum_Game
                     }
                     break;
                 case GameState.GameLose:
+
                     //go back to menue
                     if (SingleKeyPress(Keys.M, kbstate, previousKbState) ||
                         tryAgainButton.MouseClick() && tryAgainButton.MouseContains())
@@ -421,6 +425,7 @@ namespace Opossum_Game
                     }
                     break;
                 case GameState.GameWin:
+
                     if (SingleKeyPress(Keys.M, kbstate, previousKbState)
                         /*menuButton.MouseClick() && menuButton.MouseContains()*/)
                     {
