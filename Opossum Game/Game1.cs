@@ -208,7 +208,7 @@ namespace Opossum_Game
                     }
 
                     //to exit the game from menu
-                    //if (exitButton.MouseClick() && exitButton.MouseContains())
+                    //if (quitButton.MouseClick() && quitButton.MouseContains())
                     //{
                     //  Exit();
                     //}
