@@ -200,3 +200,8 @@
 /processorParam:TextureFormat=Color
 /build:tryAgainRollOver.PNG
 
+#begin testerLevel1
+/importer:
+/processor:
+/build:testerLevel1
+
