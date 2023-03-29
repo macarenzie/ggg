@@ -17,36 +17,48 @@ namespace Opossum_Game
     internal class Level
     {
         // fields -------------------------------------------------------------
-        string lineOfData;
-        StreamReader reader;
+        private string fileName;
+        private string lineOfData;
+        private StreamReader reader;
 
-        // collectible list
-        // obstacle list
-        // enemy list
-        // player object
+        // game object lists
+        private List<InteractibleObject> interactibleObjectsList;
+        private List<Enemy> enemyList;
+        private Player player;
+
+        private Texture2D filler;
 
         // properties ---------------------------------------------------------
+        public List<InteractibleObject> InteractibleObjectsList
+        {
+            get
+            {
+                return interactibleObjectsList;
+            }
+        }
 
-        // ********************************************************************
-        /* ALL LISTS NEED (GET ONLY) PROPERTIES TO BE ACCESSED IN GAME1
-         * IN GAME1: 
-         *      - create instance of level object which takes in file
-         *      - then utilize properties to draw each respective list
-         */
-        // ********************************************************************
+        public List<Enemy> EnemyList
+        {
+            get
+            {
+                return enemyList;
+            }
+        }
 
-        // collectible list (get only)
-
-        // obstacle list (get only)
-
-        // enemy list (get only)
-
-        // player object (get only)
+        public Player Player
+        {
+            get
+            {
+                return player;
+            }
+        }
 
         // constructor --------------------------------------------------------
-        public Level()
+        public Level(string fileName)
         {
-            lineOfData = "";
+            this.fileName = fileName;
+            interactibleObjectsList = new List<InteractibleObject>();
+            enemyList = new List<Enemy>();
         }
 
         // methods ------------------------------------------------------------
@@ -55,27 +67,54 @@ namespace Opossum_Game
             // read in the file
             reader = new StreamReader("Content/Levels/" + levelFile);
 
+            // iterate through each line in the file
             while ((lineOfData = reader.ReadLine()) != null)
             {
-                // WHILE LOOP
-                /*      split the data
-                 *      determine what kind of data it is
-                 *      
-                 *      if ( interactable object )
-                 *        if ( collectible )
-                 *            create collectible object
-                 *            add to collectible list
-                 *         if ( obstacle )
-                 *           create obstace object
-                 *              add to obstacle list
-                 *          
-                 *      if ( enemy )
-                 *          create enemy object
-                 *          add to enemy list
-                 *          
-                 *      if ( player )
-                 *          create player object
-                 */
+                // split the data and sort it
+                string[] objectData = lineOfData.Split(",");
+
+                if (objectData[2] == "obstacle")
+                {
+                    Obstacle obstacle = new Obstacle(
+                        filler,
+                        new Rectangle(
+                            int.Parse(objectData[0]),
+                            int.Parse(objectData[1]),
+                            0, 0));
+
+                    interactibleObjectsList.Add(obstacle);
+                }
+                else if (objectData[2] == "collectible")
+                {
+                    Collectible collectible = new Collectible(
+                        filler,
+                        new Rectangle(
+                            int.Parse(objectData[0]),
+                            int.Parse(objectData[1]),
+                            0, 0));
+
+                    interactibleObjectsList.Add(collectible);
+                }
+                else if (objectData[2] == "enemy")
+                {
+                    Enemy enemy = new Enemy(
+                        filler,
+                        new Rectangle(
+                            int.Parse(objectData[0]),
+                            int.Parse(objectData[1]),
+                            0, 0));
+
+                    EnemyList.Add(enemy);
+                }
+                else if (objectData[2] == "player")
+                {
+                    player = new Player(
+                        filler, 
+                        new Rectangle(
+                            int.Parse(objectData[0]),
+                            int.Parse(objectData[1]),
+                            0, 0));
+                }
             }
         }
     }
