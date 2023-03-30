@@ -525,7 +525,7 @@ namespace Opossum_Game
 
                 case GameState.Game:
 
-                    player.Draw(_spriteBatch); //rectangle temp
+                    //player.Draw(_spriteBatch); //rectangle temp
 
                     #region Game Level Screen
                     switch (currentScreen)
@@ -594,15 +594,34 @@ namespace Opossum_Game
                     // LEVEL TESTING ------------------------------------------
                     /*
                     player.Draw(_spriteBatch);
-                    foreach (Collectible obj in collectiblesList)
+                    for (int i = 0; i < collectiblesList.Count; i++)
                     {
-                        obj.Draw(_spriteBatch);
+                        if (isColliding)
+                        {
+                            collectiblesList[i].Draw(_spriteBatch, Color.Blue);
+                            break;
+                        }
+                        else
+                        {
+                            collectiblesList[i].Draw(_spriteBatch, Color.White);
+                        }
                     }
-                    foreach (Obstacle obj in obstaclesList)
+
+                    for (int i = 0; i < obstaclesList.Count; i++)
                     {
-                        obj.Draw(_spriteBatch);
+                        if (isColliding)
+                        {
+                            obstaclesList[i].Draw(_spriteBatch, Color.Green);
+                            break;
+                        }
+                        else
+                        {
+                            obstaclesList[i].Draw(_spriteBatch, Color.White);
+                        }
                     }
                     */
+                    
+                    
 
                     break;
 

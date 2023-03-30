@@ -28,10 +28,10 @@ namespace Opossum_Game
         private Player player;
 
         // game object textures
-        Texture2D collectibleTexture;
-        Texture2D obstacleTexture;
-        Texture2D playerTexture;
-        Texture2D enemyTexture;
+        private Texture2D collectibleTexture;
+        private Texture2D obstacleTexture;
+        private Texture2D playerTexture;
+        private Texture2D enemyTexture;
 
         // properties ---------------------------------------------------------
         public List<Collectible> CollectiblesList
