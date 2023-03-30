@@ -196,12 +196,22 @@ namespace Opossum_Game
                 return false;
             }
         }
-
-        /// <summary>
-        /// Press space to collect food if other object is in range
-        /// </summary>
-        /// <param name="key"></param>
-        public void Collect(KeyboardState prevState, KeyboardState curState, InteractibleObject otherObject)
+        public bool IndividualCollision(Rectangle obstacle)
+        {
+            if (pLocation.Intersects(obstacle)) //And !isHidden
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+            /// <summary>
+            /// Press space to collect food if other object is in range
+            /// </summary>
+            /// <param name="key"></param>
+            public void Collect(KeyboardState prevState, KeyboardState curState, InteractibleObject otherObject)
         {
             //TODO: Check for press and release of space bar
             //Only collect if collectible is in range, check if collectible is collectible
@@ -427,7 +437,8 @@ namespace Opossum_Game
         /// Draw the player to the screen, highlight if collision with light is true 
         /// maybe have the light collision be handled in level manager. just a thought --Jamie
         /// </summary>
-        public void Draw(SpriteBatch sb) 
+        //Color specifier is a TEMP until playdead is implemented
+        public void Draw(SpriteBatch sb, Color color) 
         {
             //IF COLLISION IS TRUE
             /*
@@ -445,7 +456,7 @@ namespace Opossum_Game
             sb.Draw(
                 pSprite,
                 pLocation,
-                Color.White
+                color
                 );
 
         }

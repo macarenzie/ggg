@@ -125,6 +125,11 @@ namespace Opossum_Game
         private Obstacle testObstacle;
         private bool isColliding;
 
+        //Placeholder light
+        private Texture2D lightTexture;
+        private Rectangle lightDimensions;
+        private bool isCollidingLight;
+
         #region LevelLoading
         private StreamReader reader;
         private List<Collectible> collectiblesList;
@@ -274,6 +279,11 @@ namespace Opossum_Game
             testObstacle = new Obstacle(obstacleTexture, obstacleDimensions);
             isColliding = false;
 
+            //Temp light
+            lightTexture = Content.Load<Texture2D>("light");
+            lightDimensions = new Rectangle(200, 700, 200, 200);
+            isCollidingLight = false;
+
             // level loading
             level = new Level(
                 collectibleChips,   // collectible texture
@@ -349,6 +359,8 @@ namespace Opossum_Game
                     {
                         player.Hide(kbstate, previousKbState, testObstacle.ObjectDimensions);
                     }
+                    isCollidingLight = player.IndividualCollision(lightDimensions);
+
 
                     #region Game Level Screen
                     switch (currentScreen)
@@ -577,7 +589,22 @@ namespace Opossum_Game
                     #endregion
 
                     //test obstacle
-                    //testObstacle.Draw(_spriteBatch);
+                    if (isColliding)
+                    {
+                        testObstacle.Draw(_spriteBatch, Color.Green);
+                    }
+                    else
+                    {
+                        testObstacle.Draw(_spriteBatch, Color.White);
+                    }
+
+                    //test light
+                    _spriteBatch.Draw(lightTexture, lightDimensions, Color.White);
+
+                    if (isCollidingLight)
+                    {
+                        player.Draw(_spriteBatch, Color.Red);
+                    }
 
                     // LEVEL TESTING ------------------------------------------
                     /*
