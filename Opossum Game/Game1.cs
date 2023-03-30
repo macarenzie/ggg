@@ -133,6 +133,9 @@ namespace Opossum_Game
         private Rectangle lightDimensions;
         private bool isCollidingLight;
 
+        // TEMP OBSTAACLE TEXTURE
+        Texture2D tempObsTexture;
+
         #region LevelLoading
         private StreamReader reader;
         private List<Collectible> collectiblesList;
@@ -291,10 +294,13 @@ namespace Opossum_Game
             lightDimensions = new Rectangle(200, 700, 200, 200);
             isCollidingLight = false;
 
+            // TEMP OBSTACLE
+            tempObsTexture = Content.Load<Texture2D>("tempObs");
+
             // level loading
             level = new Level(
                 collectibleChips,   // collectible texture
-                collectibleBurger,  // obstacle texture
+                tempObsTexture,  // obstacle texture
                 pSprite,            // player texture
                 collectibleCandy);  // enemy texture
             level.LoadLevel("newTesterLevel");
@@ -304,6 +310,8 @@ namespace Opossum_Game
             collectiblesList = level.CollectiblesList;
             obstaclesList = level.ObstacleList;
             enemyList = level.EnemyList;
+
+            
         }
 
         protected override void Update(GameTime gameTime)
@@ -394,50 +402,52 @@ namespace Opossum_Game
                                 currentState = GameState.Menu;
                             }
                             break;
-                        //case GameScreen.Two:
-                        //    if (player.Y == windowHeight)
-                        //    {
-                        //        currentScreen = GameScreen.Three;
-                        //        player.ResetPosition();
-                        //    }
+                            #region GameScreenTwo
+                            //case GameScreen.Two:
+                            //    if (player.Y == windowHeight)
+                            //    {
+                            //        currentScreen = GameScreen.Three;
+                            //        player.ResetPosition();
+                            //    }
 
-                        //    if (SingleKeyPress(Keys.Escape, kbstate, previousKbState))
-                        //    {
-                        //        currentState = GameState.Menu;
-                        //    }
-                        //    break;
-                        //case GameScreen.Three:
+                            //    if (SingleKeyPress(Keys.Escape, kbstate, previousKbState))
+                            //    {
+                            //        currentState = GameState.Menu;
+                            //    }
+                            //    break;
+                            //case GameScreen.Three:
 
-                        //    if (player.Y == windowHeight)
-                        //    {
-                        //        currentScreen = GameScreen.Three;
-                        //        player.ResetPosition();
-                        //    }
+                            //    if (player.Y == windowHeight)
+                            //    {
+                            //        currentScreen = GameScreen.Three;
+                            //        player.ResetPosition();
+                            //    }
 
-                        //    if (SingleKeyPress(Keys.Escape, kbstate, previousKbState))
-                        //    {
-                        //        currentState = GameState.Menu;
-                        //    }
+                            //    if (SingleKeyPress(Keys.Escape, kbstate, previousKbState))
+                            //    {
+                            //        currentState = GameState.Menu;
+                            //    }
 
-                        //    if (SingleKeyPress(Keys.Z, kbstate, previousKbState))
-                        //    {
-                        //        currentState = GameState.GameWin;
-                        //    }
-                        //    else if (SingleKeyPress(Keys.L, kbstate, previousKbState))
-                        //    {
-                        //        currentState = GameState.GameLose;
-                        //    }
+                            //    if (SingleKeyPress(Keys.Z, kbstate, previousKbState))
+                            //    {
+                            //        currentState = GameState.GameWin;
+                            //    }
+                            //    else if (SingleKeyPress(Keys.L, kbstate, previousKbState))
+                            //    {
+                            //        currentState = GameState.GameLose;
+                            //    }
 
-                        //    //to go back to main menu from game screen
-                        //    else if (SingleKeyPress(Keys.Escape, kbstate, previousKbState))
-                        //    {
-                        //        currentState = GameState.Menu;
-                        //    }
-                        //    break;
+                            //    //to go back to main menu from game screen
+                            //    else if (SingleKeyPress(Keys.Escape, kbstate, previousKbState))
+                            //    {
+                            //        currentState = GameState.Menu;
+                            //    }
+                            //    break;
                             #endregion
 
                     }
-                    if(timer.Interval > 0)
+                    #endregion
+                    if (timer.Interval > 0)
                     {
                         timer.Stop();
                     }
@@ -629,7 +639,6 @@ namespace Opossum_Game
                     
                     // LEVEL TESTING ------------------------------------------
                     /*
-                    
                     for (int i = 0; i < collectiblesList.Count; i++)
                     {
                         if (player.IndividualCollision(collectiblesList[i].Position))
@@ -654,9 +663,8 @@ namespace Opossum_Game
                         }
                     }
                     */
+                    // LEVEL TESTING ------------------------------------------
                     
-                    
-
                     break;
 
                 case GameState.GameLose:

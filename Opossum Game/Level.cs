@@ -102,8 +102,8 @@ namespace Opossum_Game
                         new Rectangle(
                             int.Parse(objectData[1]) * 30,
                             int.Parse(objectData[0]) * 30,
-                            obstacleTexture.Width / 2, 
-                            obstacleTexture.Height / 2));
+                            obstacleTexture.Width / 10, 
+                            obstacleTexture.Height / 10));
 
                     obstaclesList.Add(obstacle);
                 }
