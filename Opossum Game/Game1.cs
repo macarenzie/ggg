@@ -539,7 +539,7 @@ namespace Opossum_Game
 
                 case GameState.Game:
 
-                    player.Draw(_spriteBatch);
+                    player.Draw(_spriteBatch, Color.White);
 
                     #region Game Level Screen
                     switch (currentScreen)
