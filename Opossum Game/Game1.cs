@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Timers;
 
 namespace Opossum_Game
 {
@@ -103,7 +104,7 @@ namespace Opossum_Game
         //literal window
         private int windowWidth;
         private int windowHeight;
-        private Stopwatch timer;
+        private Timer timer;
 
         //List of interactible objects
         private List<InteractibleObject> objects;
@@ -175,7 +176,7 @@ namespace Opossum_Game
             obstacleList = new List<Obstacle>();
 
             //Initializing timer
-            timer = new Stopwatch();
+            timer = new Timer(15000); //15000 milliseconds = 15 seconds
             
 
             base.Initialize();
@@ -197,9 +198,9 @@ namespace Opossum_Game
                 new Rectangle(
                     (windowWidth / 2) - (startButtonBase2D.Width / 4),          // x value
                     (windowHeight / 2) - (startButtonBase2D.Height / 4),        // y value
-                    startButtonBase2D.Width / 2,    // width of button
-                    startButtonBase2D.Height / 2),  // height of button
-                startButtonRollOver);   // rollover button texture
+                    startButtonBase2D.Width / 2,                                // width of button
+                    startButtonBase2D.Height / 2),                              // height of button
+                startButtonRollOver);                                           // rollover button texture
 
             //quit button
             quitBase =
@@ -356,7 +357,7 @@ namespace Opossum_Game
 
                 ////all options for the state of playing the game
                 case GameState.Game:
-
+                    timer.Start(); //timer start
                     player.Update(gameTime);
 
                     //collision stuff
@@ -435,6 +436,10 @@ namespace Opossum_Game
                         //    break;
                             #endregion
 
+                    }
+                    if(timer.Interval > 0)
+                    {
+                        timer.Stop();
                     }
                     break;
                 case GameState.GameLose:
@@ -603,6 +608,14 @@ namespace Opossum_Game
                     {
                         testObstacle.Draw(_spriteBatch, Color.White);
                     }
+
+                    //drawing the timer to the screen
+                    _spriteBatch.DrawString(
+                        comicsans30,
+                        string.Format("Time left: {0}", timer.Interval),
+                        new Vector2(0, 40),
+                        Color.White
+                        );
 
                     //test light
                     _spriteBatch.Draw(lightTexture, lightDimensions, Color.White);
