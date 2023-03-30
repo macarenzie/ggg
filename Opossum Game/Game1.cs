@@ -496,18 +496,20 @@ namespace Opossum_Game
         {
             GraphicsDevice.Clear(Color.Navy);
 
-            //theoretically the game screens should load, however! idk how were gonna consider obstacles +
-            //i think thats mckenzies job - ariel
             #region UI FSM
             _spriteBatch.Begin();
             switch (currentState)
             {
                 case GameState.Menu:
+
                     _spriteBatch.Draw(menuScreen, new Rectangle(0, 0, 900, 900), Color.White);
+
+                    //drawing of the buttons
                     startButton.Draw(_spriteBatch);
                     optionsButton.Draw(_spriteBatch);
                     break;
                 case GameState.Options:
+
                     _spriteBatch.Draw(optionScreen, new Rectangle(0, 0, 900, 900), Color.White);
 
                     // TEMP
@@ -525,7 +527,7 @@ namespace Opossum_Game
 
                 case GameState.Game:
 
-                    player.Draw(_spriteBatch); //rectangle temp
+                    player.Draw(_spriteBatch);
 
                     #region Game Level Screen
                     switch (currentScreen)
@@ -542,41 +544,35 @@ namespace Opossum_Game
 
                             _spriteBatch.DrawString(
                                 comicsans30,
-                                string.Format("GAMEPLAY SCREEN"),
-                                new Vector2(10, 100),
-                                Color.White);
-
-                            _spriteBatch.DrawString(
-                                comicsans30,
                                 string.Format("PRESS 'Z' FOR WIN OR 'L' FOR LOSE"),
                                 new Vector2(10, 200),
                                 Color.White);
 
                             break;
 
-                        case GameScreen.Two:
+                        //case GameScreen.Two:
 
-                            _spriteBatch.DrawString(
-                                comicsans30,
-                                string.Format("GAMEPLAY SCREEN"),
-                                new Vector2(10, 100),
-                                Color.White);
-                            break;
+                        //    _spriteBatch.DrawString(
+                        //        comicsans30,
+                        //        string.Format("GAMEPLAY SCREEN"),
+                        //        new Vector2(10, 100),
+                        //        Color.White);
+                        //    break;
 
-                        case GameScreen.Three:
+                        //case GameScreen.Three:
 
-                            _spriteBatch.DrawString(
-                                comicsans30,
-                                string.Format("GAMEPLAY SCREEN"),
-                                new Vector2(10, 100),
-                                Color.White);
+                        //    _spriteBatch.DrawString(
+                        //        comicsans30,
+                        //        string.Format("GAMEPLAY SCREEN"),
+                        //        new Vector2(10, 100),
+                        //        Color.White);
 
-                            _spriteBatch.DrawString(
-                                comicsans30,
-                                string.Format("PRESS 'Z' FOR WIN OR 'L' FOR LOSE"),
-                                new Vector2(10, 200),
-                                Color.White);
-                            break;
+                        //    _spriteBatch.DrawString(
+                        //        comicsans30,
+                        //        string.Format("PRESS 'Z' FOR WIN OR 'L' FOR LOSE"),
+                        //        new Vector2(10, 200),
+                        //        Color.White);
+                        //    break;
                     }
                     #endregion
 
@@ -599,15 +595,18 @@ namespace Opossum_Game
                     break;
 
                 case GameState.GameLose:
+
                     _spriteBatch.Draw(
                         loseScreen,
                         new Vector2(0,0),
                         Color.White
                         );
+
                     quitButton.Draw(_spriteBatch);
                     tryAgainButton.Draw(_spriteBatch);
                     break;
                 case GameState.GameWin:
+
                     //_spriteBatch.Draw(winScreen, new Rectangle(0, 0, 900, 900), Color.White);
 
                     //TEMP
@@ -616,6 +615,7 @@ namespace Opossum_Game
                         string.Format("GAME WIN SCREEN"), 
                         new Vector2(10, 100), 
                         Color.White);
+
                     _spriteBatch.DrawString(
                         comicsans30, 
                         string.Format("PRESS 'M' FOR MAIN MENU"), 
@@ -625,8 +625,8 @@ namespace Opossum_Game
             }
             #endregion
 
-
             _spriteBatch.End();
+
             base.Draw(gameTime);
         }
 
