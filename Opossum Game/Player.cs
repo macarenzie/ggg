@@ -207,11 +207,11 @@ namespace Opossum_Game
                 return false;
             }
         }
-            /// <summary>
-            /// Press space to collect food if other object is in range
-            /// </summary>
-            /// <param name="key"></param>
-            public void Collect(KeyboardState prevState, KeyboardState curState, InteractibleObject otherObject)
+        /// <summary>
+        /// Press space to collect food if other object is in range
+        /// </summary>
+        /// <param name="key"></param>
+        public void Collect(KeyboardState prevState, KeyboardState curState, InteractibleObject otherObject)
         {
             //TODO: Check for press and release of space bar
             //Only collect if collectible is in range, check if collectible is collectible

@@ -100,8 +100,8 @@ namespace Opossum_Game
                     Obstacle obstacle = new Obstacle(
                         obstacleTexture,
                         new Rectangle(
-                            int.Parse(objectData[0]) * 10,
-                            int.Parse(objectData[1]) * 10,
+                            int.Parse(objectData[1]) * 30,
+                            int.Parse(objectData[0]) * 30,
                             obstacleTexture.Width / 2, 
                             obstacleTexture.Height / 2));
 
@@ -112,8 +112,8 @@ namespace Opossum_Game
                     Collectible collectible = new Collectible(
                         collectibleTexture,
                         new Rectangle(
-                            int.Parse(objectData[0]) * 10,
-                            int.Parse(objectData[1]) * 10,
+                            int.Parse(objectData[1]) * 30,
+                            int.Parse(objectData[0]) * 30,
                             collectibleTexture.Width / 2, 
                             collectibleTexture.Height / 2));
 
@@ -124,8 +124,8 @@ namespace Opossum_Game
                     Enemy enemy = new Enemy(
                         enemyTexture,
                         new Rectangle(
-                            int.Parse(objectData[0]) * 10,
-                            int.Parse(objectData[1]) * 10,
+                            int.Parse(objectData[1]) * 30,
+                            int.Parse(objectData[0]) * 30,
                             enemyTexture.Width / 2, 
                             enemyTexture.Height / 2));
 
@@ -136,8 +136,8 @@ namespace Opossum_Game
                     player = new Player(
                         playerTexture, 
                         new Rectangle(
-                            int.Parse(objectData[0]) * 10,
                             int.Parse(objectData[1]) * 10,
+                            int.Parse(objectData[0]) *10 ,
                             playerTexture.Width / 2, 
                             playerTexture.Height / 2));
                 }

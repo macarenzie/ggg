@@ -599,6 +599,7 @@ namespace Opossum_Game
                     }
                     #endregion
 
+                    player.Draw(_spriteBatch, Color.White);
                     //test obstacle
                     if (isColliding)
                     {
@@ -617,6 +618,7 @@ namespace Opossum_Game
                         Color.White
                         );
 
+                    
                     //test light
                     _spriteBatch.Draw(lightTexture, lightDimensions, Color.White);
 
@@ -624,16 +626,15 @@ namespace Opossum_Game
                     {
                         player.Draw(_spriteBatch, Color.Red);
                     }
-
+                    
                     // LEVEL TESTING ------------------------------------------
                     /*
-                    player.Draw(_spriteBatch);
+                    
                     for (int i = 0; i < collectiblesList.Count; i++)
                     {
-                        if (isColliding)
+                        if (player.IndividualCollision(collectiblesList[i].Position))
                         {
                             collectiblesList[i].Draw(_spriteBatch, Color.Blue);
-                            break;
                         }
                         else
                         {
@@ -643,10 +644,9 @@ namespace Opossum_Game
 
                     for (int i = 0; i < obstaclesList.Count; i++)
                     {
-                        if (isColliding)
+                        if (player.IndividualCollision(obstaclesList[i]))
                         {
                             obstaclesList[i].Draw(_spriteBatch, Color.Green);
-                            break;
                         }
                         else
                         {
