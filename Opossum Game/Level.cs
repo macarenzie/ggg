@@ -126,8 +126,8 @@ namespace Opossum_Game
                         new Rectangle(
                             int.Parse(objectData[1]) * 100,
                             int.Parse(objectData[0]) * 100,
-                            enemyTexture.Width / 2, 
-                            enemyTexture.Height / 2));
+                            enemyTexture.Width / 20, 
+                            enemyTexture.Height / 10));
 
                     EnemyList.Add(enemy);
                 }

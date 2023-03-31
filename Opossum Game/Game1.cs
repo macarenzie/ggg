@@ -302,7 +302,7 @@ namespace Opossum_Game
                 collectibleChips,   // collectible texture
                 tempObsTexture,  // obstacle texture
                 pSprite,            // player texture
-                collectibleCandy);  // enemy texture
+                lightTexture);  // enemy texture
             level.LoadLevel("newTestL1");
             
             // pass in the fields from the level class to the game1 class
@@ -666,7 +666,7 @@ namespace Opossum_Game
 
                     for (int i = 0; i < obstaclesList.Count; i++)
                     {
-                        if (player.IndividualCollision(obstaclesList[i]))
+                        if (player.IndividualCollision(obstaclesList[i].Position))
                         {
                             obstaclesList[i].Draw(_spriteBatch, Color.Green);
                         }
@@ -675,9 +675,21 @@ namespace Opossum_Game
                             obstaclesList[i].Draw(_spriteBatch, Color.White);
                         }
                     }
-                    
+
+                    for (int i = 0; i < enemyList.Count; i++)
+                    {
+                        if (player.IndividualCollision(enemyList[i].Position))
+                        {
+                            enemyList[i].Draw(_spriteBatch);
+                        }
+                        else
+                        {
+                            enemyList[i].Draw(_spriteBatch);
+                        }
+                    }
+
                     // LEVEL TESTING ------------------------------------------
-                    
+
                     break;
 
                 case GameState.GameLose:
