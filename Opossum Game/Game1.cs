@@ -308,7 +308,7 @@ namespace Opossum_Game
                 collectibleChips,   // collectible texture
                 tempObsTexture,  // obstacle texture
                 pSprite,            // player texture
-                tempObsTexture);  // enemy texture
+                lightTexture);  // enemy texture
             level.LoadLevel(levelName);
             
             // pass in the fields from the level class to the game1 class
