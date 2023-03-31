@@ -90,6 +90,9 @@ namespace Opossum_Game
 
         //the game screen
         private GameScreen currentScreen;
+
+        //the timer
+        private double timer;
         #endregion
 
         #region KBState
@@ -104,7 +107,6 @@ namespace Opossum_Game
         //literal window
         private int windowWidth;
         private int windowHeight;
-        private Timer timer;
 
         //List of interactible objects
         private List<InteractibleObject> objects;
@@ -143,6 +145,7 @@ namespace Opossum_Game
         private List<Enemy> enemyList;
         private string levelFile;
         private Level level;
+        string levelName;
         #endregion
 
 
@@ -179,11 +182,12 @@ namespace Opossum_Game
             obstacleList = new List<Obstacle>();
 
             //Initializing timer
-            timer = new Timer(15000); //15000 milliseconds = 15 seconds
-            
+            timer = 15; //15 seconds
 
-            base.Initialize();
-            
+            //testing for reseting level
+            levelName = "newTestL1";
+
+            base.Initialize(); 
         }
 
         protected override void LoadContent()
@@ -302,16 +306,14 @@ namespace Opossum_Game
                 collectibleChips,   // collectible texture
                 tempObsTexture,  // obstacle texture
                 pSprite,            // player texture
-                lightTexture);  // enemy texture
-            level.LoadLevel("newTestL1");
+                collectibleCandy);  // enemy texture
+            level.LoadLevel(levelName);
             
             // pass in the fields from the level class to the game1 class
             player = level.Player;
             collectiblesList = level.CollectiblesList;
             obstaclesList = level.ObstacleList;
             enemyList = level.EnemyList;
-
-            
         }
 
         protected override void Update(GameTime gameTime)
@@ -327,6 +329,9 @@ namespace Opossum_Game
             {
                 //all posibilities for the menu screen
                 case GameState.Menu:
+
+                    //resetting game
+                    ResetGame();
 
                     if (startButton.MouseClick() && startButton.MouseContains())
                     {
@@ -365,59 +370,20 @@ namespace Opossum_Game
 
                 ////all options for the state of playing the game
                 case GameState.Game:
-                    timer.Start(); //timer start
+
+                    timer -= gameTime.ElapsedGameTime.TotalSeconds;
+
                     player.Update(gameTime);
-
-                    //collision stuff
-                    /*
-                    isColliding = player.IndividualCollision(testObstacle);
-                    if (isColliding)
-                    {
-                        player.Hide(kbstate, previousKbState, testObstacle.ObjectDimensions);
-                    }
-                    isCollidingLight = player.IndividualCollision(lightDimensions);
-                    */
-
-                    // test if the player is able to hide in an obstacle
-                    foreach (Obstacle obs in obstaclesList)
-                    {
-                        bool collide = player.IndividualCollision(obs.Position);
-
-                        if (collide)
-                        {
-                            player.Hide(kbstate, previousKbState, obs.Position);
-                        }
-                    }
-
-                    foreach (Enemy enemy in enemyList)
-                    {
-                        bool collide = player.IndividualCollision(enemy.Position);
-
-                        if (collide)
-                        {
-                            
-                        }
-                    }
-
 
                     #region Game Level Screen
                     switch (currentScreen)
                     {
                         case GameScreen.One:
 
-                            if (SingleKeyPress(Keys.Z, kbstate, previousKbState))
-                            {
-                                currentState = GameState.GameWin;
-                            }
-                            else if (SingleKeyPress(Keys.L, kbstate, previousKbState))
-                            {
-                                currentState = GameState.GameLose;
-                            }
-
                             if (player.Y == windowHeight)
                             {
                                 currentScreen = GameScreen.Two;
-                                player.ResetPosition();
+                                player = level.Player;
                             }
 
                             if (SingleKeyPress(Keys.Escape, kbstate, previousKbState))
@@ -470,11 +436,52 @@ namespace Opossum_Game
 
                     }
                     #endregion
-                    if (timer.Interval > 0)
+
+                    #region Collisions
+                    //collision stuff
+                    /*
+                    isColliding = player.IndividualCollision(testObstacle);
+                    if (isColliding)
                     {
-                        timer.Stop();
+                        player.Hide(kbstate, previousKbState, testObstacle.ObjectDimensions);
+                    }
+                    isCollidingLight = player.IndividualCollision(lightDimensions);
+                    */
+
+                    // test if the player is able to hide in an obstacle
+                    foreach (Obstacle obs in obstaclesList)
+                    {
+                        bool collide = player.IndividualCollision(obs.Position);
+
+                        if (collide)
+                        {
+                            player.Hide(kbstate, previousKbState, obs.Position);
+                        }
+                    }
+
+                    //collectible collision
+                    for (int i = 0; i < collectiblesList.Count; i++)
+                    {
+                        bool collide = player.IndividualCollision(collectiblesList[i].Position);
+
+                        if (collide)
+                        {
+                            collectiblesList.Remove(collectiblesList[i]);
+                        }
+                    }
+                    #endregion
+
+                    //win conditions for now -- moving later to game screen 3
+                    if (timer <= 0 && collectiblesList.Count != 0)
+                    {
+                        currentState = GameState.GameLose;
+                    }
+                    else if (timer >= 0 && collectiblesList.Count == 0)
+                    {
+                        currentState = GameState.GameWin;
                     }
                     break;
+
                 case GameState.GameLose:
 
                     //go back to menue
@@ -585,53 +592,6 @@ namespace Opossum_Game
 
                     player.Draw(_spriteBatch, Color.White);
 
-                    #region Game Level Screen
-                    //switch (currentScreen)
-                    //{
-                    //    case GameScreen.One:
-                    //        //_spriteBatch.Draw(gameScreen1, new Rectangle(0, 0, 900, 900), Color.White);
-
-                    //        // TEMP
-                    //        _spriteBatch.DrawString(
-                    //            comicsans30,
-                    //            string.Format("GAMEPLAY SCREEN"),
-                    //            new Vector2(10, 100),
-                    //            Color.White);
-
-                    //        _spriteBatch.DrawString(
-                    //            comicsans30,
-                    //            string.Format("PRESS 'Z' FOR WIN OR 'L' FOR LOSE"),
-                    //            new Vector2(10, 200),
-                    //            Color.White);
-
-                    //        break;
-
-                        //case GameScreen.Two:
-
-                        //    _spriteBatch.DrawString(
-                        //        comicsans30,
-                        //        string.Format("GAMEPLAY SCREEN"),
-                        //        new Vector2(10, 100),
-                        //        Color.White);
-                        //    break;
-
-                        //case GameScreen.Three:
-
-                        //    _spriteBatch.DrawString(
-                        //        comicsans30,
-                        //        string.Format("GAMEPLAY SCREEN"),
-                        //        new Vector2(10, 100),
-                        //        Color.White);
-
-                        //    _spriteBatch.DrawString(
-                        //        comicsans30,
-                        //        string.Format("PRESS 'Z' FOR WIN OR 'L' FOR LOSE"),
-                        //        new Vector2(10, 200),
-                        //        Color.White);
-                        //    break;
-                    //}
-                    #endregion
-
 
                     ////test obstacle
                     //if (isColliding)
@@ -646,8 +606,8 @@ namespace Opossum_Game
                     //drawing the timer to the screen
                     _spriteBatch.DrawString(
                         comicsans30,
-                        string.Format("Time left: {0}", timer.Interval),
-                        new Vector2(0, 40),
+                        string.Format("Time left: {0:0}", timer),
+                        new Vector2(0, 5),
                         Color.White
                         );
 
@@ -764,6 +724,20 @@ namespace Opossum_Game
             {
                 return false;
             }
+        }
+
+        /// <summary>
+        /// resets all the game conditions
+        /// </summary>
+        public void ResetGame()
+        {
+            level.LoadLevel(levelName);
+
+            collectiblesList = level.CollectiblesList;
+
+            timer = 15;
+
+            player = level.Player;
         }
     }
 }
