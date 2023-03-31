@@ -13,6 +13,7 @@ namespace Opossum_Game
     /// Class for collectible objects that can be picked up by the player when in range.
     /// Can be walked over by the player.
     /// Inherits from InteractibleObject.
+    /// Worked on by: McKenzie Lam, Julia Rissberger
     /// </summary>
     internal class Collectible : InteractibleObject
     {

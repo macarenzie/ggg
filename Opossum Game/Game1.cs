@@ -9,7 +9,9 @@ using System.Timers;
 namespace Opossum_Game
 {
     /// <summary>
-    /// McKenzie: added enums and started loading in content, worked on temp fsm for update and draw
+    /// McKenzie: added enums and started loading in content, worked on 
+    ///    temp fsm for update and draw, did all data driven level loading,
+    ///    helped with collision handling in update and draw for each game object
     /// Hui Lin: worked on enums and current state game state stuff
     /// Ariel: finalized UI fsm and implimented camera movement fsm
     /// </summary>
@@ -306,7 +308,7 @@ namespace Opossum_Game
                 collectibleChips,   // collectible texture
                 tempObsTexture,  // obstacle texture
                 pSprite,            // player texture
-                collectibleCandy);  // enemy texture
+                tempObsTexture);  // enemy texture
             level.LoadLevel(levelName);
             
             // pass in the fields from the level class to the game1 class
@@ -438,15 +440,6 @@ namespace Opossum_Game
                     #endregion
 
                     #region Collisions
-                    //collision stuff
-                    /*
-                    isColliding = player.IndividualCollision(testObstacle);
-                    if (isColliding)
-                    {
-                        player.Hide(kbstate, previousKbState, testObstacle.ObjectDimensions);
-                    }
-                    isCollidingLight = player.IndividualCollision(lightDimensions);
-                    */
 
                     // test if the player is able to hide in an obstacle
                     foreach (Obstacle obs in obstaclesList)
@@ -592,17 +585,6 @@ namespace Opossum_Game
 
                     player.Draw(_spriteBatch, Color.White);
 
-
-                    ////test obstacle
-                    //if (isColliding)
-                    //{
-                    //    testObstacle.Draw(_spriteBatch, Color.Green);
-                    //}
-                    //else
-                    //{
-                    //    testObstacle.Draw(_spriteBatch, Color.White);
-                    //}
-
                     //drawing the timer to the screen
                     _spriteBatch.DrawString(
                         comicsans30,
@@ -610,30 +592,16 @@ namespace Opossum_Game
                         new Vector2(0, 5),
                         Color.White
                         );
-
-                    
-                    //////test light
-                    ////_spriteBatch.Draw(lightTexture, lightDimensions, Color.White);
-
-                    if (isCollidingLight)
-                    {
-                        player.Draw(_spriteBatch, Color.Red);
-                    }
                     
                     // LEVEL TESTING ------------------------------------------
                     
+                    // draw each collectible
                     for (int i = 0; i < collectiblesList.Count; i++)
                     {
-                        if (player.IndividualCollision(collectiblesList[i].Position))
-                        {
-                            collectiblesList[i].Draw(_spriteBatch, Color.Blue);
-                        }
-                        else
-                        {
-                            collectiblesList[i].Draw(_spriteBatch, Color.White);
-                        }
+                        collectiblesList[i].Draw(_spriteBatch, Color.White);
                     }
 
+                    // draw obstacles based on player collision
                     for (int i = 0; i < obstaclesList.Count; i++)
                     {
                         if (player.IndividualCollision(obstaclesList[i].Position))
@@ -646,16 +614,10 @@ namespace Opossum_Game
                         }
                     }
 
+                    // draw each light
                     for (int i = 0; i < enemyList.Count; i++)
                     {
-                        if (player.IndividualCollision(enemyList[i].Position))
-                        {
-                            enemyList[i].Draw(_spriteBatch);
-                        }
-                        else
-                        {
-                            enemyList[i].Draw(_spriteBatch);
-                        }
+                        enemyList[i].Draw(_spriteBatch);
                     }
 
                     // draw the player based on collisions with light

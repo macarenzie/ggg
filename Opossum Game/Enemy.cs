@@ -9,6 +9,9 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Opossum_Game
 {
+    /// <summary>
+    /// Worked on by: McKenzie Lam
+    /// </summary>
     internal class Enemy
     {
         private Texture2D texture;

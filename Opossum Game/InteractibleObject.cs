@@ -12,6 +12,7 @@ namespace Opossum_Game
     /// <summary>
     /// Abstract class for objects the player is able to interact with in some form. 
     /// Utilized as the parent class for obstacles and collectibles.
+    /// Worked on by: Julia Rissberger, McKenzie Lam
     /// </summary>
     internal abstract class InteractibleObject
     {

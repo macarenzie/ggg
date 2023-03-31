@@ -13,6 +13,7 @@ namespace Opossum_Game
     /// Class for obstacle objects that have collision interactions with the player.
     /// The player is able to hide under these objects when in range.
     /// Inherits from InteractibleObject.
+    /// Worked on by: McKenzie Lam, Julia Rissberger
     /// </summary>
     internal class Obstacle : InteractibleObject
     {
