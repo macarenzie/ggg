@@ -185,17 +185,6 @@ namespace Opossum_Game
         } */
 
         //Method for detecting individual collision with obstacles
-        public bool IndividualCollision (Obstacle obstacle)
-        {
-            if (pLocation.Intersects(obstacle.ObjectDimensions)) //And !isHidden
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
         public bool IndividualCollision(Rectangle obstacle)
         {
             if (pLocation.Intersects(obstacle)) //And !isHidden
@@ -306,10 +295,10 @@ namespace Opossum_Game
                         pLocation.X -= 5;
 
                         //no moving in negative x direction if A is released
-                        if(currKB.IsKeyUp(Keys.A) && prevKB.IsKeyDown(Keys.A))
-                        {
-                            pLocation.X += 0;
-                        }
+                        //if(currKB.IsKeyUp(Keys.A) && prevKB.IsKeyDown(Keys.A))
+                        //{
+                        //    pLocation.X += 0;
+                        //}
                     }
 
                     //TRANSITIONS
@@ -412,15 +401,6 @@ namespace Opossum_Game
 
             //update prevKB
             prevKB = currKB;
-        }
-
-        /// <summary>
-        /// resets the players position to the center of the screen
-        /// </summary>
-        public void ResetPosition()
-        {
-            pLocation.X = 230;
-            pLocation.Y = 5;
         }
 
         /// <summary>
