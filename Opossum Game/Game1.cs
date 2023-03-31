@@ -303,7 +303,7 @@ namespace Opossum_Game
                 tempObsTexture,  // obstacle texture
                 pSprite,            // player texture
                 collectibleCandy);  // enemy texture
-            level.LoadLevel("newTesterLevel");
+            level.LoadLevel("newTestL1");
             
             // pass in the fields from the level class to the game1 class
             player = level.Player;
@@ -369,12 +369,25 @@ namespace Opossum_Game
                     player.Update(gameTime);
 
                     //collision stuff
+                    /*
                     isColliding = player.IndividualCollision(testObstacle);
                     if (isColliding)
                     {
                         player.Hide(kbstate, previousKbState, testObstacle.ObjectDimensions);
                     }
                     isCollidingLight = player.IndividualCollision(lightDimensions);
+                    */
+
+                    // test if the player is able to hide in an obstacle
+                    foreach (Obstacle obs in obstaclesList)
+                    {
+                        bool collide = player.IndividualCollision(obs);
+
+                        if (collide)
+                        {
+                            player.Hide(kbstate, previousKbState, obs.Position);
+                        }
+                    }
 
 
                     #region Game Level Screen
@@ -563,25 +576,25 @@ namespace Opossum_Game
                     player.Draw(_spriteBatch, Color.White);
 
                     #region Game Level Screen
-                    switch (currentScreen)
-                    {
-                        case GameScreen.One:
-                            //_spriteBatch.Draw(gameScreen1, new Rectangle(0, 0, 900, 900), Color.White);
+                    //switch (currentScreen)
+                    //{
+                    //    case GameScreen.One:
+                    //        //_spriteBatch.Draw(gameScreen1, new Rectangle(0, 0, 900, 900), Color.White);
 
-                            // TEMP
-                            _spriteBatch.DrawString(
-                                comicsans30,
-                                string.Format("GAMEPLAY SCREEN"),
-                                new Vector2(10, 100),
-                                Color.White);
+                    //        // TEMP
+                    //        _spriteBatch.DrawString(
+                    //            comicsans30,
+                    //            string.Format("GAMEPLAY SCREEN"),
+                    //            new Vector2(10, 100),
+                    //            Color.White);
 
-                            _spriteBatch.DrawString(
-                                comicsans30,
-                                string.Format("PRESS 'Z' FOR WIN OR 'L' FOR LOSE"),
-                                new Vector2(10, 200),
-                                Color.White);
+                    //        _spriteBatch.DrawString(
+                    //            comicsans30,
+                    //            string.Format("PRESS 'Z' FOR WIN OR 'L' FOR LOSE"),
+                    //            new Vector2(10, 200),
+                    //            Color.White);
 
-                            break;
+                    //        break;
 
                         //case GameScreen.Two:
 
@@ -606,19 +619,19 @@ namespace Opossum_Game
                         //        new Vector2(10, 200),
                         //        Color.White);
                         //    break;
-                    }
+                    //}
                     #endregion
 
-                    player.Draw(_spriteBatch, Color.White);
-                    //test obstacle
-                    if (isColliding)
-                    {
-                        testObstacle.Draw(_spriteBatch, Color.Green);
-                    }
-                    else
-                    {
-                        testObstacle.Draw(_spriteBatch, Color.White);
-                    }
+
+                    ////test obstacle
+                    //if (isColliding)
+                    //{
+                    //    testObstacle.Draw(_spriteBatch, Color.Green);
+                    //}
+                    //else
+                    //{
+                    //    testObstacle.Draw(_spriteBatch, Color.White);
+                    //}
 
                     //drawing the timer to the screen
                     _spriteBatch.DrawString(
@@ -629,8 +642,8 @@ namespace Opossum_Game
                         );
 
                     
-                    //test light
-                    _spriteBatch.Draw(lightTexture, lightDimensions, Color.White);
+                    //////test light
+                    ////_spriteBatch.Draw(lightTexture, lightDimensions, Color.White);
 
                     if (isCollidingLight)
                     {
@@ -638,7 +651,7 @@ namespace Opossum_Game
                     }
                     
                     // LEVEL TESTING ------------------------------------------
-                    /*
+                    
                     for (int i = 0; i < collectiblesList.Count; i++)
                     {
                         if (player.IndividualCollision(collectiblesList[i].Position))
@@ -662,7 +675,7 @@ namespace Opossum_Game
                             obstaclesList[i].Draw(_spriteBatch, Color.White);
                         }
                     }
-                    */
+                    
                     // LEVEL TESTING ------------------------------------------
                     
                     break;

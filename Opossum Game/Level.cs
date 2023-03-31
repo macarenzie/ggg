@@ -100,10 +100,10 @@ namespace Opossum_Game
                     Obstacle obstacle = new Obstacle(
                         obstacleTexture,
                         new Rectangle(
-                            int.Parse(objectData[1]) * 30,
-                            int.Parse(objectData[0]) * 30,
-                            obstacleTexture.Width / 10, 
-                            obstacleTexture.Height / 10));
+                            int.Parse(objectData[1]) * 100,
+                            int.Parse(objectData[0]) * 100 - 4,
+                            obstacleTexture.Width / 5, 
+                            obstacleTexture.Height / 5));
 
                     obstaclesList.Add(obstacle);
                 }
@@ -112,8 +112,8 @@ namespace Opossum_Game
                     Collectible collectible = new Collectible(
                         collectibleTexture,
                         new Rectangle(
-                            int.Parse(objectData[1]) * 30,
-                            int.Parse(objectData[0]) * 30,
+                            int.Parse(objectData[1]) * 100,
+                            int.Parse(objectData[0]) * 100,
                             collectibleTexture.Width / 2, 
                             collectibleTexture.Height / 2));
 
@@ -124,8 +124,8 @@ namespace Opossum_Game
                     Enemy enemy = new Enemy(
                         enemyTexture,
                         new Rectangle(
-                            int.Parse(objectData[1]) * 30,
-                            int.Parse(objectData[0]) * 30,
+                            int.Parse(objectData[1]) * 100,
+                            int.Parse(objectData[0]) * 100,
                             enemyTexture.Width / 2, 
                             enemyTexture.Height / 2));
 
@@ -136,10 +136,10 @@ namespace Opossum_Game
                     player = new Player(
                         playerTexture, 
                         new Rectangle(
-                            int.Parse(objectData[1]) * 10,
-                            int.Parse(objectData[0]) *10 ,
-                            playerTexture.Width / 2, 
-                            playerTexture.Height / 2));
+                            int.Parse(objectData[1]) * 100,
+                            int.Parse(objectData[0]) *100 ,
+                            playerTexture.Width / 4, 
+                            playerTexture.Height / 4));
                 }
             }
         }
