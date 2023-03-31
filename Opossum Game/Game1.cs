@@ -184,7 +184,7 @@ namespace Opossum_Game
             obstacleList = new List<Obstacle>();
 
             //Initializing timer
-            timer = 15; //15 seconds
+            timer = 20; //15 seconds
 
             //testing for reseting level
             levelName = "newTestL1";
