@@ -11,9 +11,35 @@ namespace Opossum_Game
 {
     internal class Enemy
     {
+        private Texture2D texture;
+        private Rectangle position;
+
+        public Texture2D Texture
+        {
+            get
+            {
+                return texture;
+            }
+        }
+
+        public Rectangle Position
+        {
+            get
+            {
+                return position;
+            }
+        }
+
+
         public Enemy(Texture2D texture, Rectangle position)
         {
+            this.texture = texture;
+            this.position = position;
+        }
 
+        public void Draw(SpriteBatch sb)
+        {
+            sb.Draw(texture, position, Color.White);
         }
     }
 }

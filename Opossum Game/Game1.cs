@@ -645,9 +645,35 @@ namespace Opossum_Game
                             obstaclesList[i].Draw(_spriteBatch, Color.White);
                         }
                     }
-                    
+
+                    for (int i = 0; i < enemyList.Count; i++)
+                    {
+                        if (player.IndividualCollision(enemyList[i].Position))
+                        {
+                            enemyList[i].Draw(_spriteBatch);
+                        }
+                        else
+                        {
+                            enemyList[i].Draw(_spriteBatch);
+                        }
+                    }
+
+                    // draw the player based on collisions with light
+                    foreach (Enemy enemy in enemyList)
+                    {
+                        bool collide = player.IndividualCollision(enemy.Position);
+
+                        if (collide)
+                        {
+                            player.Draw(_spriteBatch, Color.Red);
+                            break;
+                        }
+                        
+                        player.Draw(_spriteBatch, Color.White);
+                    }
+
                     // LEVEL TESTING ------------------------------------------
-                    
+
                     break;
 
                 case GameState.GameLose:
