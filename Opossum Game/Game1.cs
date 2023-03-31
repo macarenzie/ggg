@@ -381,11 +381,21 @@ namespace Opossum_Game
                     // test if the player is able to hide in an obstacle
                     foreach (Obstacle obs in obstaclesList)
                     {
-                        bool collide = player.IndividualCollision(obs);
+                        bool collide = player.IndividualCollision(obs.Position);
 
                         if (collide)
                         {
                             player.Hide(kbstate, previousKbState, obs.Position);
+                        }
+                    }
+
+                    foreach (Enemy enemy in enemyList)
+                    {
+                        bool collide = player.IndividualCollision(enemy.Position);
+
+                        if (collide)
+                        {
+                            
                         }
                     }
 
@@ -686,6 +696,20 @@ namespace Opossum_Game
                         {
                             enemyList[i].Draw(_spriteBatch);
                         }
+                    }
+
+                    // draw the player based on collisions with light
+                    foreach (Enemy enemy in enemyList)
+                    {
+                        bool collide = player.IndividualCollision(enemy.Position);
+
+                        if (collide)
+                        {
+                            player.Draw(_spriteBatch, Color.Red);
+                            break;
+                        }
+                        
+                        player.Draw(_spriteBatch, Color.White);
                     }
 
                     // LEVEL TESTING ------------------------------------------
