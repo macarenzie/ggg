@@ -121,7 +121,7 @@ namespace Opossum_Game
                 }
                 else if (objectData[2] == "enemy")
                 {
-                    Enemy enemy = new Enemy(
+                   /* Enemy enemy = new Enemy(
                         enemyTexture,
                         new Rectangle(
                             int.Parse(objectData[1]) * 100,
@@ -129,7 +129,7 @@ namespace Opossum_Game
                             enemyTexture.Width / 20, 
                             enemyTexture.Height / 10));
 
-                    EnemyList.Add(enemy);
+                    EnemyList.Add(enemy); */
                 }
                 else if (objectData[2] == "player")
                 {

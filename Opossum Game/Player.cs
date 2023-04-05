@@ -227,7 +227,7 @@ namespace Opossum_Game
             //These numbers can be adjusted when visuals are implemented and do what looks good
             float dx = Math.Abs((this.pLocation.Width / 2) - (otherObject.Width / 2));
             float dy = Math.Abs((this.pLocation.Height / 2) - (otherObject.Height / 2));
-
+               
             if (
                 //TODO: Check distance between objects
                 //distance is based on midpoint of each object??

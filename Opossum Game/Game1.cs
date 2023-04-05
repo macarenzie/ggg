@@ -552,7 +552,7 @@ namespace Opossum_Game
         {
             GraphicsDevice.Clear(Color.Navy);
 
-            #region UI FSM
+            #region UI FSM                                                                                                                                                                                                                              
             _spriteBatch.Begin();
             switch (currentState)
             {
