@@ -15,7 +15,7 @@ namespace Opossum_Game
 
     
     ///<summary>
-    /// Enum used to indicate the current direction the enemy is moving/facing.
+    /// Enum used to indicate the current direction the enemy is moving/facing. 
     ///</summary>
     enum MovementDirection
     {
@@ -96,6 +96,40 @@ namespace Opossum_Game
                     break;
             }
                 
+        }
+
+        /// <summary>
+        /// Checks if an enemy is colliding with an obstacle.
+        /// Changes their direction if so. Doesn't need to check collision side due to straight path of enemy.
+        /// Needs to be called in game1 due to utilizing the obstacle list.
+        /// </summary>
+        /// <param name="obstacles"> List of obstacles currently on screen. </param>
+        public void enemyObstacleCollision (List<Obstacle> obstacles)
+        {
+            //Indicates if collision is occurring. Set to false by default.
+            bool isColliding = false;
+
+            //Iterates through the entire list and checks intersect status of each obstacle. Stops early if collision is found.
+            for (int i = 0; i < obstacles.Count || isColliding; i++)
+            {
+                if (position.Intersects(obstacles[i].Position))
+                {
+                    isColliding = true;
+                }
+            }
+
+            //If collision is true, changes the current direction of the enemy. 
+            if (isColliding)
+            {
+                if (currentDirection == MovementDirection.Left)
+                {
+                    currentDirection = MovementDirection.Right;
+                }
+                else if (currentDirection == MovementDirection.Right)
+                {
+                    currentDirection = MovementDirection.Left;
+                }
+            }
         }
     }
 }
