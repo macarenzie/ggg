@@ -12,6 +12,7 @@ namespace Opossum_Game
     /// <summary>
     /// Will represent the object the player is controlling
     /// Majority Written by: Jamie Zheng
+    /// COde optimization done by Ariel and McKenzie
     /// </summary>
     internal class Player
     {
@@ -27,6 +28,9 @@ namespace Opossum_Game
         private PlayerState playerState;
 
         //properties
+        /// <summary>
+        /// gets and sets the player texture
+        /// </summary>
         public Texture2D PSprite
         {
             get
@@ -55,14 +59,18 @@ namespace Opossum_Game
             get { return health; }  
         }
 
-        //Player location on X axis
+        /// <summary>
+        /// gets and sets player's x coordinate
+        /// </summary>
         public int X
         {
             get { return pLocation.X; }
             set { pLocation.X = value; }
         }
 
-        //Player location on Y axis
+        /// <summary>
+        /// gets and sets player's y coordinate
+        /// </summary>
         public int Y
         {
             get { return pLocation.Y; }
@@ -83,108 +91,12 @@ namespace Opossum_Game
             this.pLocation = pLocation;
         }
 
-        /// <summary>
-        /// Checking if the edge's of the player and another object are touching
-        /// Exists to keep FSM if statements clean
-        /// </summary>
-        /// <param name="otherObject">The enemy or obstacle's Rectangle field (property)</param>
-        /// <returns>If the player's edge is in contact with another obstacle's edge</returns>
-        //TODO: We may not need this method. Commented out for now in case we need to pull any code from it. -Julia
-        /*public bool EdgeCollision(Rectangle otherObject)
-        {
-            //TODO: 3.18.2023: Maybe have overlap, but in the draw logic keep the edges clipped
-            //This logic is not implemented yet -Jamie
-            if (
-                //LEFT OR RIGHT EDGE
-                ((((pLocation.X + pLocation.Width) == otherObject.X) ||      //left
-                (pLocation.X == (otherObject.X + otherObject.Width))) &&     //right
-                (pLocation.Y <= (otherObject.Y + otherObject.Height)) &&     //between length edges
-                (pLocation.Y >= otherObject.Y)) ||
-
-                //TOP OR BOTTOM EDGE
-                ((((pLocation.Y + pLocation.Height) == otherObject.Y) ||     //Top
-                (pLocation.Y == (otherObject.Y + otherObject.Height))) &&    //Bottom
-                (pLocation.X <= (otherObject.X + otherObject.Width)) &&      //Between width edges
-                (pLocation.X >= otherObject.X))
-                )
-            {
-                return true;
-            }
-
-            else
-            {
-                return false;
-            }
-        } */
-
-        ///<summary>
-        ///Checks edge collision with obstacles.
-        ///Edits a string to represent which edge is in contact. 
-        ///The string is used in game1 to adjust player movement.
-        ///Assumes that the list provided is a list of interactibleObjects. This can be adjusted later if necessary.
-        ///</summary>
-        
-        //public string ObstacleCollisionList(List<Obstacle> objects)
-        //{
-            //Default representation for no collision
-            /*string collisionDirection = "none";
-
-            /*TODO: I pulled these height/width specifications from game1 on 3/27/23. 
-             * Please let me know if this changes, or collision won't work properly. -Julia*/
-            //int playerWidth = pSprite.Width / 4;
-            //int playerHeight = pSprite.Height / 4;
-
-            //Loops to check each object within the list
-           /*for (int i = 0; i < objects.Count; i++)
-            {
-                //TODO: placeholder height/width specifications, based on player specifications--see above note. -Julia
-                int objectWidth = 200;
-                int objectHeight = 200;
-
-                //Only checks collision if the object is an obstacle. Skips any collectibles.
-
-                
-                    //Checks each individual edge
-                    //Player blocked in down direction
-                    //Player width factored into X direction to prevent clipping. 
-                    if(pLocation.Y + playerHeight == objects[i].ObjectDimensions.Y && 
-                        pLocation.X >= objects[i].ObjectDimensions.X + playerWidth &&
-                        pLocation.X <= objects[i].ObjectDimensions.X + objectWidth)
-                    {
-                        collisionDirection = "down";
-                    }
-
-                    //Player blocked in up direction
-                    else if (pLocation.Y == objects[i].ObjectDimensions.Y + objectHeight &&
-                         pLocation.X >= objects[i].ObjectDimensions.X + playerWidth &&
-                         pLocation.X <= objects[i].ObjectDimensions.X + objectWidth)
-                    {
-                        collisionDirection = "up";
-                    }
-
-                    //Player blocked in left direction
-                    else if (pLocation.X == objects[i].ObjectDimensions.X + objectWidth &&
-                        pLocation.Y >= objects[i].ObjectDimensions.Y + playerHeight &&
-                        pLocation.Y <= objects[i].ObjectDimensions.Y + objectHeight)
-                    {
-                        collisionDirection = "left";
-                    }
-
-                    //Player blocked in right direction
-                    else if (pLocation.X + playerWidth == objectWidth &&
-                        pLocation.Y >= objects[i].ObjectDimensions.Y + playerHeight &&
-                        pLocation.Y <= objects[i].ObjectDimensions.Y + objectHeight)
-                    {
-                        collisionDirection = "right";
-                    }
-                
-            }
-            //Later objects in list shouldn't override an earlier detected collision.
-            //May add individual return commands to if blocks depending on how many obstacles, for efficiency's sake.
-            return collisionDirection;
-        } */
-
         //Method for detecting individual collision with obstacles
+        /// <summary>
+        /// detects individual collisions with different game objects
+        /// </summary>
+        /// <param name="obstacle"></param>
+        /// <returns></returns>
         public bool IndividualCollision(Rectangle obstacle)
         {
             if (pLocation.Intersects(obstacle)) //And !isHidden
@@ -196,20 +108,21 @@ namespace Opossum_Game
                 return false;
             }
         }
+
         /// <summary>
-        /// Press space to collect food if other object is in range
+        /// player's collecting food method based on user input
         /// </summary>
-        /// <param name="key"></param>
-        public void Collect(KeyboardState prevState, KeyboardState curState, InteractibleObject otherObject)
+        /// <param name="prevState">keyboard's previous state</param>
+        /// <param name="curState">keyboard's current state</param>
+        /// <param name="otherObject"></param>
+        public void Collect(KeyboardState prevState, KeyboardState curState, Collectible food)
         {
             //TODO: Check for press and release of space bar
             //Only collect if collectible is in range, check if collectible is collectible
             //Complete IsInRange() method before this one
             if(prevState.IsKeyDown(Keys.Space) &&               //key release check
                curState.IsKeyUp(Keys.Space) &&
-                IsInRange(otherObject.ObjectDimensions) &&      //Check if in range
-                otherObject is Collectible                      //Check object is collectible
-                )
+                IsInRange(food.ObjectDimensions))      //Check if in range 
             {
                 foodCollected++;
             }
@@ -245,7 +158,7 @@ namespace Opossum_Game
         }
 
         /// <summary>
-        /// Will change the player's position to be overlapping with the hidable obstacle
+        /// Will change the player's position to be overlapping with the hideable obstacle
         /// Check if IsInRange is true
         /// Press and release space bar
         /// </summary>
@@ -277,8 +190,10 @@ namespace Opossum_Game
         /// <summary>
         /// processes EVERYTHING that affects player movement
         /// </summary>
-        //TODO: Implement edge collision--block the player from moving off screen (left/right edges), or change panel (top/bottom edges) -Julia
-        //TODO: Diagonal movement doesn't work right now. Could potentially only use enum switch for draw purposes. -Julia
+        //TODO: Implement edge collision--block the player from moving off
+        //    screen (left/right edges), or change panel (top/bottom edges) -Julia
+        //TODO: Diagonal movement doesn't work right now. Could potentially
+        //   only use enum switch for draw purposes. -Julia
         private void ProcessInput()
         {
             //get current kbState
@@ -293,12 +208,6 @@ namespace Opossum_Game
                     if (currKB.IsKeyDown(Keys.A))
                     {
                         pLocation.X -= 5;
-
-                        //no moving in negative x direction if A is released
-                        //if(currKB.IsKeyUp(Keys.A) && prevKB.IsKeyDown(Keys.A))
-                        //{
-                        //    pLocation.X += 0;
-                        //}
                     }
 
                     //TRANSITIONS
@@ -318,12 +227,6 @@ namespace Opossum_Game
                     if (currKB.IsKeyDown(Keys.D))
                     {
                         pLocation.X += 5;
-
-                        //No moving in positive x direction if D is released
-                        if(currKB.IsKeyUp(Keys.D) && prevKB.IsKeyDown(Keys.D))
-                        {
-                            pLocation.X += 0;
-                        }
                     }
 
                     //TRANSITIONS
@@ -343,12 +246,6 @@ namespace Opossum_Game
                     if (currKB.IsKeyDown(Keys.W))
                     {
                         pLocation.Y -= 5;
-
-                        //No moving in the negative y direction if W is released
-                        if(currKB.IsKeyUp(Keys.W) && prevKB.IsKeyDown(Keys.W))
-                        {
-                            pLocation.Y += 0;
-                        }
                     }
 
                     //TRANSITIONS
@@ -368,12 +265,6 @@ namespace Opossum_Game
                     if (currKB.IsKeyDown(Keys.S))
                     {
                         pLocation.Y += 5;
-
-                        //No moving in the positive Y direction if S is released
-                        if(currKB.IsKeyUp(Keys.S) && prevKB.IsKeyDown(Keys.S))
-                        {
-                            pLocation.Y += 0;
-                        }
                     }
 
                     //TRANSITIONS
