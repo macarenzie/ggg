@@ -545,6 +545,18 @@ namespace Opossum_Game
             previousKbState = kbstate;
             #endregion
 
+            //PSEUDOCODE FOR THE FREEZING AND SLOWING
+            /*FOREACH enemy in the enemyList
+                Check IF enemy.LightIntersects() is true or not
+            ----------Let's talk about this more, the only way I can see this working is a FSM because the state needs to change-------------
+                IF player is in contact with the light
+                    Freeze the player for a set amount of seconds
+                    (This is where I need help to figure out)
+                    After the initial freeze (a set amount of time that a timer can be used for) 
+                    The player's movement is altered to be slower UNTIL 
+            
+                    LightIntersects() is false. 
+            */
             base.Update(gameTime);
         }
 

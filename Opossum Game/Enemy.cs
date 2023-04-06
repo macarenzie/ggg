@@ -136,7 +136,7 @@ namespace Opossum_Game
         /// If the player hits the rectangke that is the light.
         /// </summary>
         /// <param name="player">PLayer or whatever other object that would interact with the light</param>
-        /// <returns></returns>
+        /// <returns>True if light intersects, otherwise false.</returns>
         public bool LightIntersects(Rectangle player)
         {
             if (lightRectangle.Intersects(player)) 
