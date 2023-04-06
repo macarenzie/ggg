@@ -549,10 +549,12 @@ namespace Opossum_Game
             /*FOREACH enemy in the enemyList
                 Check IF enemy.LightIntersects() is true or not
             ----------Let's talk about this more, the only way I can see this working is a FSM because the state needs to change-------------
+            Have a boolean called enemyLight
                 IF player is in contact with the light
+                    enemyLight = true;
                     Freeze the player for a set amount of seconds
-                    (This is where I need help to figure out)
-                    After the initial freeze (a set amount of time that a timer can be used for) 
+                        --> Most likely a method so everything is paused while it ticks down
+                    (How do i make the player then immune to this? I am lost here) 
                     The player's movement is altered to be slower UNTIL 
             
                     LightIntersects() is false. 
