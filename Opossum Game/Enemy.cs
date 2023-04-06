@@ -29,6 +29,7 @@ namespace Opossum_Game
         private Texture2D texture;
         private Rectangle position;
         private MovementDirection currentDirection;
+        private Rectangle lightRectangle;
 
         public Texture2D Texture
         {
@@ -129,6 +130,21 @@ namespace Opossum_Game
                 {
                     currentDirection = MovementDirection.Left;
                 }
+            }
+        }
+        /// <summary>
+        /// If the player hits the rectangke that is the light.
+        /// </summary>
+        /// <param name="player">PLayer or whatever other object that would interact with the light</param>
+        /// <returns></returns>
+        public bool LightIntersects(Rectangle player)
+        {
+            if (lightRectangle.Intersects(player)) 
+            {
+                return true;
+            } else
+            {
+                return false;
             }
         }
     }
