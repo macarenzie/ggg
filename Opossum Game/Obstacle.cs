@@ -21,6 +21,9 @@ namespace Opossum_Game
         Rectangle position;
         bool isHidable;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public Texture2D Texture
         {
             get
@@ -33,6 +36,9 @@ namespace Opossum_Game
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public Rectangle Position
         {
             get

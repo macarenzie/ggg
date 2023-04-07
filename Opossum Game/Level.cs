@@ -33,7 +33,9 @@ namespace Opossum_Game
         private Texture2D playerTexture;
         private Texture2D enemyTexture;
 
-        // properties ---------------------------------------------------------
+        /// <summary>
+        /// 
+        /// </summary>
         public List<Collectible> CollectiblesList
         {
             get
@@ -42,6 +44,9 @@ namespace Opossum_Game
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public List<Obstacle> ObstacleList
         {
             get
@@ -50,6 +55,9 @@ namespace Opossum_Game
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public List<Enemy> EnemyList
         {
             get
@@ -58,6 +66,9 @@ namespace Opossum_Game
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public Player Player
         {
             get
@@ -66,7 +77,13 @@ namespace Opossum_Game
             }
         }
 
-        // constructor --------------------------------------------------------
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="collectibleTexture"></param>
+        /// <param name="obstacleTexture"></param>
+        /// <param name="playerTexture"></param>
+        /// <param name="enemyTexture"></param>
         public Level(
             Texture2D collectibleTexture, 
             Texture2D obstacleTexture, 
@@ -83,7 +100,10 @@ namespace Opossum_Game
             this.enemyTexture = enemyTexture;
         }
 
-        // methods ------------------------------------------------------------
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="levelFile"></param>
         public void LoadLevel(string levelFile)
         {
             // read in the file

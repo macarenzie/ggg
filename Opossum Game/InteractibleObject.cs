@@ -45,7 +45,11 @@ namespace Opossum_Game
             this.objectDimensions = objectDimensions;
         } 
 
-        //Draw method
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sb"></param>
+        /// <param name="color"></param>
         public virtual void Draw(SpriteBatch sb, Color color)
         {
             sb.Draw(objectTexture, ObjectDimensions, color);

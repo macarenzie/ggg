@@ -20,6 +20,9 @@ namespace Opossum_Game
         Texture2D texture;
         Rectangle position;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public Texture2D Texture
         {
             get
@@ -32,6 +35,9 @@ namespace Opossum_Game
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public Rectangle Position
         {
             get
@@ -44,8 +50,11 @@ namespace Opossum_Game
             }
         }
 
-        //Parameterized constructor
-        //Only utilizes fields from parent class at present
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="objectTexture"></param>
+        /// <param name="objectDimensions"></param>
         public Collectible (Texture2D objectTexture, Rectangle objectDimensions) :
             base (objectTexture, objectDimensions) 
         {
@@ -53,6 +62,11 @@ namespace Opossum_Game
             position = objectDimensions;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sb"></param>
+        /// <param name="color"></param>
         public override void Draw(SpriteBatch sb, Color color)
         {
             sb.Draw(texture, position, color);
