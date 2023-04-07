@@ -295,10 +295,10 @@ namespace Opossum_Game
                         pLocation.X -= 5;
 
                         //no moving in negative x direction if A is released
-                        //if(currKB.IsKeyUp(Keys.A) && prevKB.IsKeyDown(Keys.A))
-                        //{
-                        //    pLocation.X += 0;
-                        //}
+                        if (currKB.IsKeyUp(Keys.A) && prevKB.IsKeyDown(Keys.A))
+                        {
+                            pLocation.X += 0;
+                        }
                     }
 
                     //TRANSITIONS
