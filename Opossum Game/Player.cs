@@ -17,10 +17,9 @@ namespace Opossum_Game
     internal class Player
     {
         //fields
-        private Rectangle pLocation; //dimensions pSprite dimensions
+        private Rectangle playerRectangle; //dimensions pSprite dimensions
         private Texture2D pSprite;
-        private int health;
-        private int foodCollected;
+        //private int foodCollected;
 
         //player movement stuff
         private KeyboardState currKB;
@@ -46,18 +45,18 @@ namespace Opossum_Game
         /// <summary>
         /// The amount of food the player has collected
         /// </summary>
-        public int FoodCollected
-        {
-            get { return foodCollected; }
-        }
+        //public int FoodCollected
+        //{
+        //    get { return foodCollected; }
+        //}
 
         /// <summary>
         /// gets and sets player's x coordinate
         /// </summary>
         public int X
         {
-            get { return pLocation.X; }
-            set { pLocation.X = value; }
+            get { return playerRectangle.X; }
+            set { playerRectangle.X = value; }
         }
 
         /// <summary>
@@ -65,8 +64,8 @@ namespace Opossum_Game
         /// </summary>
         public int Y
         {
-            get { return pLocation.Y; }
-            set { pLocation.Y = value; }
+            get { return playerRectangle.Y; }
+            set { playerRectangle.Y = value; }
         }
 
         //constructor
@@ -77,12 +76,11 @@ namespace Opossum_Game
         /// <param name="pLocation">Dimensions are dependent on pSprite Texture2D</param>
         public Player(Texture2D pSprite, Rectangle pLocation)
         {
-            foodCollected = 0;
+            //foodCollected = 0;
             this.pSprite = pSprite;
-            this.pLocation = pLocation;
+            this.playerRectangle = pLocation;
         }
 
-        //Method for detecting individual collision with obstacles
         /// <summary>
         /// detects individual collisions with different game objects
         /// </summary>
@@ -90,7 +88,8 @@ namespace Opossum_Game
         /// <returns></returns>
         public bool IndividualCollision(Rectangle obstacle)
         {
-            if (pLocation.Intersects(obstacle)) //And !isHidden
+            //what exactly is an obstacle... for each loop could go here 
+            if (playerRectangle.Intersects(obstacle)) //And !isHidden
             {
                 return true;
             }
@@ -106,18 +105,18 @@ namespace Opossum_Game
         /// <param name="prevState">keyboard's previous state</param>
         /// <param name="curState">keyboard's current state</param>
         /// <param name="otherObject"></param>
-        public void Collect(KeyboardState prevState, KeyboardState curState, Collectible food)
-        {
-            //TODO: Check for press and release of space bar
-            //Only collect if collectible is in range, check if collectible is collectible
-            //Complete IsInRange() method before this one
-            if(prevState.IsKeyDown(Keys.Space) &&               //key release check
-               curState.IsKeyUp(Keys.Space) &&
-                IsInRange(food.ObjectDimensions))      //Check if in range 
-            {
-                foodCollected++;
-            }
-        }
+        //public void Collect(KeyboardState prevState, KeyboardState curState, Collectible food)
+        //{
+        //    //TODO: Check for press and release of space bar
+        //    //Only collect if collectible is in range, check if collectible is collectible
+        //    //Complete IsInRange() method before this one
+        //    if(prevState.IsKeyDown(Keys.Space) &&               //key release check
+        //       curState.IsKeyUp(Keys.Space) &&
+        //        IsInRange(food.ObjectDimensions))      //Check if in range 
+        //    {
+        //        foodCollected++;
+        //    }
+        //}
 
         /// <summary>
         /// Checking if another object is in range
@@ -129,14 +128,14 @@ namespace Opossum_Game
         public bool IsInRange(Rectangle otherObject)
         {
             //These numbers can be adjusted when visuals are implemented and do what looks good
-            float dx = Math.Abs((this.pLocation.Width / 2) - (otherObject.Width / 2));
-            float dy = Math.Abs((this.pLocation.Height / 2) - (otherObject.Height / 2));
+            float dx = Math.Abs((this.playerRectangle.Width / 2) - (otherObject.Width / 2));
+            float dy = Math.Abs((this.playerRectangle.Height / 2) - (otherObject.Height / 2));
                
             if (
                 //TODO: Check distance between objects
                 //distance is based on midpoint of each object??
-                (dx + 20) >= (pLocation.X + pLocation.Width) - (otherObject.X + otherObject.Width)
-                && (dy + 20) >= (pLocation.Y + pLocation.Width) - (otherObject.Y + otherObject.Height)
+                (dx + 20) >= (playerRectangle.X + playerRectangle.Width) - (otherObject.X + otherObject.Width)
+                && (dy + 20) >= (playerRectangle.Y + playerRectangle.Width) - (otherObject.Y + otherObject.Height)
                 )
             {
                 return true;
@@ -164,15 +163,15 @@ namespace Opossum_Game
                 // && otherObstacle is Hideable
                 )
             {
-                if(prevState.IsKeyDown(Keys.Space) && curState.IsKeyUp(Keys.Space))
+                if(currKB.IsKeyDown(Keys.Space) && prevState.IsKeyUp(Keys.Space))
                 {
                     //These obstacles have to be the same size or larger than the player 
                     //Centers the player with the obstacle
-                    pLocation.X = (otherObstacle.X + (otherObstacle.Width / 2)) 
-                        - (pLocation.Width/2);
+                    playerRectangle.X = (otherObstacle.X + (otherObstacle.Width / 2)) 
+                        - (playerRectangle.Width/2);
 
-                    pLocation.Y = (otherObstacle.Y + (otherObstacle.Height / 2)) 
-                        - (pLocation.Height / 2);
+                    playerRectangle.Y = (otherObstacle.Y + (otherObstacle.Height / 2)) 
+                        - (playerRectangle.Height / 2);
 
                 }
             }
@@ -198,7 +197,7 @@ namespace Opossum_Game
                     //if A is pressed
                     if (currKB.IsKeyDown(Keys.A))
                     {
-                        pLocation.X -= 5;
+                        playerRectangle.X -= 5;
                     }
 
                     //TRANSITIONS
@@ -217,7 +216,7 @@ namespace Opossum_Game
                     //if D is pressed
                     if (currKB.IsKeyDown(Keys.D))
                     {
-                        pLocation.X += 5;
+                        playerRectangle.X += 5;
                     }
 
                     //TRANSITIONS
@@ -236,7 +235,7 @@ namespace Opossum_Game
                     //if W is pressed
                     if (currKB.IsKeyDown(Keys.W))
                     {
-                        pLocation.Y -= 5;
+                        playerRectangle.Y -= 5;
                     }
 
                     //TRANSITIONS
@@ -255,7 +254,7 @@ namespace Opossum_Game
                     //if S is pressed
                     if (currKB.IsKeyDown(Keys.S))
                     {
-                        pLocation.Y += 5;
+                        playerRectangle.Y += 5;
                     }
 
                     //TRANSITIONS
@@ -317,7 +316,7 @@ namespace Opossum_Game
             //IF COLLSION IS FALSE
             sb.Draw(
                 pSprite,
-                pLocation,
+                playerRectangle,
                 color
                 );
 

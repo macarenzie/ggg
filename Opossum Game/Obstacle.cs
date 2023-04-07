@@ -19,6 +19,7 @@ namespace Opossum_Game
     {
         Texture2D texture;
         Rectangle position;
+        bool isHidable;
 
         public Texture2D Texture
         {
@@ -44,13 +45,27 @@ namespace Opossum_Game
             }
         }
 
+        /// <summary>
+        /// makes the bool for an object acessible
+        /// </summary>
+        public bool IsHidable
+        {
+            get
+            {
+                return isHidable;
+            }
+        }
+
         //Parameterized constructor
         //Only utilizes fields from the parent class at present
-        public Obstacle(Texture2D objectTexture, Rectangle objectDimensions) 
+        public Obstacle(Texture2D objectTexture, Rectangle objectDimensions /*,bool isHidable*/) 
             : base (objectTexture, objectDimensions) 
         {
             texture = objectTexture;
             position = objectDimensions;
+
+            //put this here because i would assume its also being read in --ariel
+            //this.isHidable = isHidable;
         }
         
         public override void Draw(SpriteBatch sb, Color color)
