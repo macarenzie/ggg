@@ -608,7 +608,7 @@ namespace Opossum_Game
                         );
                     
                     // LEVEL TESTING ------------------------------------------
-                    
+                    /*
                     // draw each collectible
                     for (int i = 0; i < collectiblesList.Count; i++)
                     {
@@ -647,7 +647,7 @@ namespace Opossum_Game
                         
                         player.Draw(_spriteBatch, Color.White);
                     }
-
+                    */
                     // LEVEL TESTING ------------------------------------------
 
                     break;

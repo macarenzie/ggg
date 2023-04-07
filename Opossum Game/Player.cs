@@ -12,7 +12,7 @@ namespace Opossum_Game
     /// <summary>
     /// Will represent the object the player is controlling
     /// Majority Written by: Jamie Zheng
-    /// COde optimization done by Ariel and McKenzie
+    /// Code optimization done by Ariel and McKenzie
     /// </summary>
     internal class Player
     {
@@ -52,14 +52,6 @@ namespace Opossum_Game
         }
 
         /// <summary>
-        /// The amount of health the player has
-        /// </summary>
-        public int Health
-        {
-            get { return health; }  
-        }
-
-        /// <summary>
         /// gets and sets player's x coordinate
         /// </summary>
         public int X
@@ -85,7 +77,6 @@ namespace Opossum_Game
         /// <param name="pLocation">Dimensions are dependent on pSprite Texture2D</param>
         public Player(Texture2D pSprite, Rectangle pLocation)
         {
-            health = 3;
             foodCollected = 0;
             this.pSprite = pSprite;
             this.pLocation = pLocation;
