@@ -451,15 +451,7 @@ namespace Opossum_Game
                     }
 
                     //collectible collision
-                    for (int i = 0; i < collectiblesList.Count; i++)
-                    {
-                        bool collide = player.IndividualCollision(collectiblesList[i].Position);
-
-                        if (collide)
-                        {
-                            collectiblesList.Remove(collectiblesList[i]);
-                        }
-                    }
+                    CollectibleCollision();
                     #endregion
 
                     //win conditions for now -- moving later to game screen 3
@@ -604,14 +596,12 @@ namespace Opossum_Game
                         new Vector2(0, 5),
                         Color.White
                         );
-                    
+
+                    //draw all the collectibles
+                    CollectibleDraw();
+
                     // LEVEL TESTING ------------------------------------------
                     /*
-                    // draw each collectible
-                    for (int i = 0; i < collectiblesList.Count; i++)
-                    {
-                        collectiblesList[i].Draw(_spriteBatch, Color.White);
-                    }
 
                     // draw obstacles based on player collision
                     for (int i = 0; i < obstaclesList.Count; i++)
@@ -697,6 +687,35 @@ namespace Opossum_Game
             else
             {
                 return false;
+            }
+        }
+
+        /// <summary>
+        /// checks for collectible collision
+        /// </summary>
+        public void CollectibleCollision()
+        {
+            //collectible collision
+            for (int i = 0; i < collectiblesList.Count; i++)
+            {
+                bool collide = player.IndividualCollision(collectiblesList[i].Position);
+
+                if (collide && SingleKeyPress(Keys.E, kbstate, previousKbState))
+                {
+                    collectiblesList.Remove(collectiblesList[i]);
+                    i--;
+                }
+            }
+        }
+
+        /// <summary>
+        /// draws the collectibles to the screen
+        /// </summary>
+        public void CollectibleDraw()
+        {
+            for (int i = 0; i < collectiblesList.Count; i++)
+            {
+                collectiblesList[i].Draw(_spriteBatch, Color.White);
             }
         }
 
