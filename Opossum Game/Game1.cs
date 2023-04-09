@@ -105,16 +105,9 @@ namespace Opossum_Game
         // font fields
         private SpriteFont comicsans30;
 
-        #region Window and UI
         //literal window
         private int windowWidth;
         private int windowHeight;
-
-        //List of interactible objects
-        private List<InteractibleObject> objects;
-
-        //String to hold collision direction
-        string obstacleCollision;
 
         //all general window screens
         private Texture2D menuScreen;
@@ -123,7 +116,12 @@ namespace Opossum_Game
         private Texture2D loseScreen;
 
         private GameState currentState;
-        #endregion
+
+        //List of interactible objects
+        private List<InteractibleObject> objects;
+
+        //String to hold collision direction
+        string obstacleCollision;
 
         //Obstacle test. Texture and rectangle and obstacle list
         private List<Obstacle> obstacleList;
@@ -138,7 +136,7 @@ namespace Opossum_Game
         private bool isCollidingLight;
 
         // TEMP OBSTAACLE TEXTURE
-        Texture2D tempObsTexture;
+        private Texture2D tempObsTexture;
 
         #region LevelLoading
         private StreamReader reader;
