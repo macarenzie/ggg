@@ -438,6 +438,9 @@ namespace Opossum_Game
                     #endregion
 
                     #region Collisions
+                    //this method is to adjust the player's position with an non-overlappable object 
+                    //May be a little buggy with the logic
+                    CheckObstacleCollision(player, level.ObstacleList);         //edge collision
 
                     // test if the player is able to hide in an obstacle
                     foreach (Obstacle obs in obstaclesList)
@@ -731,6 +734,40 @@ namespace Opossum_Game
             timer = 15;
 
             player = level.Player;
+        }
+
+        /// <summary>
+        /// Checks if the player is overlapping with any Obstacle object
+        /// If the player is overlapping, then the player's position will be adjusted 
+        /// so that only their edges are touching
+        /// </summary>
+        /// <param name="player">The Player object</param>
+        /// <param name="obstaclesList">A list of all the Obstacles in this game, 
+        /// should exist in the Level class</param>
+        void CheckObstacleCollision(Player player, List<Obstacle> obstaclesList)
+        {
+            //Going through each obstacle in the list of obstacles to check for intersection
+            foreach(Obstacle obstacle in obstaclesList)
+            {
+                //If the intersection returns true
+                if (player.PRectangle.Intersects(obstacle.Position))
+                {
+                    //Get the intersection area
+                    Rectangle intersectionArea = Rectangle.Intersect(player.PRectangle, obstacle.Position);
+
+                    //If the width is less than the height, adjust the X position
+                    if (intersectionArea.Width < intersectionArea.Height)
+                    {
+                        player.X -= intersectionArea.Width; 
+                    }
+
+                    //If the height it less than the width, adjust the Y position
+                    else if(intersectionArea.Height < intersectionArea.Width)
+                    {
+                        player.Y -= intersectionArea.Height;
+                    }
+                }
+            }
         }
     }
 }

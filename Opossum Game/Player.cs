@@ -68,6 +68,16 @@ namespace Opossum_Game
             set { playerRectangle.Y = value; }
         }
 
+        /// <summary>
+        /// Returns the Rectangle associated with the Player.
+        /// Get only, although the X and Y properties allow for set
+        /// No reason to change dimensions
+        /// </summary>
+        public Rectangle PRectangle
+        {
+            get { return playerRectangle; }
+        }
+
         //constructor
         /// <summary>
         /// Creates what the player will control.
