@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Input;
 namespace Opossum_Game
 {
     /// <summary>
-    /// Worked on by: McKenzie Lam, Julia Rissberger
+    /// Worked on by: McKenzie Lam, Julia Rissberger, Hui Lin Khouw
     /// </summary>
 
     
@@ -133,7 +133,7 @@ namespace Opossum_Game
             }
         }
         /// <summary>
-        /// If the player hits the rectangke that is the light.
+        /// If the player hits the rectangle that is the light.
         /// </summary>
         /// <param name="player">PLayer or whatever other object that would interact with the light</param>
         /// <returns>True if light intersects, otherwise false.</returns>

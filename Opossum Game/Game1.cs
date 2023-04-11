@@ -583,6 +583,22 @@ namespace Opossum_Game
                     The player's movement is altered to be slower UNTIL 
             
                     LightIntersects() is false. 
+
+            ********ENEMY DOES NOT KEEP MOVING**************
+            IF ENEMY.LIGHTINTERSECTS == TRUE
+            Put in a freeze method that would tick down for a certain amount of time.
+                - Must be in a method to pause everything else within the game.
+            Once the timer runs out, the enemy TURNS
+                - Because the enemy has turned, the player will no longer intersect with the enemy light
+
+            Freeze method is done, and all player movement and enemy movement is in tact
+
+            *************ENEMY KEEPS MOVING******************
+            WHILE LIGHTINTERSECTS is TRUE
+            Keep enemy movement running
+            Stop player movement
+
+
             */
             base.Update(gameTime);
         }
