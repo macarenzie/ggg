@@ -262,8 +262,11 @@ namespace Opossum_Game
 
             // player sprite
             pSprite = Content.Load<Texture2D>("pSprite");
+
             // player initialization
-            player = new Player(pSprite, new Rectangle(10, 10, pSprite.Width / 4, pSprite.Height / 4));
+            player = new Player(
+                pSprite, 
+                new Rectangle(10, 10, pSprite.Width / 4, pSprite.Height / 4));
 
             #region Collectibles
             collectibleBurger = Content.Load<Texture2D>("collectibleBurger");
@@ -272,13 +275,17 @@ namespace Opossum_Game
             #endregion
 
             #region Game Screens
-            menuScreen = Content.Load<Texture2D>("startScreen");
             //menuScreen
+            menuScreen = Content.Load<Texture2D>("startScreen");
+
             //optionScreen
             optionScreen = Content.Load<Texture2D>("optionsScreen");
+
             //winScreen
+
             //loseScreen
             loseScreen = Content.Load<Texture2D>("gameOverScreen");
+
             //gameScreen1
             //gameScreen2
             //gameScreen3
@@ -303,10 +310,10 @@ namespace Opossum_Game
 
             // level loading
             level = new Level(
-                collectibleChips,   // collectible texture
-                tempObsTexture,  // obstacle texture
-                pSprite,            // player texture
-                lightTexture);  // enemy texture
+                collectibleChips,       // collectible texture
+                tempObsTexture,         // obstacle texture
+                pSprite,                // player texture
+                lightTexture);          // enemy texture
             level.LoadLevel(levelName);
             
             // pass in the fields from the level class to the game1 class
@@ -322,7 +329,6 @@ namespace Opossum_Game
                 Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            #region UI FSM
             kbstate = Keyboard.GetState();
 
             switch (currentState)
@@ -533,7 +539,6 @@ namespace Opossum_Game
 
             // update the previous keyboard state
             previousKbState = kbstate;
-            #endregion
 
             //PSEUDOCODE FOR THE FREEZING AND SLOWING
             /*FOREACH enemy in the enemyList
