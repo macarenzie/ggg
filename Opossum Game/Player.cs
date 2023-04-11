@@ -311,19 +311,6 @@ namespace Opossum_Game
         //Color specifier is a TEMP until playdead is implemented
         public void Draw(SpriteBatch sb, Color color) 
         {
-            //IF COLLISION IS TRUE
-            /*
-            if (pLocation.Intersects(lightSource))
-            {
-                sb.Draw(
-                pSprite,
-                pLocation,
-                Color.Red
-                );
-            }
-            */
-
-            //IF COLLSION IS FALSE
             sb.Draw(
                 pSprite,
                 playerRectangle,

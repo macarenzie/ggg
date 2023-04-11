@@ -25,6 +25,7 @@ namespace Opossum_Game
         Game,
         GameLose,
         GameWin,
+        Debug
     }
 
     //the state of the player
@@ -148,6 +149,9 @@ namespace Opossum_Game
         string levelName;
         #endregion
 
+        // DEBUG MODE
+        private bool debug;
+
 
 
         public Game1()
@@ -186,6 +190,9 @@ namespace Opossum_Game
 
             //testing for reseting level
             levelName = "newTestL1";
+
+            // debug mode
+            debug = false;
 
             base.Initialize(); 
         }
@@ -339,6 +346,16 @@ namespace Opossum_Game
                     //resetting game
                     ResetGame();
 
+                    if (SingleKeyPress(Keys.U, kbstate, previousKbState) && debug == false)
+                    {
+                        debug = true;
+                    }
+                    
+                    else if (SingleKeyPress(Keys.U, kbstate, previousKbState) && debug == true)
+                    {
+                        debug = false;
+                    }
+
                     if (startButton.MouseClick() && startButton.MouseContains())
                     {
                         currentState = GameState.Game;
@@ -377,101 +394,111 @@ namespace Opossum_Game
                 ////all options for the state of playing the game
                 case GameState.Game:
 
-                    timer -= gameTime.ElapsedGameTime.TotalSeconds;
-
-                    player.Update(gameTime);
-
-                    #region Game Level Screen
-                    switch (currentScreen)
+                    if (debug)
                     {
-                        case GameScreen.One:
-
-                            if (player.Y == windowHeight)
-                            {
-                                currentScreen = GameScreen.Two;
-                                player = level.Player;
-                            }
-
-                            if (SingleKeyPress(Keys.Escape, kbstate, previousKbState))
-                            {
-                                currentState = GameState.Menu;
-                            }
-                            break;
-                            #region GameScreenTwo
-                            //case GameScreen.Two:
-                            //    if (player.Y == windowHeight)
-                            //    {
-                            //        currentScreen = GameScreen.Three;
-                            //        player.ResetPosition();
-                            //    }
-
-                            //    if (SingleKeyPress(Keys.Escape, kbstate, previousKbState))
-                            //    {
-                            //        currentState = GameState.Menu;
-                            //    }
-                            //    break;
-                            //case GameScreen.Three:
-
-                            //    if (player.Y == windowHeight)
-                            //    {
-                            //        currentScreen = GameScreen.Three;
-                            //        player.ResetPosition();
-                            //    }
-
-                            //    if (SingleKeyPress(Keys.Escape, kbstate, previousKbState))
-                            //    {
-                            //        currentState = GameState.Menu;
-                            //    }
-
-                            //    if (SingleKeyPress(Keys.Z, kbstate, previousKbState))
-                            //    {
-                            //        currentState = GameState.GameWin;
-                            //    }
-                            //    else if (SingleKeyPress(Keys.L, kbstate, previousKbState))
-                            //    {
-                            //        currentState = GameState.GameLose;
-                            //    }
-
-                            //    //to go back to main menu from game screen
-                            //    else if (SingleKeyPress(Keys.Escape, kbstate, previousKbState))
-                            //    {
-                            //        currentState = GameState.Menu;
-                            //    }
-                            //    break;
-                            #endregion
-
+                        player.Update(gameTime);
                     }
-                    #endregion
-
-                    #region Collisions
-                    //this method is to adjust the player's position with an non-overlappable object 
-                    //May be a little buggy with the logic
-                    CheckObstacleCollision(player, level.ObstacleList);         //edge collision
-
-                    // test if the player is able to hide in an obstacle
-                    foreach (Obstacle obs in obstaclesList)
+                    
+                    if (!debug)
                     {
-                        bool collide = player.IndividualCollision(obs.Position);
+                        timer -= gameTime.ElapsedGameTime.TotalSeconds;
 
-                        if (collide)
+                        player.Update(gameTime);
+
+                        #region Game Level Screen
+                        switch (currentScreen)
                         {
-                            player.Hide(kbstate, previousKbState, obs.Position);
+                            case GameScreen.One:
+
+                                if (player.Y == windowHeight)
+                                {
+                                    currentScreen = GameScreen.Two;
+                                    player = level.Player;
+                                }
+
+                                if (SingleKeyPress(Keys.Escape, kbstate, previousKbState))
+                                {
+                                    currentState = GameState.Menu;
+                                }
+                                break;
+                                #region GameScreenTwo
+                                //case GameScreen.Two:
+                                //    if (player.Y == windowHeight)
+                                //    {
+                                //        currentScreen = GameScreen.Three;
+                                //        player.ResetPosition();
+                                //    }
+
+                                //    if (SingleKeyPress(Keys.Escape, kbstate, previousKbState))
+                                //    {
+                                //        currentState = GameState.Menu;
+                                //    }
+                                //    break;
+                                //case GameScreen.Three:
+
+                                //    if (player.Y == windowHeight)
+                                //    {
+                                //        currentScreen = GameScreen.Three;
+                                //        player.ResetPosition();
+                                //    }
+
+                                //    if (SingleKeyPress(Keys.Escape, kbstate, previousKbState))
+                                //    {
+                                //        currentState = GameState.Menu;
+                                //    }
+
+                                //    if (SingleKeyPress(Keys.Z, kbstate, previousKbState))
+                                //    {
+                                //        currentState = GameState.GameWin;
+                                //    }
+                                //    else if (SingleKeyPress(Keys.L, kbstate, previousKbState))
+                                //    {
+                                //        currentState = GameState.GameLose;
+                                //    }
+
+                                //    //to go back to main menu from game screen
+                                //    else if (SingleKeyPress(Keys.Escape, kbstate, previousKbState))
+                                //    {
+                                //        currentState = GameState.Menu;
+                                //    }
+                                //    break;
+                                #endregion
+
+                        }
+                        #endregion
+
+                        #region Collisions
+                        //this method is to adjust the player's position with an non-overlappable object 
+                        //May be a little buggy with the logic
+                        CheckObstacleCollision(player, level.ObstacleList);         //edge collision
+
+                        // test if the player is able to hide in an obstacle
+                        foreach (Obstacle obs in obstaclesList)
+                        {
+                            bool collide = player.IndividualCollision(obs.Position);
+
+                            if (collide)
+                            {
+                                player.Hide(kbstate, previousKbState, obs.Position);
+                            }
+                        }
+
+                        //collectible collision
+                        CollectibleCollision();
+                        #endregion
+
+                        //win conditions for now -- moving later to game screen 3
+                        if (timer <= 0 && collectiblesList.Count != 0)
+                        {
+                            currentState = GameState.GameLose;
+                        }
+                        else if (timer >= 0 && collectiblesList.Count == 0)
+                        {
+                            currentState = GameState.GameWin;
                         }
                     }
-
-                    //collectible collision
-                    CollectibleCollision();
-                    #endregion
-
-                    //win conditions for now -- moving later to game screen 3
-                    if (timer <= 0 && collectiblesList.Count != 0)
-                    {
-                        currentState = GameState.GameLose;
-                    }
-                    else if (timer >= 0 && collectiblesList.Count == 0)
-                    {
-                        currentState = GameState.GameWin;
-                    }
+                    
+                    
                     break;
 
                 case GameState.GameLose:
@@ -563,8 +590,7 @@ namespace Opossum_Game
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Navy);
-
-            #region UI FSM                                                                                                                                                                                                                              
+                                                                                                                                                                                                                             
             _spriteBatch.Begin();
             switch (currentState)
             {
@@ -575,6 +601,12 @@ namespace Opossum_Game
                     //drawing of the buttons
                     startButton.Draw(_spriteBatch);
                     optionsButton.Draw(_spriteBatch);
+
+                    _spriteBatch.DrawString(
+                        comicsans30, 
+                        string.Format("Press 'U' to toggle debug mode!\nDebug mode: " + debug), 
+                        new Vector2(0, 5), 
+                        Color.Pink);
                     break;
                 case GameState.Options:
 
@@ -595,56 +627,77 @@ namespace Opossum_Game
 
                 case GameState.Game:
 
-                    player.Draw(_spriteBatch, Color.White);
-
-                    //drawing the timer to the screen
-                    _spriteBatch.DrawString(
-                        comicsans30,
-                        string.Format("Time left: {0:0}", timer),
-                        new Vector2(0, 5),
-                        Color.White
-                        );
-
-                    //draw all the collectibles
-                    CollectibleDraw();
-
-                    // LEVEL TESTING ------------------------------------------
-                    /*
-
-                    // draw obstacles based on player collision
-                    for (int i = 0; i < obstaclesList.Count; i++)
+                    if (debug)
                     {
-                        if (player.IndividualCollision(obstaclesList[i].Position))
-                        {
-                            obstaclesList[i].Draw(_spriteBatch, Color.Green);
-                        }
-                        else
-                        {
-                            obstaclesList[i].Draw(_spriteBatch, Color.White);
-                        }
-                    }
-
-                    // draw each light
-                    for (int i = 0; i < enemyList.Count; i++)
-                    {
-                        enemyList[i].Draw(_spriteBatch);
-                    }
-
-                    // draw the player based on collisions with light
-                    foreach (Enemy enemy in enemyList)
-                    {
-                        bool collide = player.IndividualCollision(enemy.Position);
-
-                        if (collide)
-                        {
-                            player.Draw(_spriteBatch, Color.Red);
-                            break;
-                        }
+                        // DRAW ORDER: obstacle, collectibles, enemy, player
                         
                         player.Draw(_spriteBatch, Color.White);
+
+                        //drawing the timer to the screen
+                        _spriteBatch.DrawString(
+                            comicsans30,
+                            string.Format("Time left: {0:0}", timer),
+                            new Vector2(0, 5),
+                            Color.White);
                     }
-                    */
-                    // LEVEL TESTING ------------------------------------------
+
+                    if (!debug)
+                    {
+                        // DRAW ORDER: player, collectibles, obstacle, enemy
+
+                        player.Draw(_spriteBatch, Color.White);
+
+                        //drawing the timer to the screen
+                        _spriteBatch.DrawString(
+                            comicsans30,
+                            string.Format("Time left: {0:0}", timer),
+                            new Vector2(0, 5),
+                            Color.White
+                            );
+
+                        //draw all the collectibles
+                        CollectibleDraw();
+
+                        // LEVEL TESTING ------------------------------------------
+                        /*
+
+                        // draw obstacles based on player collision
+                        for (int i = 0; i < obstaclesList.Count; i++)
+                        {
+                            if (player.IndividualCollision(obstaclesList[i].Position))
+                            {
+                                obstaclesList[i].Draw(_spriteBatch, Color.Green);
+                            }
+                            else
+                            {
+                                obstaclesList[i].Draw(_spriteBatch, Color.White);
+                            }
+                        }
+
+                        // draw each light
+                        for (int i = 0; i < enemyList.Count; i++)
+                        {
+                            enemyList[i].Draw(_spriteBatch);
+                        }
+
+                        // draw the player based on collisions with light
+                        foreach (Enemy enemy in enemyList)
+                        {
+                            bool collide = player.IndividualCollision(enemy.Position);
+
+                            if (collide)
+                            {
+                                player.Draw(_spriteBatch, Color.Red);
+                                break;
+                            }
+
+                            player.Draw(_spriteBatch, Color.White);
+                        }
+                        */
+                        // LEVEL TESTING ------------------------------------------
+                    }
+
+
 
                     break;
 
@@ -677,7 +730,6 @@ namespace Opossum_Game
                         Color.White);
                     break;
             }
-            #endregion
 
             _spriteBatch.End();
 
