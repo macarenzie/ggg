@@ -184,15 +184,15 @@ namespace Opossum_Game
                         playerState = PlayerState.Front;
 
                     break;
-                //===================================================================
-                //will update this when enemy obstacles have been made
-                //case PlayerState.PlayDead:
-                //    if (Collision() == true)
-                //    {
-                //        pLocation.X += 0;
-                //        pLocation.Y += 0;
-                //    }
-                //    break;
+                    //===================================================================
+                    //will update this when enemy obstacles have been made
+                    //case PlayerState.PlayDead:
+                    //    if (Collision() == true)
+                    //    {
+                    //        pLocation.X += 0;
+                    //        pLocation.Y += 0;
+                    //    }
+                    //    break;
             }
             //---------------------------------------------------------------
 
@@ -215,7 +215,7 @@ namespace Opossum_Game
         /// maybe have the light collision be handled in level manager. just a thought --Jamie
         /// </summary>
         //Color specifier is a TEMP until playdead is implemented
-        public void Draw(SpriteBatch sb, Color color) 
+        public void Draw(SpriteBatch sb, Color color)
         {
             sb.Draw(
                 pSprite,
@@ -242,4 +242,5 @@ namespace Opossum_Game
             }
 
         }
+    }
 }
