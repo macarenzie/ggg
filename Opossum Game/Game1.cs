@@ -14,6 +14,8 @@ namespace Opossum_Game
     ///    helped with collision handling in update and draw for each game object
     /// Hui Lin: worked on enums and current state game state stuff
     /// Ariel: finalized UI fsm and implimented camera movement fsm
+    /// Jamie: edge collision so the player does not go over obstacles that the player
+    /// cannot go through
     /// </summary>
     #region Enums
 
@@ -813,6 +815,7 @@ namespace Opossum_Game
         /// Checks if the player is overlapping with any Obstacle object
         /// If the player is overlapping, then the player's position will be adjusted 
         /// so that only their edges are touching
+        /// Worked on by Jamie Zheng
         /// </summary>
         /// <param name="player">The Player object</param>
         /// <param name="obstaclesList">A list of all the Obstacles in this game, 
@@ -831,14 +834,40 @@ namespace Opossum_Game
                     //If the width is less than the height, adjust the X position
                     if (intersectionArea.Width < intersectionArea.Height)
                     {
-                        player.X -= intersectionArea.Width; 
+                        //LEFT side of obstacle
+                        //player.X is less than the midpoint of the obstacle's width
+                        if (player.X < (obstacle.Position.X + obstacle.Position.Width/2))
+                        {
+                            player.X -= intersectionArea.Width;
+
+                        }
+                        //RIGHT
+                        else
+                        {
+                            player.X += intersectionArea.Width;
+
+                        }
+
                     }
 
                     //If the height it less than the width, adjust the Y position
                     else if(intersectionArea.Height < intersectionArea.Width)
                     {
-                        player.Y -= intersectionArea.Height;
+                        //TOP side of the obstacle;
+                        //If player.Y is less than the obstacle's Height midpoint
+                        if (player.Y < (obstacle.Position.Y + obstacle.Position.Height/2))
+                        {
+                            player.Y -= intersectionArea.Height;
+
+                        }
+                        //BOTTOM
+                        else
+                        {
+                            player.Y += intersectionArea.Height;
+
+                        }
                     }
+
                 }
             }
         }
