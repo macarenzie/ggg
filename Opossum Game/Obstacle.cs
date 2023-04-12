@@ -17,12 +17,13 @@ namespace Opossum_Game
     /// </summary>
     internal class Obstacle : InteractibleObject
     {
+        //Fields
         Texture2D texture;
         Rectangle position;
-        bool isHidable;
+        bool isHideable;
 
         /// <summary>
-        /// 
+        /// Get/set for obstacle texture
         /// </summary>
         public Texture2D Texture
         {
@@ -37,7 +38,7 @@ namespace Opossum_Game
         }
 
         /// <summary>
-        /// 
+        /// Get/set for obstacle position
         /// </summary>
         public Rectangle Position
         {
@@ -52,28 +53,35 @@ namespace Opossum_Game
         }
 
         /// <summary>
-        /// makes the bool for an object acessible
+        /// Get-only property for isHideable status
         /// </summary>
-        public bool IsHidable
+        public bool IsHideable
         {
             get
             {
-                return isHidable;
+                return isHideable;
             }
         }
 
-        //Parameterized constructor
-        //Only utilizes fields from the parent class at present
-        public Obstacle(Texture2D objectTexture, Rectangle objectDimensions /*,bool isHidable*/) 
+        /// <summary>
+        /// Constructor for obstacle objects
+        /// </summary>
+        /// <param name="objectTexture">Texture of obstacle</param>
+        /// <param name="objectDimensions">Size and position of obstacle</param>
+        /// <param name="isHideable">If obstacle can be hidden in by the player</param>
+        public Obstacle(Texture2D objectTexture, Rectangle objectDimensions, bool isHideable) 
             : base (objectTexture, objectDimensions) 
         {
             texture = objectTexture;
             position = objectDimensions;
-
-            //put this here because i would assume its also being read in --ariel
-            //this.isHidable = isHidable;
+            this.isHideable = isHideable;
         }
         
+        /// <summary>
+        /// Override for draw method to draw the obstacle to the screen
+        /// </summary>
+        /// <param name="sb">Spritebatch</param>
+        /// <param name="color">Color the obstacle should be tinted</param>
         public override void Draw(SpriteBatch sb, Color color)
         {
             sb.Draw(texture, position, color);
