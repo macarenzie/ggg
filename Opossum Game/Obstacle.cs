@@ -69,12 +69,12 @@ namespace Opossum_Game
         /// <param name="objectTexture">Texture of obstacle</param>
         /// <param name="objectDimensions">Size and position of obstacle</param>
         /// <param name="isHideable">If obstacle can be hidden in by the player</param>
-        public Obstacle(Texture2D objectTexture, Rectangle objectDimensions, bool isHideable) 
+        public Obstacle(Texture2D objectTexture, Rectangle objectDimensions /*bool isHideable*/) 
             : base (objectTexture, objectDimensions) 
         {
             texture = objectTexture;
             position = objectDimensions;
-            this.isHideable = isHideable;
+            //this.isHideable = isHideable;
         }
         
         /// <summary>
