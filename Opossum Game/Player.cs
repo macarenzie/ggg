@@ -91,107 +91,13 @@ namespace Opossum_Game
             this.playerRectangle = pLocation;
         }
 
-        /// <summary>
-        /// detects individual collisions with different game objects
-        /// </summary>
-        /// <param name="obstacle"></param>
-        /// <returns></returns>
-        public bool IndividualCollision(Rectangle obstacle)
-        {
-            //what exactly is an obstacle... for each loop could go here 
-            if (playerRectangle.Intersects(obstacle)) //And !isHidden
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// player's collecting food method based on user input
-        /// </summary>
-        /// <param name="prevState">keyboard's previous state</param>
-        /// <param name="curState">keyboard's current state</param>
-        /// <param name="otherObject"></param>
-        //public void Collect(KeyboardState prevState, KeyboardState curState, Collectible food)
-        //{
-        //    //TODO: Check for press and release of space bar
-        //    //Only collect if collectible is in range, check if collectible is collectible
-        //    //Complete IsInRange() method before this one
-        //    if(prevState.IsKeyDown(Keys.Space) &&               //key release check
-        //       curState.IsKeyUp(Keys.Space) &&
-        //        IsInRange(food.ObjectDimensions))      //Check if in range 
-        //    {
-        //        foodCollected++;
-        //    }
-        //}
-
-        /// <summary>
-        /// Checking if another object is in range
-        /// Used to determine if a food collectible is in range
-        /// or a hiding spot is in range to collect or use
-        /// </summary>
-        /// <param name="otherObject"></param>
-        /// <returns></returns>
-        public bool IsInRange(Rectangle otherObject)
-        {
-            //These numbers can be adjusted when visuals are implemented and do what looks good
-            float dx = Math.Abs((this.playerRectangle.Width / 2) - (otherObject.Width / 2));
-            float dy = Math.Abs((this.playerRectangle.Height / 2) - (otherObject.Height / 2));
-               
-            if (
-                //TODO: Check distance between objects
-                //distance is based on midpoint of each object??
-                (dx + 20) >= (playerRectangle.X + playerRectangle.Width) - (otherObject.X + otherObject.Width)
-                && (dy + 20) >= (playerRectangle.Y + playerRectangle.Width) - (otherObject.Y + otherObject.Height)
-                )
-            {
-                return true;
-            }
-
-            else
-            {
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Will change the player's position to be overlapping with the hideable obstacle
-        /// Check if IsInRange is true
-        /// Press and release space bar
-        /// </summary>
-        /// 
-        //TODO: Implement a way to exit hide state, otherwise player will be stuck within object. -Julia
-        //^^ bool to allow for exit
-        public void Hide(KeyboardState prevState, 
-            KeyboardState curState, Rectangle otherObstacle)
-        {
-            //get mid points lined up
-            if (IsInRange(otherObstacle)
-                // && otherObstacle is Hideable
-                )
-            {
-                if(currKB.IsKeyDown(Keys.Space) && prevState.IsKeyUp(Keys.Space))
-                {
-                    //These obstacles have to be the same size or larger than the player 
-                    //Centers the player with the obstacle
-                    playerRectangle.X = (otherObstacle.X + (otherObstacle.Width / 2)) 
-                        - (playerRectangle.Width/2);
-
-                    playerRectangle.Y = (otherObstacle.Y + (otherObstacle.Height / 2)) 
-                        - (playerRectangle.Height / 2);
-
-                }
-            }
-        }
 
         /// <summary>
         /// processes EVERYTHING that affects player movement
         /// </summary>
         //TODO: Implement edge collision--block the player from moving off
         //    screen (left/right edges), or change panel (top/bottom edges) -Julia
+        //DONE^^ See CheckObstacleCollision in Game1 - Jamie
         //TODO: Diagonal movement doesn't work right now. Could potentially
         //   only use enum switch for draw purposes. -Julia
         private void ProcessInput()
@@ -318,5 +224,22 @@ namespace Opossum_Game
                 );
 
         }
-    }
+
+        /// <summary>
+        /// detects individual collisions with different game objects
+        /// </summary>
+        /// <param name="obstacle">The rectangle associated w. the object in question</param>
+        /// <returns>whether the player is colliding with another object</returns>
+        public bool IndividualCollision(Rectangle obstacle)
+        {
+            if (playerRectangle.Intersects(obstacle)) //And !isHidden
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
 }
