@@ -808,7 +808,6 @@ namespace Opossum_Game
         }
 
 
-
         /// <summary>
         /// Checking if another object is in range
         /// Used to determine if a food collectible is in range
@@ -816,7 +815,7 @@ namespace Opossum_Game
         /// </summary>
         /// <param name="otherObject"></param>
         /// <returns></returns>
-        private bool IsInRange(Rectangle otherObject, Player player)
+        bool IsInRange(Rectangle otherObject, Player player)
         {
             //These numbers can be adjusted when visuals are implemented and do what looks good
             float dx = Math.Abs((player.PRectangle.Width / 2) - (otherObject.Width / 2));
@@ -846,27 +845,36 @@ namespace Opossum_Game
         /// 
         //TODO: Implement a way to exit hide state, otherwise player will be stuck within object. -Julia
         //^^ bool to allow for exit
-        private void Hide(KeyboardState prevState,
-            KeyboardState curState, Rectangle otherObstacle, Player player)
+        //DONE^^ -Jamie
+        void Hide(KeyboardState prevState,
+            KeyboardState curState, Obstacle otherObstacle, Player player)
         {
             //get mid points lined up
-            if (IsInRange(otherObstacle, player)
-                //&& otherObstacle is Hideable
-                )
+            if (IsInRange(otherObstacle.Position, player)
+                && otherObstacle.IsHideable)
             {
                 if (curState.IsKeyDown(Keys.Space) && prevState.IsKeyUp(Keys.Space))
                 {
                     //These obstacles have to be the same size or larger than the player 
                     //Centers the player with the obstacle
-                    player.X = (otherObstacle.X + (otherObstacle.Width / 2))
+                    player.X = (otherObstacle.Position.X + (otherObstacle.Position.Width / 2))
                         - (player.PRectangle.Width / 2);
 
-                    player.Y = (otherObstacle.Y + (otherObstacle.Height / 2))
+                    player.Y = (otherObstacle.Position.Y + (otherObstacle.Position.Height / 2))
                         - (player.PRectangle.Height / 2);
 
+                    player.IsHiding = true;
+                }
+
+                //if the space bar is pressed again then unhide
+                else if (player.IsHiding)
+                {
+                    player.IsHiding = false;
+                    //Add position changing stuff
                 }
             }
         }
+
 
     }
 }
