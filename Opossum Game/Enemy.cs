@@ -36,7 +36,9 @@ namespace Opossum_Game
         private Rectangle lightRectangle;
         private Stopwatch freezeTimer;
 
-        //Properties
+        /// <summary>
+        /// Get-only property for enemy texture
+        /// </summary>
         public Texture2D Texture
         {
             get
@@ -45,6 +47,9 @@ namespace Opossum_Game
             }
         }
 
+        /// <summary>
+        /// Get-only property for enemy position
+        /// </summary>
         public Rectangle Position
         {
             get

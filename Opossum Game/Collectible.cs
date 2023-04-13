@@ -51,10 +51,10 @@ namespace Opossum_Game
     //    }
 
         /// <summary>
-        /// 
+        /// Constructor for individual collectible objects
         /// </summary>
-        /// <param name="objectTexture"></param>
-        /// <param name="objectDimensions"></param>
+        /// <param name="objectTexture">texture of collectible</param>
+        /// <param name="objectDimensions">position of collectible</param>
         public Collectible (Texture2D objectTexture, Rectangle objectDimensions) :
             base (objectTexture, objectDimensions) 
         {
@@ -63,10 +63,10 @@ namespace Opossum_Game
         }
 
         /// <summary>
-        /// 
+        /// Override for draw, draws collectible with specified color
         /// </summary>
-        /// <param name="sb"></param>
-        /// <param name="color"></param>
+        /// <param name="sb">spritebatch</param>
+        /// <param name="color">current color of the collectible</param>
         public override void Draw(SpriteBatch sb, Color color)
         {
             sb.Draw(objectTexture, objectDimensions, color);

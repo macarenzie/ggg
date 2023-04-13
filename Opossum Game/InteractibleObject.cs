@@ -20,39 +20,23 @@ namespace Opossum_Game
         protected Texture2D objectTexture;
         protected Rectangle objectDimensions;
 
-        //Properties
-        public Rectangle ObjectDimensions
-        {
-            get { return objectDimensions; }
-            set { objectDimensions = value; }
-        }
-
-        public Texture2D ObjectTexture
-        {
-            get { return objectTexture; }
-            set { objectTexture = value; }
-        }
-
-        //Constructor
         ///<summary>
         ///Creates individual obstacle objects.
         ///</summary>
-        ///<param name="objectTexture" the texture displayed for the created object
-        ///<param name="objectDimensions" the dimensions of the object, used for drawing and checking collision
+        ///<param name="objectTexture">the texture displayed for the created object</param>
+        ///<param name="objectDimensions">the dimensions of the object, used for drawing and checking collision</param>
         public InteractibleObject (Texture2D objectTexture, Rectangle objectDimensions)
         {
             this.objectTexture = objectTexture;
             this.objectDimensions = objectDimensions;
-        } 
+        }
 
         /// <summary>
-        /// 
+        /// Abstract method for drawing objects
         /// </summary>
-        /// <param name="sb"></param>
-        /// <param name="color"></param>
-        public virtual void Draw(SpriteBatch sb, Color color)
-        {
-            sb.Draw(objectTexture, ObjectDimensions, color);
-        }
+        /// <param name="sb">spritebatch</param>
+        /// <param name="color">color of object</param>
+        public abstract void Draw(SpriteBatch sb, Color color);
+        
     }
 }
