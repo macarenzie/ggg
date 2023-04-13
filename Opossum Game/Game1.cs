@@ -80,6 +80,7 @@ namespace Opossum_Game
         private Texture2D collectibleBurger;
         private Texture2D collectibleCandy;
         private Texture2D collectibleChips;
+        private List<Texture2D> collectibleTextures;
         #endregion
 
         #region Player
@@ -138,8 +139,9 @@ namespace Opossum_Game
         private Rectangle lightDimensions;
         private bool isCollidingLight;
 
-        // TEMP OBSTAACLE TEXTURE
-        private Texture2D tempObsTexture;
+        // enemy
+        private Texture2D enemyTexture;
+        private Rectangle enemyDimensions;
 
         #region LevelLoading
         private StreamReader reader;
@@ -195,6 +197,9 @@ namespace Opossum_Game
 
             // debug mode
             debug = false;
+
+            // initialize the collectible texture list
+            collectibleTextures = new List<Texture2D>();
 
             base.Initialize(); 
         }
@@ -270,7 +275,7 @@ namespace Opossum_Game
             #endregion
 
             // player sprite
-            pSprite = Content.Load<Texture2D>("pSprite");
+            pSprite = Content.Load<Texture2D>("playerSprite");
 
             // player initialization
             player = new Player(
@@ -278,9 +283,12 @@ namespace Opossum_Game
                 new Rectangle(10, 10, pSprite.Width / 4, pSprite.Height / 4));
 
             #region Collectibles
-            collectibleBurger = Content.Load<Texture2D>("collectibleBurger");
-            collectibleCandy = Content.Load<Texture2D>("collectibleCandy");
-            collectibleChips = Content.Load<Texture2D>("collectibleChips");
+            collectibleBurger = Content.Load<Texture2D>("colBurger");
+            collectibleCandy = Content.Load<Texture2D>("colCandy");
+            collectibleChips = Content.Load<Texture2D>("colChips");
+            collectibleTextures.Add(collectibleBurger);
+            collectibleTextures.Add(collectibleCandy);
+            collectibleTextures.Add(collectibleChips);
             #endregion
 
             #region Game Screens
@@ -303,26 +311,22 @@ namespace Opossum_Game
             // temporary font
             comicsans30 = Content.Load<SpriteFont>("comicsans30");
 
-            //Temporary collision obstacle
-            obstacleTexture = Content.Load<Texture2D>("collectibleBurger");
+            // obstacle
+            obstacleTexture = Content.Load<Texture2D>("obstacleTexture");
             obstacleDimensions = new Rectangle(400, 400, 200, 200);
             testObstacle = new Obstacle(obstacleTexture, obstacleDimensions);
             isColliding = false;
 
-            //Temp light
-            lightTexture = Content.Load<Texture2D>("light");
-            lightDimensions = new Rectangle(200, 700, 200, 200);
-            isCollidingLight = false;
+            // enemy
+            enemyTexture = Content.Load<Texture2D>("enemyTexture");
 
-            // TEMP OBSTACLE
-            tempObsTexture = Content.Load<Texture2D>("tempObs");
 
             // level loading
             level = new Level(
-                collectibleChips,       // collectible texture
-                tempObsTexture,         // obstacle texture
+                collectibleTextures,       // collectible texture
+                obstacleTexture,         // obstacle texture
                 pSprite,                // player texture
-                lightTexture);          // enemy texture
+                enemyTexture);          // enemy texture
             level.LoadLevel(levelName);
             
             // pass in the fields from the level class to the game1 class
@@ -345,9 +349,6 @@ namespace Opossum_Game
                 //all posibilities for the menu screen
                 case GameState.Menu:
 
-                    //resetting game
-                    ResetGame();
-
                     if (SingleKeyPress(Keys.U, kbstate, previousKbState) && debug == false)
                     {
                         debug = true;
@@ -360,6 +361,8 @@ namespace Opossum_Game
 
                     if (startButton.MouseClick() && startButton.MouseContains())
                     {
+                        //resetting game
+                        ResetGame();
                         currentState = GameState.Game;
                     }
 
@@ -676,9 +679,8 @@ namespace Opossum_Game
                         //draw all the collectibles
                         CollectibleDraw();
 
-                        // LEVEL TESTING ------------------------------------------
-                        /*
-
+                        // LEVEL ------------------------------------------
+                        
                         // draw obstacles based on player collision
                         for (int i = 0; i < obstaclesList.Count; i++)
                         {
@@ -692,7 +694,7 @@ namespace Opossum_Game
                             }
                         }
 
-                        // draw each light
+                        // draw each enemy
                         for (int i = 0; i < enemyList.Count; i++)
                         {
                             enemyList[i].Draw(_spriteBatch);
@@ -711,8 +713,8 @@ namespace Opossum_Game
 
                             player.Draw(_spriteBatch, Color.White);
                         }
-                        */
-                        // LEVEL TESTING ------------------------------------------
+                        
+                        // LEVEL ------------------------------------------
                     }
 
 
@@ -776,7 +778,7 @@ namespace Opossum_Game
             //collectible collision
             for (int i = 0; i < collectiblesList.Count; i++)
             {
-                bool collide = player.IndividualCollision(collectiblesList[i].Position);
+                bool collide = player.IndividualCollision(collectiblesList[i].ObjectDimensions);
 
                 if (collide && SingleKeyPress(Keys.E, kbstate, previousKbState))
                 {
@@ -802,6 +804,9 @@ namespace Opossum_Game
         /// </summary>
         public void ResetGame()
         {
+            collectiblesList.Clear();
+            obstaclesList.Clear();
+            enemyList.Clear();
             level.LoadLevel(levelName);
 
             collectiblesList = level.CollectiblesList;

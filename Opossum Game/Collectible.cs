@@ -17,38 +17,38 @@ namespace Opossum_Game
     /// </summary>
     internal class Collectible : InteractibleObject
     {
-        Texture2D texture;
-        Rectangle position;
+    //    Texture2D texture;
+    //    Rectangle position;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public Texture2D Texture
-        {
-            get
-            {
-                return texture;
-            }
-            set
-            {
-                texture = value;
-            }
-        }
+    //    /// <summary>
+    //    /// 
+    //    /// </summary>
+    //    public Texture2D Texture
+    //    {
+    //        get
+    //        {
+    //            return texture;
+    //        }
+    //        set
+    //        {
+    //            texture = value;
+    //        }
+    //    }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public Rectangle Position
-        {
-            get
-            {
-                return position;
-            }
-            set
-            {
-                position = value;
-            }
-        }
+    //    /// <summary>
+    //    /// 
+    //    /// </summary>
+    //    public Rectangle Position
+    //    {
+    //        get
+    //        {
+    //            return position;
+    //        }
+    //        set
+    //        {
+    //            position = value;
+    //        }
+    //    }
 
         /// <summary>
         /// 
@@ -58,8 +58,8 @@ namespace Opossum_Game
         public Collectible (Texture2D objectTexture, Rectangle objectDimensions) :
             base (objectTexture, objectDimensions) 
         {
-            texture = objectTexture;
-            position = objectDimensions;
+            //texture = objectTexture;
+            //position = objectDimensions;
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace Opossum_Game
         /// <param name="color"></param>
         public override void Draw(SpriteBatch sb, Color color)
         {
-            sb.Draw(texture, position, color);
+            sb.Draw(objectTexture, objectDimensions, color);
         }
     }
 }
