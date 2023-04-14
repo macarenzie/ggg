@@ -14,7 +14,7 @@ namespace Opossum_Game
     /// Hui Lin: worked on enums and current state game state stuff
     /// Ariel: finalized UI fsm and implimented camera movement fsm
     /// Jamie: edge collision so the player does not go over obstacles that the player
-    /// cannot go through
+    /// cannot go through & Hide()
     /// </summary>
     #region Enums
 
@@ -476,7 +476,10 @@ namespace Opossum_Game
 
                         #region Collisions
                         //this method is to adjust the player's position with an non-overlappable object 
-                        CheckObstacleCollision(player, level.ObstacleList);         //edge collision
+                        if (!player.IsHiding)
+                        {
+                            CheckObstacleCollision(player, level.ObstacleList);         //edge collision
+                        }
 
                         // test if the player is able to hide in an obstacle
                         /*
@@ -491,7 +494,7 @@ namespace Opossum_Game
                         }
                         */
                         //cleaner hide loop
-                        foreach(Obstacle obstacle in obstaclesList)
+                        foreach (Obstacle obstacle in obstaclesList)
                         {
                             Hide(previousKbState, kbstate, obstacle, player);
                         }
@@ -644,7 +647,7 @@ namespace Opossum_Game
                         for (int i = 0; i < obstaclesList.Count; i++)
                         {
                             //test code for hideable objects
-                            /*
+                            
                             if (IsInRange(obstaclesList[i].Position, player) 
                                 && obstaclesList[i].IsHideable)
                             {
@@ -654,8 +657,8 @@ namespace Opossum_Game
                             {
                                 obstaclesList[i].Draw(_spriteBatch, Color.White);
                             }
-                            */
                             
+                            /*
                             if (player.IndividualCollision(obstaclesList[i].Position))
                             {
                                 obstaclesList[i].Draw(_spriteBatch, Color.Green);
@@ -664,6 +667,7 @@ namespace Opossum_Game
                             {
                                 obstaclesList[i].Draw(_spriteBatch, Color.White);
                             }
+                            */
                             
                         }
 
@@ -815,7 +819,8 @@ namespace Opossum_Game
                     if (player.PRectangle.Intersects(obstacle.Position))
                     {
                         //Get the intersection area
-                        Rectangle intersectionArea = Rectangle.Intersect(player.PRectangle, obstacle.Position);
+                        Rectangle intersectionArea = Rectangle.Intersect(
+                            player.PRectangle, obstacle.Position);
 
                         //If the width is less than the height, adjust the X position
                         if (intersectionArea.Width < intersectionArea.Height)
@@ -857,6 +862,8 @@ namespace Opossum_Game
                     }
                 }
             }
+
+            System.Diagnostics.Debug.WriteLine(player.IsHiding);
 
         }
 

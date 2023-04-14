@@ -126,7 +126,7 @@ namespace Opossum_Game
                             int.Parse(objectData[0]) * 100 - 4,
                             obstacleTexture.Width / 2, 
                             obstacleTexture.Height / 2)
-                        //, true      //for testing Hide
+                        , true      //for testing Hide
                         );
 
                     obstaclesList.Add(obstacle);
