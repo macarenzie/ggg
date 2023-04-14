@@ -23,36 +23,6 @@ namespace Opossum_Game
         bool isHideable;
 
         /// <summary>
-        /// Get/set for obstacle texture
-        /// </summary>
-        public Texture2D Texture
-        {
-            get
-            {
-                return texture;
-            }
-            set
-            {
-                texture = value;
-            }
-        }
-
-        /// <summary>
-        /// Get/set for obstacle position
-        /// </summary>
-        public Rectangle Position
-        {
-            get
-            {
-                return position;
-            }
-            set
-            {
-                position = value;
-            }
-        }
-
-        /// <summary>
         /// Get-only property for isHideable status
         /// </summary>
         public bool IsHideable
@@ -69,14 +39,29 @@ namespace Opossum_Game
         /// <param name="objectTexture">Texture of obstacle</param>
         /// <param name="objectDimensions">Size and position of obstacle</param>
         /// <param name="isHideable">If obstacle can be hidden in by the player</param>
-        public Obstacle(Texture2D objectTexture, Rectangle objectDimensions /*bool isHideable*/) 
+        public Obstacle(Texture2D objectTexture, Rectangle objectDimensions, bool isHideable) 
             : base (objectTexture, objectDimensions) 
         {
             texture = objectTexture;
             position = objectDimensions;
-            //this.isHideable = isHideable;
+            this.isHideable = isHideable;
         }
-        
+
+        /// <summary>
+        /// Constructor for obstacle objects
+        /// Different overloads to simplify when we want to test obstacles without 
+        /// isHidable. Tldr; for testing convenience
+        /// </summary>
+        /// <param name="objectTexture">Texture of obstacle</param>
+        /// <param name="objectDimensions">Size and position of obstacle</param>
+        public Obstacle(Texture2D objectTexture, Rectangle objectDimensions)
+            : base(objectTexture, objectDimensions)
+        {
+            texture = objectTexture;
+            position = objectDimensions;
+            this.isHideable = false;
+        }
+
         /// <summary>
         /// Override for draw method to draw the obstacle to the screen
         /// </summary>

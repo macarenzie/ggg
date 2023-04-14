@@ -20,6 +20,36 @@ namespace Opossum_Game
         protected Texture2D objectTexture;
         protected Rectangle objectDimensions;
 
+        /// <summary>
+        /// Get/set for obstacle texture
+        /// </summary>
+        public Texture2D Texture
+        {
+            get
+            {
+                return objectTexture;
+            }
+            set
+            {
+                objectTexture = value;
+            }
+        }
+
+        /// <summary>
+        /// Get/set for obstacle position
+        /// </summary>
+        public Rectangle Position
+        {
+            get
+            {
+                return objectDimensions;
+            }
+            set
+            {
+                objectDimensions = value;
+            }
+        }
+
         ///<summary>
         ///Creates individual obstacle objects.
         ///</summary>

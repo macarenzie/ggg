@@ -80,7 +80,7 @@ namespace Opossum_Game
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="collectibleTexture"></param>
+        /// <param name="collectibleTextures"></param>
         /// <param name="obstacleTexture"></param>
         /// <param name="playerTexture"></param>
         /// <param name="enemyTexture"></param>
@@ -125,7 +125,9 @@ namespace Opossum_Game
                             int.Parse(objectData[1]) * 100,
                             int.Parse(objectData[0]) * 100 - 4,
                             obstacleTexture.Width / 2, 
-                            obstacleTexture.Height / 2));
+                            obstacleTexture.Height / 2)
+                        //, true      //for testing Hide
+                        );
 
                     obstaclesList.Add(obstacle);
                 }

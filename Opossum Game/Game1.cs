@@ -127,7 +127,8 @@ namespace Opossum_Game
         private List<Obstacle> obstacleList;
         private Texture2D obstacleTexture;
         private Rectangle obstacleDimensions;
-        private Obstacle testObstacle;
+        private Obstacle hideableTestObstacle;
+        private Obstacle nonHideableTestObstacle;
         private bool isColliding;
 
         //Placeholder light
@@ -305,8 +306,17 @@ namespace Opossum_Game
 
             // obstacle
             obstacleTexture = Content.Load<Texture2D>("obstacleTexture");
+            /*
             obstacleDimensions = new Rectangle(400, 400, 200, 200);
-            testObstacle = new Obstacle(obstacleTexture, obstacleDimensions);
+            hideableTestObstacle = new Obstacle(
+                obstacleTexture, 
+                obstacleDimensions, 
+                true); //isHidable
+            nonHideableTestObstacle = new Obstacle(
+                obstacleTexture, 
+                obstacleDimensions); //non-hideable
+            */
+
             isColliding = false;
 
             // enemy
@@ -388,7 +398,7 @@ namespace Opossum_Game
                     //}
                     break;
 
-                ////all options for the state of playing the game
+                //all options for the state of playing the game
                 case GameState.Game:
 
                     if (debug)
@@ -466,10 +476,10 @@ namespace Opossum_Game
 
                         #region Collisions
                         //this method is to adjust the player's position with an non-overlappable object 
-                        //May be a little buggy with the logic
                         CheckObstacleCollision(player, level.ObstacleList);         //edge collision
 
                         // test if the player is able to hide in an obstacle
+                        /*
                         foreach (Obstacle obs in obstaclesList)
                         {
                             bool collide = player.IndividualCollision(obs.Position);
@@ -478,6 +488,12 @@ namespace Opossum_Game
                             {
                                 player.Hide(kbstate, previousKbState, obs.Position);
                             }
+                        }
+                        */
+                        //cleaner hide loop
+                        foreach(Obstacle obstacle in obstaclesList)
+                        {
+                            Hide(previousKbState, kbstate, obstacle, player);
                         }
 
                         //collectible collision
@@ -627,6 +643,19 @@ namespace Opossum_Game
                         // draw obstacles based on player collision
                         for (int i = 0; i < obstaclesList.Count; i++)
                         {
+                            //test code for hideable objects
+                            /*
+                            if (IsInRange(obstaclesList[i].Position, player) 
+                                && obstaclesList[i].IsHideable)
+                            {
+                                obstaclesList[i].Draw(_spriteBatch, Color.Green);
+                            }
+                            else
+                            {
+                                obstaclesList[i].Draw(_spriteBatch, Color.White);
+                            }
+                            */
+                            
                             if (player.IndividualCollision(obstaclesList[i].Position))
                             {
                                 obstaclesList[i].Draw(_spriteBatch, Color.Green);
@@ -635,6 +664,7 @@ namespace Opossum_Game
                             {
                                 obstaclesList[i].Draw(_spriteBatch, Color.White);
                             }
+                            
                         }
 
                         // draw each enemy
@@ -656,6 +686,8 @@ namespace Opossum_Game
 
                             player.Draw(_spriteBatch, Color.White);
                         }
+
+                        
                         
                         // LEVEL ------------------------------------------
                     }
@@ -722,7 +754,7 @@ namespace Opossum_Game
             //collectible collision
             for (int i = 0; i < collectiblesList.Count; i++)
             {
-                bool collide = player.IndividualCollision(collectiblesList[i].ObjectDimensions);
+                bool collide = player.IndividualCollision(collectiblesList[i].Position);
 
                 if (collide && SingleKeyPress(Keys.E, kbstate, previousKbState))
                 {
@@ -771,54 +803,61 @@ namespace Opossum_Game
         /// should exist in the Level class</param>
         void CheckObstacleCollision(Player player, List<Obstacle> obstaclesList)
         {
-            //Going through each obstacle in the list of obstacles to check for intersection
-            foreach (Obstacle obstacle in obstaclesList)
+            //this only matters if the player is not hiding.
+            //otherwise without this bool the player will just clip out of the box
+            //because every obstacle cannot be overlapped
+            if (!player.IsHiding)
             {
-                //If the intersection returns true
-                if (player.PRectangle.Intersects(obstacle.Position))
+                //Going through each obstacle in the list of obstacles to check for intersection
+                foreach (Obstacle obstacle in obstaclesList)
                 {
-                    //Get the intersection area
-                    Rectangle intersectionArea = Rectangle.Intersect(player.PRectangle, obstacle.Position);
-
-                    //If the width is less than the height, adjust the X position
-                    if (intersectionArea.Width < intersectionArea.Height)
+                    //If the intersection returns true
+                    if (player.PRectangle.Intersects(obstacle.Position))
                     {
-                        //LEFT side of obstacle
-                        //player.X is less than the midpoint of the obstacle's width
-                        if (player.X < (obstacle.Position.X + obstacle.Position.Width / 2))
+                        //Get the intersection area
+                        Rectangle intersectionArea = Rectangle.Intersect(player.PRectangle, obstacle.Position);
+
+                        //If the width is less than the height, adjust the X position
+                        if (intersectionArea.Width < intersectionArea.Height)
                         {
-                            player.X -= intersectionArea.Width;
+                            //LEFT side of obstacle
+                            //player.X is less than the midpoint of the obstacle's width
+                            if (player.X < (obstacle.Position.X + obstacle.Position.Width / 2))
+                            {
+                                player.X -= intersectionArea.Width;
+
+                            }
+                            //RIGHT
+                            else
+                            {
+                                player.X += intersectionArea.Width;
+
+                            }
 
                         }
-                        //RIGHT
-                        else
-                        {
-                            player.X += intersectionArea.Width;
 
+                        //If the height it less than the width, adjust the Y position
+                        else if (intersectionArea.Height < intersectionArea.Width)
+                        {
+                            //TOP side of the obstacle;
+                            //If player.Y is less than the obstacle's Height midpoint
+                            if (player.Y < (obstacle.Position.Y + obstacle.Position.Height / 2))
+                            {
+                                player.Y -= intersectionArea.Height;
+
+                            }
+                            //BOTTOM
+                            else
+                            {
+                                player.Y += intersectionArea.Height;
+
+                            }
                         }
 
                     }
-
-                    //If the height it less than the width, adjust the Y position
-                    else if (intersectionArea.Height < intersectionArea.Width)
-                    {
-                        //TOP side of the obstacle;
-                        //If player.Y is less than the obstacle's Height midpoint
-                        if (player.Y < (obstacle.Position.Y + obstacle.Position.Height / 2))
-                        {
-                            player.Y -= intersectionArea.Height;
-
-                        }
-                        //BOTTOM
-                        else
-                        {
-                            player.Y += intersectionArea.Height;
-
-                        }
-                    }
-
                 }
             }
+
         }
 
 
@@ -828,7 +867,8 @@ namespace Opossum_Game
         /// or a hiding spot is in range to collect or use
         /// </summary>
         /// <param name="otherObject"></param>
-        /// <returns></returns>
+        /// <returns>A bool on is the object is in range. In draw 
+        /// there should be a visual indication on applications</returns>
         bool IsInRange(Rectangle otherObject, Player player)
         {
             //These numbers can be adjusted when visuals are implemented and do what looks good
@@ -867,7 +907,7 @@ namespace Opossum_Game
             if (IsInRange(otherObstacle.Position, player)
                 && otherObstacle.IsHideable)
             {
-                if (curState.IsKeyDown(Keys.Space) && prevState.IsKeyUp(Keys.Space))
+                if (curState.IsKeyDown(Keys.Space) && prevState.IsKeyUp(Keys.Space) && !player.IsHiding)
                 {
                     //These obstacles have to be the same size or larger than the player 
                     //Centers the player with the obstacle

@@ -17,38 +17,6 @@ namespace Opossum_Game
     /// </summary>
     internal class Collectible : InteractibleObject
     {
-    //    Texture2D texture;
-    //    Rectangle position;
-
-    //    /// <summary>
-    //    /// 
-    //    /// </summary>
-    //    public Texture2D Texture
-    //    {
-    //        get
-    //        {
-    //            return texture;
-    //        }
-    //        set
-    //        {
-    //            texture = value;
-    //        }
-    //    }
-
-    //    /// <summary>
-    //    /// 
-    //    /// </summary>
-    //    public Rectangle Position
-    //    {
-    //        get
-    //        {
-    //            return position;
-    //        }
-    //        set
-    //        {
-    //            position = value;
-    //        }
-    //    }
 
         /// <summary>
         /// Constructor for individual collectible objects
