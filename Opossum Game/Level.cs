@@ -17,7 +17,6 @@ namespace Opossum_Game
     internal class Level
     {
         // fields -------------------------------------------------------------
-        private string fileName;
         private string lineOfData;
         private StreamReader reader;
 
@@ -29,6 +28,7 @@ namespace Opossum_Game
 
         // game object textures
         private Texture2D collectibleTexture;
+        private List<Texture2D> collectibleTextures;
         private Texture2D obstacleTexture;
         private Texture2D playerTexture;
         private Texture2D enemyTexture;
@@ -80,21 +80,23 @@ namespace Opossum_Game
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="collectibleTexture"></param>
+        /// <param name="collectibleTextures"></param>
         /// <param name="obstacleTexture"></param>
         /// <param name="playerTexture"></param>
         /// <param name="enemyTexture"></param>
         public Level(
-            Texture2D collectibleTexture, 
+            List<Texture2D> collectibleTextures, 
             Texture2D obstacleTexture, 
             Texture2D playerTexture, 
             Texture2D enemyTexture)
         {
+            // initialize each game object list
             collectiblesList = new List<Collectible>();
             obstaclesList = new List<Obstacle>();
             enemyList = new List<Enemy>();
 
-            this.collectibleTexture = collectibleTexture;
+            // initialize each game object texture
+            this.collectibleTextures = collectibleTextures;
             this.obstacleTexture = obstacleTexture;
             this.playerTexture = playerTexture;
             this.enemyTexture = enemyTexture;
@@ -122,20 +124,24 @@ namespace Opossum_Game
                         new Rectangle(
                             int.Parse(objectData[1]) * 100,
                             int.Parse(objectData[0]) * 100 - 4,
-                            obstacleTexture.Width / 5, 
-                            obstacleTexture.Height / 5));
+                            obstacleTexture.Width / 2, 
+                            obstacleTexture.Height / 2)
+                        , true      //for testing Hide
+                        );
 
                     obstaclesList.Add(obstacle);
                 }
                 else if (objectData[2] == "collectible")
                 {
+                    Random rng = new Random();
+                    collectibleTexture = collectibleTextures[rng.Next(0, 3)];
                     Collectible collectible = new Collectible(
                         collectibleTexture,
                         new Rectangle(
                             int.Parse(objectData[1]) * 100,
                             int.Parse(objectData[0]) * 100,
-                            collectibleTexture.Width / 2, 
-                            collectibleTexture.Height / 2));
+                            collectibleTexture.Width / 4, 
+                            collectibleTexture.Height / 4));
 
                     collectiblesList.Add(collectible);
                 }

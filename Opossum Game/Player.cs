@@ -19,12 +19,14 @@ namespace Opossum_Game
         //fields
         private Rectangle playerRectangle; //dimensions pSprite dimensions
         private Texture2D pSprite;
-        //private int foodCollected;
 
         //player movement stuff
         private KeyboardState currKB;
         private KeyboardState prevKB;
         private PlayerState playerState;
+
+        //hiding stuff
+        private bool isHiding;
 
         //properties
         /// <summary>
@@ -42,13 +44,6 @@ namespace Opossum_Game
             }
         }
 
-        /// <summary>
-        /// The amount of food the player has collected
-        /// </summary>
-        //public int FoodCollected
-        //{
-        //    get { return foodCollected; }
-        //}
 
         /// <summary>
         /// gets and sets player's x coordinate
@@ -78,6 +73,16 @@ namespace Opossum_Game
             get { return playerRectangle; }
         }
 
+        /// <summary>
+        /// Get and Set, returns whether or not a player is hiding within another obstacle
+        /// See Game1 for Hide()
+        /// </summary>
+        public bool IsHiding
+        {
+            get { return isHiding; }
+            set { isHiding = value; }
+        }
+
         //constructor
         /// <summary>
         /// Creates what the player will control.
@@ -89,109 +94,16 @@ namespace Opossum_Game
             //foodCollected = 0;
             this.pSprite = pSprite;
             this.playerRectangle = pLocation;
+            isHiding = false;
         }
 
-        /// <summary>
-        /// detects individual collisions with different game objects
-        /// </summary>
-        /// <param name="obstacle"></param>
-        /// <returns></returns>
-        public bool IndividualCollision(Rectangle obstacle)
-        {
-            //what exactly is an obstacle... for each loop could go here 
-            if (playerRectangle.Intersects(obstacle)) //And !isHidden
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// player's collecting food method based on user input
-        /// </summary>
-        /// <param name="prevState">keyboard's previous state</param>
-        /// <param name="curState">keyboard's current state</param>
-        /// <param name="otherObject"></param>
-        //public void Collect(KeyboardState prevState, KeyboardState curState, Collectible food)
-        //{
-        //    //TODO: Check for press and release of space bar
-        //    //Only collect if collectible is in range, check if collectible is collectible
-        //    //Complete IsInRange() method before this one
-        //    if(prevState.IsKeyDown(Keys.Space) &&               //key release check
-        //       curState.IsKeyUp(Keys.Space) &&
-        //        IsInRange(food.ObjectDimensions))      //Check if in range 
-        //    {
-        //        foodCollected++;
-        //    }
-        //}
-
-        /// <summary>
-        /// Checking if another object is in range
-        /// Used to determine if a food collectible is in range
-        /// or a hiding spot is in range to collect or use
-        /// </summary>
-        /// <param name="otherObject"></param>
-        /// <returns></returns>
-        public bool IsInRange(Rectangle otherObject)
-        {
-            //These numbers can be adjusted when visuals are implemented and do what looks good
-            float dx = Math.Abs((this.playerRectangle.Width / 2) - (otherObject.Width / 2));
-            float dy = Math.Abs((this.playerRectangle.Height / 2) - (otherObject.Height / 2));
-               
-            if (
-                //TODO: Check distance between objects
-                //distance is based on midpoint of each object??
-                (dx + 20) >= (playerRectangle.X + playerRectangle.Width) - (otherObject.X + otherObject.Width)
-                && (dy + 20) >= (playerRectangle.Y + playerRectangle.Width) - (otherObject.Y + otherObject.Height)
-                )
-            {
-                return true;
-            }
-
-            else
-            {
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Will change the player's position to be overlapping with the hideable obstacle
-        /// Check if IsInRange is true
-        /// Press and release space bar
-        /// </summary>
-        /// 
-        //TODO: Implement a way to exit hide state, otherwise player will be stuck within object. -Julia
-        //^^ bool to allow for exit
-        public void Hide(KeyboardState prevState, 
-            KeyboardState curState, Rectangle otherObstacle)
-        {
-            //get mid points lined up
-            if (IsInRange(otherObstacle)
-                // && otherObstacle is Hideable
-                )
-            {
-                if(currKB.IsKeyDown(Keys.Space) && prevState.IsKeyUp(Keys.Space))
-                {
-                    //These obstacles have to be the same size or larger than the player 
-                    //Centers the player with the obstacle
-                    playerRectangle.X = (otherObstacle.X + (otherObstacle.Width / 2)) 
-                        - (playerRectangle.Width/2);
-
-                    playerRectangle.Y = (otherObstacle.Y + (otherObstacle.Height / 2)) 
-                        - (playerRectangle.Height / 2);
-
-                }
-            }
-        }
 
         /// <summary>
         /// processes EVERYTHING that affects player movement
         /// </summary>
         //TODO: Implement edge collision--block the player from moving off
         //    screen (left/right edges), or change panel (top/bottom edges) -Julia
+        //DONE^^ See CheckObstacleCollision in Game1 - Jamie
         //TODO: Diagonal movement doesn't work right now. Could potentially
         //   only use enum switch for draw purposes. -Julia
         private void ProcessInput()
@@ -200,94 +112,106 @@ namespace Opossum_Game
             currKB = Keyboard.GetState();
 
             //---------------------------------------------------------------
-            switch (playerState)
+            //player can only move if they are not hiding in a box
+            if (!isHiding)
             {
-                //===================================================================
-                case PlayerState.Left:
-                    //if A is pressed
-                    if (currKB.IsKeyDown(Keys.A))
-                    {
-                        playerRectangle.X -= 5;
-                    }
+                switch (playerState)
+                {
+                    //===================================================================
+                    case PlayerState.Left:
+                        //if A is pressed
+                        if (currKB.IsKeyDown(Keys.A))
+                        {
+                            playerRectangle.X -= 5;
+                        }
 
-                    //TRANSITIONS
-                    if (currKB.IsKeyDown(Keys.D) && prevKB.IsKeyUp(Keys.D))
-                        playerState = PlayerState.Right;
+                        //TRANSITIONS
+                        if (currKB.IsKeyDown(Keys.D) && prevKB.IsKeyUp(Keys.D))
+                            playerState = PlayerState.Right;
 
-                    if (currKB.IsKeyDown(Keys.W) && prevKB.IsKeyUp(Keys.W))
-                        playerState = PlayerState.Front;
+                        if (currKB.IsKeyDown(Keys.W) && prevKB.IsKeyUp(Keys.W))
+                            playerState = PlayerState.Front;
 
-                    if (currKB.IsKeyDown(Keys.S) && prevKB.IsKeyUp(Keys.S))
-                        playerState = PlayerState.Back;
+                        if (currKB.IsKeyDown(Keys.S) && prevKB.IsKeyUp(Keys.S))
+                            playerState = PlayerState.Back;
 
-                    break;
-                //===================================================================
-                case PlayerState.Right:
-                    //if D is pressed
-                    if (currKB.IsKeyDown(Keys.D))
-                    {
-                        playerRectangle.X += 5;
-                    }
+                        break;
+                    //===================================================================
+                    case PlayerState.Right:
+                        //if D is pressed
+                        if (currKB.IsKeyDown(Keys.D))
+                        {
+                            playerRectangle.X += 5;
+                        }
 
-                    //TRANSITIONS
-                    if (currKB.IsKeyDown(Keys.A) && prevKB.IsKeyUp(Keys.A))
-                        playerState = PlayerState.Left;
+                        //TRANSITIONS
+                        if (currKB.IsKeyDown(Keys.A) && prevKB.IsKeyUp(Keys.A))
+                            playerState = PlayerState.Left;
 
-                    if (currKB.IsKeyDown(Keys.W) && prevKB.IsKeyUp(Keys.W))
-                        playerState = PlayerState.Front;
+                        if (currKB.IsKeyDown(Keys.W) && prevKB.IsKeyUp(Keys.W))
+                            playerState = PlayerState.Front;
 
-                    if (currKB.IsKeyDown(Keys.S) && prevKB.IsKeyUp(Keys.S))
-                        playerState = PlayerState.Back;
+                        if (currKB.IsKeyDown(Keys.S) && prevKB.IsKeyUp(Keys.S))
+                            playerState = PlayerState.Back;
 
-                    break;
+                        break;
 
-                case PlayerState.Front:
-                    //if W is pressed
-                    if (currKB.IsKeyDown(Keys.W))
-                    {
-                        playerRectangle.Y -= 5;
-                    }
+                    case PlayerState.Front:
+                        //if W is pressed
+                        if (currKB.IsKeyDown(Keys.W))
+                        {
+                            playerRectangle.Y -= 5;
+                        }
 
-                    //TRANSITIONS
-                    if (currKB.IsKeyDown(Keys.A) && prevKB.IsKeyUp(Keys.A))
-                        playerState = PlayerState.Left;
+                        //TRANSITIONS
+                        if (currKB.IsKeyDown(Keys.A) && prevKB.IsKeyUp(Keys.A))
+                            playerState = PlayerState.Left;
 
-                    if (currKB.IsKeyDown(Keys.D) && prevKB.IsKeyUp(Keys.D))
-                        playerState = PlayerState.Right;
+                        if (currKB.IsKeyDown(Keys.D) && prevKB.IsKeyUp(Keys.D))
+                            playerState = PlayerState.Right;
 
-                    if (currKB.IsKeyDown(Keys.S) && prevKB.IsKeyUp(Keys.S))
-                        playerState = PlayerState.Back;
+                        if (currKB.IsKeyDown(Keys.S) && prevKB.IsKeyUp(Keys.S))
+                            playerState = PlayerState.Back;
 
-                    break;
-                //===================================================================
-                case PlayerState.Back:
-                    //if S is pressed
-                    if (currKB.IsKeyDown(Keys.S))
-                    {
-                        playerRectangle.Y += 5;
-                    }
+                        break;
+                    //===================================================================
+                    case PlayerState.Back:
+                        //if S is pressed
+                        if (currKB.IsKeyDown(Keys.S))
+                        {
+                            playerRectangle.Y += 5;
+                        }
 
-                    //TRANSITIONS
-                    if (currKB.IsKeyDown(Keys.A) && prevKB.IsKeyUp(Keys.A))
-                        playerState = PlayerState.Left;
+                        //TRANSITIONS
+                        if (currKB.IsKeyDown(Keys.A) && prevKB.IsKeyUp(Keys.A))
+                            playerState = PlayerState.Left;
 
-                    if (currKB.IsKeyDown(Keys.D) && prevKB.IsKeyUp(Keys.D))
-                        playerState = PlayerState.Right;
+                        if (currKB.IsKeyDown(Keys.D) && prevKB.IsKeyUp(Keys.D))
+                            playerState = PlayerState.Right;
 
-                    if (currKB.IsKeyDown(Keys.W) && prevKB.IsKeyUp(Keys.W))
-                        playerState = PlayerState.Front;
+                        if (currKB.IsKeyDown(Keys.W) && prevKB.IsKeyUp(Keys.W))
+                            playerState = PlayerState.Front;
 
-                    break;
-                //===================================================================
-                //will update this when enemy obstacles have been made
-                //case PlayerState.PlayDead:
-                //    if (Collision() == true)
-                //    {
-                //        pLocation.X += 0;
-                //        pLocation.Y += 0;
-                //    }
-                //    break;
+                        break;
+                        //===================================================================
+                        //will update this when enemy obstacles have been made
+                        //case PlayerState.PlayDead:
+                        //    if (Collision() == true)
+                        //    {
+                        //        pLocation.X += 0;
+                        //        pLocation.Y += 0;
+                        //    }
+                        //    break;
+                }
             }
+            else
+            {
+                //logically, the player can't move in this else
+                //Do not move
+                //playerRectangle.X += 0;
+                //playerRectangle.Y += 0;
+            }
+            
             //---------------------------------------------------------------
 
             //update prevKB
@@ -309,13 +233,31 @@ namespace Opossum_Game
         /// maybe have the light collision be handled in level manager. just a thought --Jamie
         /// </summary>
         //Color specifier is a TEMP until playdead is implemented
-        public void Draw(SpriteBatch sb, Color color) 
+        public void Draw(SpriteBatch sb, Color color)
         {
             sb.Draw(
                 pSprite,
                 playerRectangle,
                 color
                 );
+
+        }
+
+        /// <summary>
+        /// detects individual collisions with different game objects
+        /// </summary>
+        /// <param name="obstacle">The rectangle associated w. the object in question</param>
+        /// <returns>whether the player is colliding with another object</returns>
+        public bool IndividualCollision(Rectangle obstacle)
+        {
+            if (playerRectangle.Intersects(obstacle)) //And !isHidden
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
 
         }
     }

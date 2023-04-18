@@ -13,7 +13,7 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin collectibleBurger.PNG
+#begin colBurger.PNG
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -23,9 +23,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:collectibleBurger.PNG
+/build:colBurger.PNG
 
-#begin collectibleCandy.PNG
+#begin colCandy.PNG
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -35,9 +35,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:collectibleCandy.PNG
+/build:colCandy.PNG
 
-#begin collectibleChips.PNG
+#begin colChips.PNG
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -47,7 +47,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:collectibleChips.PNG
+/build:colChips.PNG
 
 #begin comicsans30.spritefont
 /importer:FontDescriptionImporter
@@ -55,6 +55,30 @@
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
 /build:comicsans30.spritefont
+
+#begin enemyTexture.PNG
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:enemyTexture.PNG
+
+#begin environmentalArt.PNG
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:environmentalArt.PNG
 
 #begin gameOverScreen.PNG
 /importer:TextureImporter
@@ -68,7 +92,7 @@
 /processorParam:TextureFormat=Color
 /build:gameOverScreen.PNG
 
-#begin light.png
+#begin obstacleTexture.PNG
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -78,7 +102,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:light.png
+/build:obstacleTexture.PNG
 
 #begin optionButtonBase.PNG
 /importer:TextureImporter
@@ -116,7 +140,7 @@
 /processorParam:TextureFormat=Color
 /build:optionsScreen.PNG
 
-#begin pSprite.PNG
+#begin playerSprite.PNG
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -126,7 +150,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:pSprite.PNG
+/build:playerSprite.PNG
 
 #begin quitBase.PNG
 /importer:TextureImporter
@@ -187,18 +211,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:startScreen.PNG
-
-#begin tempObs.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:tempObs.png
 
 #begin tryAgainBase.PNG
 /importer:TextureImporter
