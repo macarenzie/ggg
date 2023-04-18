@@ -73,6 +73,9 @@ namespace Opossum_Game
         private Texture2D quitBase;
         private Texture2D quitRollOver;
         private Button quitButton;
+
+        private Texture2D environmentalArt;
+
         #endregion
 
         #region Collectibles
@@ -259,13 +262,16 @@ namespace Opossum_Game
                 optionsButtonBase,
                 new Rectangle(
                     (windowWidth / 2) - (optionsButtonBase.Width / 4),
-                    (windowHeight / 2) + (optionsButtonBase.Height / 4),
+                    (windowHeight / 2) + (optionsButtonBase.Height / 4) + 50,
                     optionsButtonBase.Width / 2,
                     optionsButtonBase.Height / 2
                     ),
                 optionsButtonRollOver
                 );
             #endregion
+
+            //background art
+            environmentalArt = Content.Load<Texture2D>("environmentalArt");
 
             // player sprite
             pSprite = Content.Load<Texture2D>("playerSprite");
@@ -627,6 +633,8 @@ namespace Opossum_Game
                     if (!debug)
                     {
                         // DRAW ORDER: player, collectibles, obstacle, enemy
+
+                        _spriteBatch.Draw(environmentalArt, new Rectangle(0, 0, 900, 900), Color.White);
 
                         player.Draw(_spriteBatch, Color.White);
 
