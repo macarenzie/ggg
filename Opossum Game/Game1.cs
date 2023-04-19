@@ -1,10 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Timers;
 
 namespace Opossum_Game
 {
@@ -14,6 +13,8 @@ namespace Opossum_Game
     ///    helped with collision handling in update and draw for each game object
     /// Hui Lin: worked on enums and current state game state stuff
     /// Ariel: finalized UI fsm and implimented camera movement fsm
+    /// Jamie: edge collision so the player does not go over obstacles that the player
+    /// cannot go through & Hide()
     /// </summary>
     #region Enums
 
@@ -25,6 +26,7 @@ namespace Opossum_Game
         Game,
         GameLose,
         GameWin,
+        Debug
     }
 
     //the state of the player
@@ -71,12 +73,16 @@ namespace Opossum_Game
         private Texture2D quitBase;
         private Texture2D quitRollOver;
         private Button quitButton;
+
+        private Texture2D environmentalArt;
+
         #endregion
 
         #region Collectibles
         private Texture2D collectibleBurger;
         private Texture2D collectibleCandy;
         private Texture2D collectibleChips;
+        private List<Texture2D> collectibleTextures;
         #endregion
 
         #region Player
@@ -105,16 +111,9 @@ namespace Opossum_Game
         // font fields
         private SpriteFont comicsans30;
 
-        #region Window and UI
         //literal window
         private int windowWidth;
         private int windowHeight;
-
-        //List of interactible objects
-        private List<InteractibleObject> objects;
-
-        //String to hold collision direction
-        string obstacleCollision;
 
         //all general window screens
         private Texture2D menuScreen;
@@ -123,13 +122,16 @@ namespace Opossum_Game
         private Texture2D loseScreen;
 
         private GameState currentState;
-        #endregion
+
+        //List of interactible objects
+        private List<InteractibleObject> objects;
 
         //Obstacle test. Texture and rectangle and obstacle list
         private List<Obstacle> obstacleList;
         private Texture2D obstacleTexture;
         private Rectangle obstacleDimensions;
-        private Obstacle testObstacle;
+        private Obstacle hideableTestObstacle;
+        private Obstacle nonHideableTestObstacle;
         private bool isColliding;
 
         //Placeholder light
@@ -137,8 +139,9 @@ namespace Opossum_Game
         private Rectangle lightDimensions;
         private bool isCollidingLight;
 
-        // TEMP OBSTAACLE TEXTURE
-        Texture2D tempObsTexture;
+        // enemy
+        private Texture2D enemyTexture;
+        private Rectangle enemyDimensions;
 
         #region LevelLoading
         private StreamReader reader;
@@ -147,8 +150,13 @@ namespace Opossum_Game
         private List<Enemy> enemyList;
         private string levelFile;
         private Level level;
-        string levelName;
+        private string level1;
+        private string level2;
+        private string level3;
         #endregion
+
+        // DEBUG MODE
+        private bool debug;
 
 
 
@@ -176,18 +184,22 @@ namespace Opossum_Game
             //start the first game level at one
             currentScreen = GameScreen.One;
 
-            //Initializing list and default collision state
-            objects = new List<InteractibleObject>();
-            obstacleCollision = "none";
-
             //Test for list collision
             obstacleList = new List<Obstacle>();
 
             //Initializing timer
-            timer = 20; //15 seconds
+            timer = 200; //15 seconds
 
             //testing for reseting level
-            levelName = "newTestL1";
+            level1 = "levelScreen1";
+            level2 = "levelScreen2";
+            level3 = "levelScreen3";
+
+            // debug mode
+            debug = false;
+
+            // initialize the collectible texture list
+            collectibleTextures = new List<Texture2D>();
 
             base.Initialize(); 
         }
@@ -198,9 +210,9 @@ namespace Opossum_Game
 
             #region Button
             // start button
-            startButtonBase2D = 
+            startButtonBase2D =
                 Content.Load<Texture2D>("startButtonBase");
-            startButtonRollOver = 
+            startButtonRollOver =
                 Content.Load<Texture2D>("startButtonRollOver");
             startButton = new Button(
                 startButtonBase2D,      // initial button texture
@@ -225,8 +237,8 @@ namespace Opossum_Game
                     quitBase.Height / 2     //height
                     ),
                 quitRollOver
-                ) ;
-            
+                );
+
 
             //try again button
             tryAgainBase =
@@ -246,15 +258,15 @@ namespace Opossum_Game
 
 
             // option button
-            optionsButtonBase = 
+            optionsButtonBase =
                 Content.Load<Texture2D>("optionButtonBase");
-            optionsButtonRollOver = 
+            optionsButtonRollOver =
                 Content.Load<Texture2D>("optionButtonRollOver");
             optionsButton = new Button(
                 optionsButtonBase,
                 new Rectangle(
                     (windowWidth / 2) - (optionsButtonBase.Width / 4),
-                    (windowHeight / 2) + (optionsButtonBase.Height / 4),
+                    (windowHeight / 2) + (optionsButtonBase.Height / 4) + 50,
                     optionsButtonBase.Width / 2,
                     optionsButtonBase.Height / 2
                     ),
@@ -262,25 +274,38 @@ namespace Opossum_Game
                 );
             #endregion
 
+            //background art
+            environmentalArt = Content.Load<Texture2D>("environmentalArt");
+
             // player sprite
-            pSprite = Content.Load<Texture2D>("pSprite");
+            pSprite = Content.Load<Texture2D>("playerSprite");
+
             // player initialization
-            player = new Player(pSprite, new Rectangle(10, 10, pSprite.Width / 4, pSprite.Height / 4));
+            player = new Player(
+                pSprite,
+                new Rectangle(10, 10, pSprite.Width / 4, pSprite.Height / 4));
 
             #region Collectibles
-            collectibleBurger = Content.Load<Texture2D>("collectibleBurger");
-            collectibleCandy = Content.Load<Texture2D>("collectibleCandy");
-            collectibleChips = Content.Load<Texture2D>("collectibleChips");
+            collectibleBurger = Content.Load<Texture2D>("colBurger");
+            collectibleCandy = Content.Load<Texture2D>("colCandy");
+            collectibleChips = Content.Load<Texture2D>("colChips");
+            collectibleTextures.Add(collectibleBurger);
+            collectibleTextures.Add(collectibleCandy);
+            collectibleTextures.Add(collectibleChips);
             #endregion
 
             #region Game Screens
-            menuScreen = Content.Load<Texture2D>("startScreen");
             //menuScreen
+            menuScreen = Content.Load<Texture2D>("startScreen");
+
             //optionScreen
             optionScreen = Content.Load<Texture2D>("optionsScreen");
+
             //winScreen
+
             //loseScreen
             loseScreen = Content.Load<Texture2D>("gameOverScreen");
+
             //gameScreen1
             //gameScreen2
             //gameScreen3
@@ -289,28 +314,33 @@ namespace Opossum_Game
             // temporary font
             comicsans30 = Content.Load<SpriteFont>("comicsans30");
 
-            //Temporary collision obstacle
-            obstacleTexture = Content.Load<Texture2D>("collectibleBurger");
+            // obstacle
+            obstacleTexture = Content.Load<Texture2D>("obstacleTexture");
+            /*
             obstacleDimensions = new Rectangle(400, 400, 200, 200);
-            testObstacle = new Obstacle(obstacleTexture, obstacleDimensions);
+            hideableTestObstacle = new Obstacle(
+                obstacleTexture, 
+                obstacleDimensions, 
+                true); //isHidable
+            nonHideableTestObstacle = new Obstacle(
+                obstacleTexture, 
+                obstacleDimensions); //non-hideable
+            */
+
             isColliding = false;
 
-            //Temp light
-            lightTexture = Content.Load<Texture2D>("light");
-            lightDimensions = new Rectangle(200, 700, 200, 200);
-            isCollidingLight = false;
+            // enemy
+            enemyTexture = Content.Load<Texture2D>("enemyTexture");
 
-            // TEMP OBSTACLE
-            tempObsTexture = Content.Load<Texture2D>("tempObs");
 
             // level loading
             level = new Level(
-                collectibleChips,   // collectible texture
-                tempObsTexture,  // obstacle texture
-                pSprite,            // player texture
-                lightTexture);  // enemy texture
-            level.LoadLevel(levelName);
-            
+                collectibleTextures,       // collectible texture
+                obstacleTexture,         // obstacle texture
+                pSprite,                // player texture
+                enemyTexture);          // enemy texture
+            level.LoadLevel(level1);
+
             // pass in the fields from the level class to the game1 class
             player = level.Player;
             collectiblesList = level.CollectiblesList;
@@ -320,11 +350,10 @@ namespace Opossum_Game
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || 
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
                 Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            #region UI FSM
             kbstate = Keyboard.GetState();
 
             switch (currentState)
@@ -332,11 +361,20 @@ namespace Opossum_Game
                 //all posibilities for the menu screen
                 case GameState.Menu:
 
-                    //resetting game
-                    ResetGame();
+                    if (SingleKeyPress(Keys.U, kbstate, previousKbState) && debug == false)
+                    {
+                        debug = true;
+                    }
+
+                    else if (SingleKeyPress(Keys.U, kbstate, previousKbState) && debug == true)
+                    {
+                        debug = false;
+                    }
 
                     if (startButton.MouseClick() && startButton.MouseContains())
                     {
+                        //resetting game
+                        ResetGame();
                         currentState = GameState.Game;
                     }
 
@@ -370,101 +408,139 @@ namespace Opossum_Game
                     //}
                     break;
 
-                ////all options for the state of playing the game
+                //all options for the state of playing the game
                 case GameState.Game:
 
-                    timer -= gameTime.ElapsedGameTime.TotalSeconds;
-
-                    player.Update(gameTime);
-
-                    #region Game Level Screen
-                    switch (currentScreen)
+                    if (debug)
                     {
-                        case GameScreen.One:
-
-                            if (player.Y == windowHeight)
-                            {
-                                currentScreen = GameScreen.Two;
-                                player = level.Player;
-                            }
-
-                            if (SingleKeyPress(Keys.Escape, kbstate, previousKbState))
-                            {
-                                currentState = GameState.Menu;
-                            }
-                            break;
-                            #region GameScreenTwo
-                            //case GameScreen.Two:
-                            //    if (player.Y == windowHeight)
-                            //    {
-                            //        currentScreen = GameScreen.Three;
-                            //        player.ResetPosition();
-                            //    }
-
-                            //    if (SingleKeyPress(Keys.Escape, kbstate, previousKbState))
-                            //    {
-                            //        currentState = GameState.Menu;
-                            //    }
-                            //    break;
-                            //case GameScreen.Three:
-
-                            //    if (player.Y == windowHeight)
-                            //    {
-                            //        currentScreen = GameScreen.Three;
-                            //        player.ResetPosition();
-                            //    }
-
-                            //    if (SingleKeyPress(Keys.Escape, kbstate, previousKbState))
-                            //    {
-                            //        currentState = GameState.Menu;
-                            //    }
-
-                            //    if (SingleKeyPress(Keys.Z, kbstate, previousKbState))
-                            //    {
-                            //        currentState = GameState.GameWin;
-                            //    }
-                            //    else if (SingleKeyPress(Keys.L, kbstate, previousKbState))
-                            //    {
-                            //        currentState = GameState.GameLose;
-                            //    }
-
-                            //    //to go back to main menu from game screen
-                            //    else if (SingleKeyPress(Keys.Escape, kbstate, previousKbState))
-                            //    {
-                            //        currentState = GameState.Menu;
-                            //    }
-                            //    break;
-                            #endregion
-
+                        player.Update(gameTime);
+                         
+                        
+                        //turn collisions off
+                        //for each game object check if the player is colliding with it and return false every time
                     }
-                    #endregion
 
-                    #region Collisions
-
-                    // test if the player is able to hide in an obstacle
-                    foreach (Obstacle obs in obstaclesList)
+                    if (!debug)
                     {
-                        bool collide = player.IndividualCollision(obs.Position);
+                        timer -= gameTime.ElapsedGameTime.TotalSeconds;
 
-                        if (collide)
+                        player.Update(gameTime);
+
+                        #region Game Level Screen
+                        switch (currentScreen)
                         {
-                            player.Hide(kbstate, previousKbState, obs.Position);
+                            case GameScreen.One:
+
+                                if (player.Y == windowHeight)
+                                {
+                                    currentScreen = GameScreen.Two;
+                                    player = level.Player;
+                                }
+
+                                if (SingleKeyPress(Keys.Escape, kbstate, previousKbState))
+                                {
+                                    currentState = GameState.Menu;
+                                }
+                                break;
+                                #region GameScreenTwo
+                                //case GameScreen.Two:
+                                //    if (player.Y == windowHeight)
+                                //    {
+                                //        currentScreen = GameScreen.Three;
+                                //        player.ResetPosition();
+                                //    }
+
+                                //    if (SingleKeyPress(Keys.Escape, kbstate, previousKbState))
+                                //    {
+                                //        currentState = GameState.Menu;
+                                //    }
+                                //    break;
+                                //case GameScreen.Three:
+
+                                //    if (player.Y == windowHeight)
+                                //    {
+                                //        currentScreen = GameScreen.Three;
+                                //        player.ResetPosition();
+                                //    }
+
+                                //    if (SingleKeyPress(Keys.Escape, kbstate, previousKbState))
+                                //    {
+                                //        currentState = GameState.Menu;
+                                //    }
+
+                                //    if (SingleKeyPress(Keys.Z, kbstate, previousKbState))
+                                //    {
+                                //        currentState = GameState.GameWin;
+                                //    }
+                                //    else if (SingleKeyPress(Keys.L, kbstate, previousKbState))
+                                //    {
+                                //        currentState = GameState.GameLose;
+                                //    }
+
+                                //    //to go back to main menu from game screen
+                                //    else if (SingleKeyPress(Keys.Escape, kbstate, previousKbState))
+                                //    {
+                                //        currentState = GameState.Menu;
+                                //    }
+                                //    break;
+                                #endregion
+
+                        }
+                        #endregion
+
+                        #region Collisions
+                        //this method is to adjust the player's position with an non-overlappable object 
+                        if (!player.IsHiding)
+                        {
+                            CheckObstacleCollision(player, level.ObstacleList);         //edge collision
+                        }
+
+                        // test if the player is able to hide in an obstacle
+                        /*
+                        foreach (Obstacle obs in obstaclesList)
+                        {
+                            bool collide = player.IndividualCollision(obs.Position);
+
+                            if (collide)
+                            {
+                                player.Hide(kbstate, previousKbState, obs.Position);
+                            }
+                        }
+                        */
+                        //cleaner hide loop
+                        foreach (Obstacle obstacle in obstaclesList)
+                        {
+                            Hide(previousKbState, kbstate, obstacle, player);
+                        }
+
+                        //collectible collision
+                        CollectibleCollision();
+                        #endregion
+
+                        //win conditions for now -- moving later to game screen 3
+                        if (timer <= 0 && collectiblesList.Count != 0)
+                        {
+                            currentState = GameState.GameLose;
+                        }
+                        else if (timer >= 0 && collectiblesList.Count == 0)
+                        {
+                            currentState = GameState.GameWin;
                         }
                     }
 
-                    //collectible collision
-                    CollectibleCollision();
-                    #endregion
 
-                    //win conditions for now -- moving later to game screen 3
-                    if (timer <= 0 && collectiblesList.Count != 0)
-                    {
-                        currentState = GameState.GameLose;
-                    }
-                    else if (timer >= 0 && collectiblesList.Count == 0)
-                    {
-                        currentState = GameState.GameWin;
-                    }
+                    //PSEUDOCODE FOR THE FREEZING AND SLOWING
+                    /*
+                     ********ENEMY DOES NOT KEEP MOVING**************
+                    IF ENEMY.LIGHTINTERSECTS == TRUE
+                    Put in a freeze method that would tick down for a certain amount of time.
+                        - Must be in a method to pause everything else within the game.
+                    Once the timer runs out, the enemy TURNS
+                        - Because the enemy has turned, the player will no longer intersect with the enemy light
+                    Freeze method is done, and all player movement and enemy movement is in tact
+                    */
+
+
                     break;
 
                 case GameState.GameLose:
@@ -495,62 +571,13 @@ namespace Opossum_Game
                     {
                         Exit();
                     }
-                    break;
-
-
-                    //Collision detection -- utilizing keyboard input to ensure player is attempting to move.
-                    //Adjusts player direction in the opposite direction of their movement--should result in player staying still.
-                    //If player movement speed is adjusted, this needs to be adjusted as well!
-                    //updates collision string
-                    /*obstacleCollision = player.ObstacleCollision(obstacleList);
-
-                    //Only runs if collision isn't "none"
-                    if (obstacleCollision != "none")
-                    {
-                        //Player moving down
-                        if (obstacleCollision == "down" && kbstate.IsKeyDown(Keys.S))
-                        {
-                            player.Y -= 5;
-                        }
-
-                        //Player moving up
-                        if (obstacleCollision == "up" && kbstate.IsKeyDown(Keys.W))
-                        {
-                            player.Y += 5;
-                        }
-
-                        //Player moving left
-                        if (obstacleCollision == "left" && kbstate.IsKeyDown(Keys.A))
-                        {
-                            player.X += 5;
-                        }
-
-                        //Player moving right
-                        if (obstacleCollision == "right" && kbstate.IsKeyDown(Keys.D))
-                        {
-                            player.X -= 5;
-                        }
-                    } */
+                    break; 
             }
 
             // update the previous keyboard state
             previousKbState = kbstate;
-            #endregion
 
-            //PSEUDOCODE FOR THE FREEZING AND SLOWING
-            /*FOREACH enemy in the enemyList
-                Check IF enemy.LightIntersects() is true or not
-            ----------Let's talk about this more, the only way I can see this working is a FSM because the state needs to change-------------
-            Have a boolean called enemyLight
-                IF player is in contact with the light
-                    enemyLight = true;
-                    Freeze the player for a set amount of seconds
-                        --> Most likely a method so everything is paused while it ticks down
-                    (How do i make the player then immune to this? I am lost here) 
-                    The player's movement is altered to be slower UNTIL 
-            
-                    LightIntersects() is false. 
-            */
+
             base.Update(gameTime);
         }
 
@@ -558,7 +585,6 @@ namespace Opossum_Game
         {
             GraphicsDevice.Clear(Color.Navy);
 
-            #region UI FSM                                                                                                                                                                                                                              
             _spriteBatch.Begin();
             switch (currentState)
             {
@@ -569,6 +595,12 @@ namespace Opossum_Game
                     //drawing of the buttons
                     startButton.Draw(_spriteBatch);
                     optionsButton.Draw(_spriteBatch);
+
+                    _spriteBatch.DrawString(
+                        comicsans30,
+                        string.Format("Press 'U' to toggle debug mode!\nDebug mode: " + debug),
+                        new Vector2(0, 5),
+                        Color.Pink);
                     break;
                 case GameState.Options:
 
@@ -576,69 +608,140 @@ namespace Opossum_Game
 
                     // TEMP
                     _spriteBatch.DrawString(
-                        comicsans30, 
-                        string.Format("OPTIONS SCREEN"), 
-                        new Vector2(10, 100), 
+                        comicsans30,
+                        string.Format("OPTIONS SCREEN"),
+                        new Vector2(10, 100),
                         Color.White);
                     _spriteBatch.DrawString(
-                        comicsans30, 
-                        string.Format("PRESS 'M' FOR MAIN MENU"), 
-                        new Vector2(10, 200), 
+                        comicsans30,
+                        string.Format("PRESS 'M' FOR MAIN MENU"),
+                        new Vector2(10, 200),
                         Color.White);
                     break;
 
                 case GameState.Game:
 
-                    player.Draw(_spriteBatch, Color.White);
-
-                    //drawing the timer to the screen
-                    _spriteBatch.DrawString(
-                        comicsans30,
-                        string.Format("Time left: {0:0}", timer),
-                        new Vector2(0, 5),
-                        Color.White
-                        );
-
-                    //draw all the collectibles
-                    CollectibleDraw();
-
-                    // LEVEL TESTING ------------------------------------------
-                    /*
-
-                    // draw obstacles based on player collision
-                    for (int i = 0; i < obstaclesList.Count; i++)
+                    if (debug)
                     {
-                        if (player.IndividualCollision(obstaclesList[i].Position))
-                        {
-                            obstaclesList[i].Draw(_spriteBatch, Color.Green);
-                        }
-                        else
-                        {
-                            obstaclesList[i].Draw(_spriteBatch, Color.White);
-                        }
-                    }
+                        // DRAW ORDER: obstacle, collectibles, enemy, player
 
-                    // draw each light
-                    for (int i = 0; i < enemyList.Count; i++)
-                    {
-                        enemyList[i].Draw(_spriteBatch);
-                    }
-
-                    // draw the player based on collisions with light
-                    foreach (Enemy enemy in enemyList)
-                    {
-                        bool collide = player.IndividualCollision(enemy.Position);
-
-                        if (collide)
+                        foreach (IGameObject obstacle in obstacleList)
                         {
-                            player.Draw(_spriteBatch, Color.Red);
-                            break;
+                            obstacle.Draw(_spriteBatch, Color.White);
                         }
-                        
+
+                        foreach (IGameObject collectible in collectiblesList)
+                        {
+                            collectible.Draw(_spriteBatch, Color.White);
+                        }
+
+                        foreach (IGameObject enemy in enemyList)
+                        {
+                            enemy.Draw(_spriteBatch, Color.White);
+                        }
+
                         player.Draw(_spriteBatch, Color.White);
+
+                        //drawing the timer to the screen
+                        _spriteBatch.DrawString(
+                            comicsans30,
+                            string.Format("Time left: {0:0}", timer),
+                            new Vector2(0, 5),
+                            Color.White);
                     }
-                    */
-                    // LEVEL TESTING ------------------------------------------
+                    else
+                    {
+                        // DRAW ORDER: player, collectibles, obstacle, enemy
+
+                        _spriteBatch.Draw(environmentalArt, new Rectangle(0, 0, 900, 900), Color.White);
+
+                        player.Draw(_spriteBatch, Color.White);
+
+                        foreach (IGameObject collectible in collectiblesList)
+                        {
+                            collectible.Draw(_spriteBatch, Color.White);
+                        }
+
+                        foreach (IGameObject obstacle in obstacleList)
+                        {
+                            obstacle.Draw(_spriteBatch, Color.White);
+                        }
+
+                        foreach (IGameObject enemy in enemyList)
+                        {
+                            enemy.Draw(_spriteBatch, Color.White);
+                        }
+
+                        //drawing the timer to the screen
+                        _spriteBatch.DrawString(
+                            comicsans30,
+                            string.Format("Time left: {0:0}", timer),
+                            new Vector2(0, 5),
+                            Color.White
+                            );
+
+                        // LEVEL ------------------------------------------
+                        
+                        // draw obstacles based on player collision
+                        for (int i = 0; i < obstaclesList.Count; i++)
+                        {
+                            //test code for hideable objects
+                            
+                            if (IsInRange(obstaclesList[i].Rectangle, player) 
+                                && obstaclesList[i].IsHideable)
+                            {
+                                obstaclesList[i].Draw(_spriteBatch, Color.Green);
+                            }
+                            else
+                            {
+                                obstaclesList[i].Draw(_spriteBatch, Color.White);
+                            }
+                            
+                            /*
+                            if (player.IndividualCollision(obstaclesList[i].Position))
+                            {
+                                obstaclesList[i].Draw(_spriteBatch, Color.Green);
+                            }
+                            else
+                            {
+                                obstaclesList[i].Draw(_spriteBatch, Color.White);
+                            }
+                            */
+                            
+                        }
+
+                        // draw each enemy
+                        //for (int i = 0; i < enemyList.Count; i++)
+                        //{
+                        //    enemyList[i].Draw(_spriteBatch, Color.White);
+                        //}
+
+                        // draw the player based on collisions with light
+                        foreach (Enemy enemy in enemyList)
+                        {
+                            bool collide = player.IndividualCollision(enemy.Rectangle);
+
+                            if (collide)
+                            {
+                                player.Draw(_spriteBatch, Color.Red);
+                                break;
+                            }
+
+                            player.Draw(_spriteBatch, Color.White);
+                        }
+
+
+                        //drawing the timer to the screen
+                        _spriteBatch.DrawString(
+                            comicsans30,
+                            string.Format("Time left: {0:0}", timer),
+                            new Vector2(0, 5),
+                            Color.White
+                            );
+                        // LEVEL ------------------------------------------
+                    }
+
+
 
                     break;
 
@@ -646,7 +749,7 @@ namespace Opossum_Game
 
                     _spriteBatch.Draw(
                         loseScreen,
-                        new Vector2(0,0),
+                        new Vector2(0, 0),
                         Color.White
                         );
 
@@ -659,19 +762,18 @@ namespace Opossum_Game
 
                     //TEMP
                     _spriteBatch.DrawString(
-                        comicsans30, 
-                        string.Format("GAME WIN SCREEN"), 
-                        new Vector2(10, 100), 
+                        comicsans30,
+                        string.Format("GAME WIN SCREEN"),
+                        new Vector2(10, 100),
                         Color.White);
 
                     _spriteBatch.DrawString(
-                        comicsans30, 
-                        string.Format("PRESS 'M' FOR MAIN MENU"), 
-                        new Vector2(10, 200), 
+                        comicsans30,
+                        string.Format("PRESS 'M' FOR MAIN MENU"),
+                        new Vector2(10, 200),
                         Color.White);
                     break;
             }
-            #endregion
 
             _spriteBatch.End();
 
@@ -701,6 +803,7 @@ namespace Opossum_Game
         }
 
         /// <summary>
+        /// TODO: Clean up
         /// checks for collectible collision
         /// </summary>
         public void CollectibleCollision()
@@ -708,7 +811,7 @@ namespace Opossum_Game
             //collectible collision
             for (int i = 0; i < collectiblesList.Count; i++)
             {
-                bool collide = player.IndividualCollision(collectiblesList[i].Position);
+                bool collide = player.IndividualCollision(collectiblesList[i].Rectangle);
 
                 if (collide && SingleKeyPress(Keys.E, kbstate, previousKbState))
                 {
@@ -734,13 +837,181 @@ namespace Opossum_Game
         /// </summary>
         public void ResetGame()
         {
-            level.LoadLevel(levelName);
+            collectiblesList.Clear();
+            obstaclesList.Clear();
+            enemyList.Clear();
+            level.LoadLevel(level1);
 
             collectiblesList = level.CollectiblesList;
 
-            timer = 15;
+            timer = 150;
 
             player = level.Player;
         }
+
+        /// <summary>
+        /// Checks if the player is overlapping with any Obstacle object
+        /// If the player is overlapping, then the player's position will be adjusted 
+        /// so that only their edges are touching
+        /// Worked on by Jamie Zheng
+        /// </summary>
+        /// <param name="player">The Player object</param>
+        /// <param name="obstaclesList">A list of all the Obstacles in this game, 
+        /// should exist in the Level class</param>
+        void CheckObstacleCollision(Player player, List<Obstacle> obstaclesList)
+        {
+            //this only matters if the player is not hiding.
+            //otherwise without this bool the player will just clip out of the box
+            //because every obstacle cannot be overlapped
+            if (!player.IsHiding)
+            {
+                //Going through each obstacle in the list of obstacles to check for intersection
+                foreach (Obstacle obstacle in obstaclesList)
+                {
+                    //If the intersection returns true
+                    if (player.Rectangle.Intersects(obstacle.Rectangle))
+                    {
+                        //Get the intersection area
+                        Rectangle intersectionArea = Rectangle.Intersect(
+                            player.Rectangle, obstacle.Rectangle);
+
+                        //If the width is less than the height, adjust the X position
+                        if (intersectionArea.Width < intersectionArea.Height)
+                        {
+                            //LEFT side of obstacle
+                            //player.X is less than the midpoint of the obstacle's width
+                            if (player.X < (obstacle.Rectangle.X + obstacle.Rectangle.Width / 2))
+                            {
+                                player.X -= intersectionArea.Width;
+
+                            }
+                            //RIGHT
+                            else
+                            {
+                                player.X += intersectionArea.Width;
+
+                            }
+
+                        }
+
+                        //If the height it less than the width, adjust the Y position
+                        else if (intersectionArea.Height < intersectionArea.Width)
+                        {
+                            //TOP side of the obstacle;
+                            //If player.Y is less than the obstacle's Height midpoint
+                            if (player.Y < (obstacle.Rectangle.Y + obstacle.Rectangle.Height / 2))
+                            {
+                                player.Y -= intersectionArea.Height;
+
+                            }
+                            //BOTTOM
+                            else
+                            {
+                                player.Y += intersectionArea.Height;
+
+                            }
+                        }
+
+                    }
+                }
+            }
+
+
+        }
+
+
+        /// <summary>
+        /// Checking if another object is in range
+        /// Used to determine if a food collectible is in range
+        /// or a hiding spot is in range to collect or use
+        /// </summary>
+        /// <param name="otherObject"></param>
+        /// <returns>A bool on is the object is in range. In draw 
+        /// there should be a visual indication on applications</returns>
+        bool IsInRange(Rectangle otherObject, Player player)
+        {
+            //These numbers can be adjusted when visuals are implemented and do what looks good
+            //the distance in the x and y direction.
+            //Half of player's width/ height + half of the other objects width/ height
+            float dx = Math.Abs((player.Rectangle.Width / 2) + (otherObject.Width / 2));
+            float dy = Math.Abs((player.Rectangle.Height / 2) + (otherObject.Height / 2));
+
+            //player mid point coordinates
+            float pMidX = player.X + player.Rectangle.Width / 2;
+            float pMidY = player.Y + player.Rectangle.Height / 2;
+
+            //otherObject midpoint coordinates
+            float oMidX = otherObject.X + otherObject.Width / 2;
+            float oMidY = otherObject.Y + otherObject.Height / 2;
+
+            if (
+                //distance needs to be less than or equal to when they touch + 50 pixels
+                (dx + 50) >= Math.Abs(pMidX - oMidX)
+                && (dy + 50) >= Math.Abs(pMidY - oMidY)
+                )
+            {
+                return true;
+            }
+
+            else
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Will change the player's position to be overlapping with the hideable obstacle
+        /// Check if IsInRange is true
+        /// Press and release space bar
+        /// </summary>
+        /// 
+        //TODO: Implement a way to exit hide state, otherwise player will be stuck within object. -Julia
+        //^^ bool to allow for exit
+        //DONE^^ -Jamie
+        void Hide(KeyboardState prevState,
+            KeyboardState curState, Obstacle otherObstacle, Player player)
+        {
+            //get mid points lined up
+            if (IsInRange(otherObstacle.Rectangle, player)
+                && otherObstacle.IsHideable 
+                //&& !player.IsHiding
+                )
+            {
+                if (curState.IsKeyDown(Keys.Space) && prevState.IsKeyUp(Keys.Space) 
+                    //&& !player.IsHiding
+                    )
+                {
+                    if (!player.IsHiding)
+                    {
+                        //These obstacles have to be the same size or larger than the player 
+                        //or in draw logic if the player is hiding then don't draw
+                        //Centers the player with the obstacle
+                        player.X = (otherObstacle.Rectangle.X + (otherObstacle.Rectangle.Width / 2))
+                            - (player.Rectangle.Width / 2);
+
+                        player.Y = (otherObstacle.Rectangle.Y + (otherObstacle.Rectangle.Height / 2))
+                            - (player.Rectangle.Height / 2);
+
+                        player.IsHiding = true;
+                    }
+
+                    //if the space bar is pressed again then unhide
+                    else if (player.IsHiding)
+                    {
+                        player.IsHiding = false;
+                        
+                        //position changing logic
+                        //by the edge collision logic, the player will move to the closest open area
+                    }
+                    
+                }
+
+                
+            }
+
+            System.Diagnostics.Debug.WriteLine("Player is hiding: {0}", player.IsHiding);
+        }
+
+
     }
 }
