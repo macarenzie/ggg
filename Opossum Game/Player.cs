@@ -105,8 +105,8 @@ namespace Opossum_Game
         //TODO: Implement edge collision--block the player from moving off
         //    screen (left/right edges), or change panel (top/bottom edges) -Julia
         //DONE^^ See CheckObstacleCollision in Game1 - Jamie
-        //TODO: Diagonal movement doesn't work right now. Could potentially
-        //   only use enum switch for draw purposes. -Julia
+        //TODO: is playerstate enum going to be used to change the direction the player is drawn in?
+        //Otherwise the only use is for playdead, which could become a bool if that's the only use for the enum. -Julia
         private void ProcessInput()
         {
             //get current kbState
@@ -114,9 +114,55 @@ namespace Opossum_Game
 
             //---------------------------------------------------------------
             //player can only move if they are not hiding in a box
-            if (!isHiding)
+            //TODO: tentatively adding PlayDead state as a check here.
+            //This means that PlayDead resolution needs to set the player state to movement. -Julia
+            if (!isHiding && playerState != PlayerState.PlayDead)
             {
-                switch (playerState)
+                //Player movement. Gives priority of current state to left/right for potential drawing purposes.
+                //W pressed
+                if (currKB.IsKeyDown(Keys.W)) 
+                {
+                    playerState = PlayerState.Front;
+                    playerRectangle.Y -= 5;
+                }
+
+                //S pressed 
+                if (currKB.IsKeyDown(Keys.S))
+                {
+                    playerState = PlayerState.Back;
+                    playerRectangle.Y += 5;
+                }
+
+                //A pressed
+                if (currKB.IsKeyDown(Keys.A))
+                {
+                    playerState = PlayerState.Left;
+                    playerRectangle.X -= 5;
+                }
+
+                //D pressed 
+                if (currKB.IsKeyDown(Keys.D))
+                {
+                    playerState = PlayerState.Right;
+                    playerRectangle.X += 5;
+                }
+
+                //Adjusting for diagonal movement. Decreases speed in the Y direction
+                //Diagonally up
+                if (currKB.IsKeyDown(Keys.W) && (currKB.IsKeyDown(Keys.A) || currKB.IsKeyDown(Keys.D)))
+                {
+                    playerRectangle.Y += 2;
+                }
+
+                //Diagonally down
+                if (currKB.IsKeyDown(Keys.S) && (currKB.IsKeyDown(Keys.A) || currKB.IsKeyDown(Keys.D)))
+                {
+                    playerRectangle.Y -= 2;
+                }
+
+                //Commenting out switch statement to try a different movement system.
+                //Will remove later when it's clear we don't need anything from here. -Julia
+                /*switch (playerState)
                 {
                     //===================================================================
                     case PlayerState.Left:
@@ -203,7 +249,7 @@ namespace Opossum_Game
                         //        pLocation.Y += 0;
                         //    }
                         //    break;
-                }
+                } */
             }
             else
             {
