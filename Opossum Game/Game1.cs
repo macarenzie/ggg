@@ -1003,12 +1003,10 @@ namespace Opossum_Game
         /// <summary>
         /// Will change the player's position to be overlapping with the hideable obstacle
         /// Check if IsInRange is true
-        /// Press and release space bar
+        /// Press and release space bar. Hide and UnHide are the same. 
+        /// If unhiding, then currently by edge collision logic, 
+        /// it will set you outside automatically
         /// </summary>
-        /// 
-        //TODO: Implement a way to exit hide state, otherwise player will be stuck within object. -Julia
-        //^^ bool to allow for exit
-        //DONE^^ -Jamie
         void Hide(KeyboardState prevState,
             KeyboardState curState, Obstacle otherObstacle, Player player)
         {
@@ -1018,9 +1016,7 @@ namespace Opossum_Game
                 //&& !player.IsHiding
                 )
             {
-                if (curState.IsKeyDown(Keys.Space) && prevState.IsKeyUp(Keys.Space) 
-                    //&& !player.IsHiding
-                    )
+                if (curState.IsKeyDown(Keys.Space) && prevState.IsKeyUp(Keys.Space))
                 {
                     if (!player.IsHiding)
                     {
