@@ -314,6 +314,7 @@ namespace Opossum_Game
                 debugModeRollOver
                 );
 
+            //exit from main menu button
             exitBase =
                 Content.Load<Texture2D>("exitButtonBase");
             exitRollOver =
@@ -327,6 +328,19 @@ namespace Opossum_Game
                     optionsButtonBase.Height / 2
                     ),
                 exitRollOver
+                );
+
+            xMarkTexture =
+                Content.Load<Texture2D>("xMark");
+            xMarkButton = new Button(
+                xMarkTexture,
+                new Rectangle(
+                    90,
+                    90,
+                    xMarkTexture.Width / 2,
+                    xMarkTexture.Height / 2
+                    ),
+                xMarkTexture
                 );
 
             #endregion
@@ -454,6 +468,11 @@ namespace Opossum_Game
                     // PLACEHOLDER TO TEST TRANSITIONS
                     if (SingleKeyPress(Keys.M, kbstate, previousKbState)
                         /*menuButton.MouseClick() && menuButton.MouseContains()*/)
+                    {
+                        currentState = GameState.Menu;
+                    }
+
+                    if (xMarkButton.MouseClick() && xMarkButton.MouseContains())
                     {
                         currentState = GameState.Menu;
                     }
@@ -674,6 +693,8 @@ namespace Opossum_Game
 
                     _spriteBatch.Draw(optionScreen, new Rectangle(0, 0, 900, 900), Color.White);
 
+                    xMarkButton.Draw(_spriteBatch);
+
                     /*
                     if (debug == true)
                     {
@@ -684,18 +705,6 @@ namespace Opossum_Game
                         debugModeButtonOff.Draw(_spriteBatch);
                     }
                     */
-
-                    // TEMP
-                    _spriteBatch.DrawString(
-                        comicsans30,
-                        string.Format("OPTIONS SCREEN"),
-                        new Vector2(10, 100),
-                        Color.White);
-                    _spriteBatch.DrawString(
-                        comicsans30,
-                        string.Format("PRESS 'M' FOR MAIN MENU"),
-                        new Vector2(10, 200),
-                        Color.White);
                     break;
 
                 case GameState.Game:
