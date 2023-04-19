@@ -76,6 +76,12 @@ namespace Opossum_Game
 
         private Texture2D environmentalArt;
 
+        // debug mode 
+        private Texture2D debugModeBase;
+        private Texture2D debugModeRollOver;
+        private Button debugModeButtonOff;
+        private Button debugModeButtonOn;
+
         #endregion
 
         #region Collectibles
@@ -272,6 +278,33 @@ namespace Opossum_Game
                     ),
                 optionsButtonRollOver
                 );
+
+            //debug mode button
+            debugModeBase =
+                Content.Load<Texture2D>("debugModeBase");
+            debugModeRollOver =
+                Content.Load<Texture2D>("debugModeRollOver");
+            debugModeButtonOn = new Button(
+                debugModeBase,
+                new Rectangle(
+                    (windowWidth / 2) - (optionsButtonBase.Width / 4) - 160,
+                    (windowHeight / 2) + (optionsButtonBase.Height / 4) + 190,
+                    optionsButtonBase.Width / 2,
+                    optionsButtonBase.Height / 2
+                    ),
+                debugModeBase
+                );
+            debugModeButtonOff = new Button(
+                debugModeRollOver,
+                new Rectangle(
+                    (windowWidth / 2) - (optionsButtonBase.Width / 4) - 160,
+                    (windowHeight / 2) + (optionsButtonBase.Height / 4) + 190,
+                    optionsButtonBase.Width / 2,
+                    optionsButtonBase.Height / 2
+                    ),
+                debugModeRollOver
+                );
+
             #endregion
 
             //background art
@@ -402,10 +435,19 @@ namespace Opossum_Game
                     }
 
                     //for when we do have the gode mode stuff implemented
-                    //if (/*stealthModeButton.MouseClick() && stealthModeButton.MouseContains()*/)
-                    //{
-                    //    god mode on and off
-                    //}
+                    if (debug == false)
+                    {
+                        if (debugModeButtonOn.MouseClick() && debugModeButtonOn.MouseContains())
+                        {
+                            debug = true;
+                        }
+                    } else
+                    {
+                        if (debugModeButtonOff.MouseClick() && debugModeButtonOff.MouseContains())
+                        {
+                            debug = false;
+                        }
+                    }
                     break;
 
                 //all options for the state of playing the game
@@ -605,6 +647,16 @@ namespace Opossum_Game
                 case GameState.Options:
 
                     _spriteBatch.Draw(optionScreen, new Rectangle(0, 0, 900, 900), Color.White);
+
+
+                    if (debug == true)
+                    {
+                        debugModeButtonOn.Draw(_spriteBatch);
+                    } 
+                    else
+                    {
+                        debugModeButtonOff.Draw(_spriteBatch);
+                    }
 
                     // TEMP
                     _spriteBatch.DrawString(
