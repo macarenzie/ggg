@@ -26,7 +26,7 @@ namespace Opossum_Game
         Pause
     }
 
-    internal class Enemy
+    internal class Enemy : IGameObject
     {
         //Fields
         private Texture2D texture;
@@ -45,12 +45,16 @@ namespace Opossum_Game
             {
                 return texture;
             }
+            set
+            {
+                texture = value;
+            }
         }
 
         /// <summary>
         /// Get-only property for enemy position
         /// </summary>
-        public Rectangle Position
+        public Rectangle Rectangle
         {
             get
             {
@@ -131,16 +135,16 @@ namespace Opossum_Game
         /// Draws enemy in the direction they are currently facing based on the direction enum.
         /// </summary>
         //TODO: Implement texture and texture flipping. Currently draws the same each direction.
-        public void Draw(SpriteBatch sb)
+        public void Draw(SpriteBatch sb, Color color)
         {
             switch(currentDirection)
             {
                 case MovementDirection.Left:
-                    sb.Draw(texture, position, Color.White);
+                    sb.Draw(texture, position, color);
                     break;
 
                 case MovementDirection.Right:
-                    sb.Draw(texture, position, Color.White);
+                    sb.Draw(texture, position, color);
                     break;
             }
                 
@@ -160,7 +164,7 @@ namespace Opossum_Game
             //Iterates through the entire list and checks intersect status of each obstacle. Stops early if collision is found.
             for (int i = 0; i < obstacles.Count || isColliding; i++)
             {
-                if (position.Intersects(obstacles[i].Position))
+                if (position.Intersects(obstacles[i].Rectangle))
                 {
                     isColliding = true;
                 }

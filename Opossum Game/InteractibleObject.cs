@@ -14,7 +14,7 @@ namespace Opossum_Game
     /// Utilized as the parent class for obstacles and collectibles.
     /// Worked on by: Julia Rissberger, McKenzie Lam
     /// </summary>
-    internal abstract class InteractibleObject
+    internal abstract class InteractibleObject : IGameObject
     {
         //Fields
         protected Texture2D objectTexture;
@@ -38,7 +38,7 @@ namespace Opossum_Game
         /// <summary>
         /// Get/set for obstacle position
         /// </summary>
-        public Rectangle Position
+        public Rectangle Rectangle
         {
             get
             {
