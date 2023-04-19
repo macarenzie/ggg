@@ -282,11 +282,15 @@ namespace Opossum_Game
         //Color specifier is a TEMP until playdead is implemented
         public void Draw(SpriteBatch sb, Color color)
         {
-            sb.Draw(
+            //Only draws the player if they aren't hiding
+            if (!isHiding)
+            {
+                sb.Draw(
                 pSprite,
                 playerRectangle,
                 color
                 );
+            }
 
         }
 
