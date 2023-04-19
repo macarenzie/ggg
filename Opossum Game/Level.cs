@@ -119,53 +119,92 @@ namespace Opossum_Game
 
                 if (objectData[2] == "obstacle")
                 {
-                    Obstacle obstacle = new Obstacle(
-                        obstacleTexture,
-                        new Rectangle(
-                            int.Parse(objectData[1]) * 100,
-                            int.Parse(objectData[0]) * 100 - 4,
-                            obstacleTexture.Width / 2, 
-                            obstacleTexture.Height / 2)
-                        , true      //for testing Hide
-                        );
+                    Obstacle obstacle = null;
 
+                    // determine if it is a hideable object
+                    if (objectData[3] == "t")
+                    {
+                        obstacle = new Obstacle(
+                            obstacleTexture, 
+                            new Rectangle(
+                                int.Parse(objectData[1]) * 90, 
+                                int.Parse(objectData[0]) * 90,
+                                obstacleTexture.Width / 3, 
+                                obstacleTexture.Height / 3), 
+                            true);
+                    }
+                    else
+                    {
+                        obstacle = new Obstacle(
+                            obstacleTexture,
+                            new Rectangle(
+                                int.Parse(objectData[1]) * 90,
+                                int.Parse(objectData[0]) * 90,
+                                obstacleTexture.Width / 3,
+                                obstacleTexture.Height / 3),
+                            false);
+                    }
+                    
                     obstaclesList.Add(obstacle);
                 }
                 else if (objectData[2] == "collectible")
                 {
+                    // randomize the collectible texture
                     Random rng = new Random();
                     collectibleTexture = collectibleTextures[rng.Next(0, 3)];
+                    
+                    // create and add the collectible object to the list
                     Collectible collectible = new Collectible(
                         collectibleTexture,
                         new Rectangle(
-                            int.Parse(objectData[1]) * 100,
-                            int.Parse(objectData[0]) * 100,
-                            collectibleTexture.Width / 4, 
-                            collectibleTexture.Height / 4));
+                            int.Parse(objectData[1]) * 90 + 10,
+                            int.Parse(objectData[0]) * 90 + 10,
+                            collectibleTexture.Width / 3, 
+                            collectibleTexture.Height / 3));
 
                     collectiblesList.Add(collectible);
                 }
                 else if (objectData[2] == "enemy")
                 {
-                   /* Enemy enemy = new Enemy(
-                        enemyTexture,
-                        new Rectangle(
-                            int.Parse(objectData[1]) * 100,
-                            int.Parse(objectData[0]) * 100,
-                            enemyTexture.Width / 20, 
-                            enemyTexture.Height / 10));
-
-                    EnemyList.Add(enemy); */
+                    Enemy enemy = null;
+                    
+                    // determine the movement direction of the enemy
+                    if (objectData[3] == "l")
+                    {
+                        enemy = new Enemy(
+                        enemyTexture,       // texture
+                        new Rectangle(      // position and dimensions
+                            int.Parse(objectData[1]) * 90,
+                            int.Parse(objectData[0]) * 90,
+                            enemyTexture.Width / 20,
+                            enemyTexture.Height / 10), 
+                        new Rectangle(),    // light
+                        MovementDirection.Left);    // direction
+                    }
+                    else
+                    {
+                        enemy = new Enemy(
+                        enemyTexture,       // texture
+                        new Rectangle(      // position and dimensions
+                            int.Parse(objectData[1]) * 90,
+                            int.Parse(objectData[0]) * 90,
+                            enemyTexture.Width / 20,
+                            enemyTexture.Height / 10),
+                        new Rectangle(),    // light
+                        MovementDirection.Left);    // direction
+                    }
+                    
+                    EnemyList.Add(enemy);
                 }
                 else if (objectData[2] == "player")
                 {
                     player = new Player(
                         playerTexture, 
                         new Rectangle(
-                            int.Parse(objectData[1]) * 100,
-                            int.Parse(objectData[0]) *100 ,
-                            playerTexture.Width / 4, 
-                            playerTexture.Height / 4));
+                            int.Parse(objectData[1]) * 90,
+                            int.Parse(objectData[0]) * 90,
+                            playerTexture.Width / 5, 
+                            playerTexture.Height / 5));
                 }
             }
         }

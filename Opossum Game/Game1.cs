@@ -150,7 +150,9 @@ namespace Opossum_Game
         private List<Enemy> enemyList;
         private string levelFile;
         private Level level;
-        string levelName;
+        private string level1;
+        private string level2;
+        private string level3;
         #endregion
 
         // DEBUG MODE
@@ -186,10 +188,12 @@ namespace Opossum_Game
             obstacleList = new List<Obstacle>();
 
             //Initializing timer
-            timer = 20; //15 seconds
+            timer = 200; //15 seconds
 
             //testing for reseting level
-            levelName = "newTestL1";
+            level1 = "levelScreen1";
+            level2 = "levelScreen2";
+            level3 = "levelScreen3";
 
             // debug mode
             debug = false;
@@ -335,7 +339,7 @@ namespace Opossum_Game
                 obstacleTexture,         // obstacle texture
                 pSprite,                // player texture
                 enemyTexture);          // enemy texture
-            level.LoadLevel(levelName);
+            level.LoadLevel(level1);
 
             // pass in the fields from the level class to the game1 class
             player = level.Player;
@@ -638,13 +642,7 @@ namespace Opossum_Game
 
                         player.Draw(_spriteBatch, Color.White);
 
-                        //drawing the timer to the screen
-                        _spriteBatch.DrawString(
-                            comicsans30,
-                            string.Format("Time left: {0:0}", timer),
-                            new Vector2(0, 5),
-                            Color.White
-                            );
+                        
 
                         //draw all the collectibles
                         CollectibleDraw();
@@ -699,8 +697,14 @@ namespace Opossum_Game
                             player.Draw(_spriteBatch, Color.White);
                         }
 
-                        
-                        
+
+                        //drawing the timer to the screen
+                        _spriteBatch.DrawString(
+                            comicsans30,
+                            string.Format("Time left: {0:0}", timer),
+                            new Vector2(0, 5),
+                            Color.White
+                            );
                         // LEVEL ------------------------------------------
                     }
 
@@ -795,11 +799,11 @@ namespace Opossum_Game
             collectiblesList.Clear();
             obstaclesList.Clear();
             enemyList.Clear();
-            level.LoadLevel(levelName);
+            level.LoadLevel(level1);
 
             collectiblesList = level.CollectiblesList;
 
-            timer = 15;
+            timer = 150;
 
             player = level.Player;
         }
