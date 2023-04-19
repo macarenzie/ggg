@@ -908,7 +908,6 @@ namespace Opossum_Game
                 }
             }
 
-            System.Diagnostics.Debug.WriteLine(player.IsHiding);
 
         }
 
@@ -924,14 +923,23 @@ namespace Opossum_Game
         bool IsInRange(Rectangle otherObject, Player player)
         {
             //These numbers can be adjusted when visuals are implemented and do what looks good
-            float dx = Math.Abs((player.Rectangle.Width / 2) - (otherObject.Width / 2));
-            float dy = Math.Abs((player.Rectangle.Height / 2) - (otherObject.Height / 2));
+            //the distance in the x and y direction.
+            //Half of player's width/ height + half of the other objects width/ height
+            float dx = Math.Abs((player.Rectangle.Width / 2) + (otherObject.Width / 2));
+            float dy = Math.Abs((player.Rectangle.Height / 2) + (otherObject.Height / 2));
+
+            //player mid point coordinates
+            float pMidX = player.X + player.Rectangle.Width / 2;
+            float pMidY = player.Y + player.Rectangle.Height / 2;
+
+            //otherObject midpoint coordinates
+            float oMidX = otherObject.X + otherObject.Width / 2;
+            float oMidY = otherObject.Y + otherObject.Height / 2;
 
             if (
-                //TODO: Check distance between objects
-                //distance is based on midpoint of each object??
-                (dx + 20) >= (player.Rectangle.X + player.Rectangle.Width) - (otherObject.X + otherObject.Width)
-                && (dy + 20) >= (player.Rectangle.Y + player.Rectangle.Width) - (otherObject.Y + otherObject.Height)
+                //distance needs to be less than or equal to when they touch + 50 pixels
+                (dx + 50) >= Math.Abs(pMidX - oMidX)
+                && (dy + 50) >= Math.Abs(pMidY - oMidY)
                 )
             {
                 return true;
@@ -957,28 +965,43 @@ namespace Opossum_Game
         {
             //get mid points lined up
             if (IsInRange(otherObstacle.Rectangle, player)
-                && otherObstacle.IsHideable)
+                && otherObstacle.IsHideable 
+                //&& !player.IsHiding
+                )
             {
-                if (curState.IsKeyDown(Keys.Space) && prevState.IsKeyUp(Keys.Space) && !player.IsHiding)
+                if (curState.IsKeyDown(Keys.Space) && prevState.IsKeyUp(Keys.Space) 
+                    //&& !player.IsHiding
+                    )
                 {
-                    //These obstacles have to be the same size or larger than the player 
-                    //Centers the player with the obstacle
-                    player.X = (otherObstacle.Rectangle.X + (otherObstacle.Rectangle.Width / 2))
-                        - (player.Rectangle.Width / 2);
+                    if (!player.IsHiding)
+                    {
+                        //These obstacles have to be the same size or larger than the player 
+                        //or in draw logic if the player is hiding then don't draw
+                        //Centers the player with the obstacle
+                        player.X = (otherObstacle.Rectangle.X + (otherObstacle.Rectangle.Width / 2))
+                            - (player.Rectangle.Width / 2);
 
-                    player.Y = (otherObstacle.Rectangle.Y + (otherObstacle.Rectangle.Height / 2))
-                        - (player.Rectangle.Height / 2);
+                        player.Y = (otherObstacle.Rectangle.Y + (otherObstacle.Rectangle.Height / 2))
+                            - (player.Rectangle.Height / 2);
 
-                    player.IsHiding = true;
+                        player.IsHiding = true;
+                    }
+
+                    //if the space bar is pressed again then unhide
+                    else if (player.IsHiding)
+                    {
+                        player.IsHiding = false;
+                        
+                        //position changing logic
+                        //by the edge collision logic, the player will move to the closest open area
+                    }
+                    
                 }
 
-                //if the space bar is pressed again then unhide
-                else if (player.IsHiding)
-                {
-                    player.IsHiding = false;
-                    //Add position changing stuff
-                }
+                
             }
+
+            System.Diagnostics.Debug.WriteLine("Player is hiding: {0}", player.IsHiding);
         }
 
 
