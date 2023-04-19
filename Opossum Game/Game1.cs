@@ -435,7 +435,7 @@ namespace Opossum_Game
                     }
 
                     //for when we do have the gode mode stuff implemented
-                    if (debug == false)
+                  /*  if (debug == false)
                     {
                         if (debugModeButtonOn.MouseClick() && debugModeButtonOn.MouseContains())
                         {
@@ -448,6 +448,7 @@ namespace Opossum_Game
                             debug = false;
                         }
                     }
+                  */
                     break;
 
                 //all options for the state of playing the game
@@ -648,7 +649,7 @@ namespace Opossum_Game
 
                     _spriteBatch.Draw(optionScreen, new Rectangle(0, 0, 900, 900), Color.White);
 
-
+                    /*
                     if (debug == true)
                     {
                         debugModeButtonOn.Draw(_spriteBatch);
@@ -657,6 +658,7 @@ namespace Opossum_Game
                     {
                         debugModeButtonOff.Draw(_spriteBatch);
                     }
+                    */
 
                     // TEMP
                     _spriteBatch.DrawString(
