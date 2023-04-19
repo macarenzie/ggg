@@ -82,6 +82,15 @@ namespace Opossum_Game
         private Button debugModeButtonOff;
         private Button debugModeButtonOn;
 
+        //exit button
+        private Texture2D exitBase;
+        private Texture2D exitRollOver;
+        private Button exitButton;
+
+        //tiny button for exit
+        private Texture2D xMarkTexture;
+        private Button xMarkButton;
+
         #endregion
 
         #region Collectibles
@@ -305,6 +314,21 @@ namespace Opossum_Game
                 debugModeRollOver
                 );
 
+            exitBase =
+                Content.Load<Texture2D>("exitButtonBase");
+            exitRollOver =
+                Content.Load<Texture2D>("exitButtonRollOver");
+            exitButton = new Button(
+                 exitBase,
+                new Rectangle(
+                    (windowWidth / 2) - (optionsButtonBase.Width / 4),
+                    (windowHeight / 2) + (optionsButtonBase.Height / 4) + 175,
+                    optionsButtonBase.Width / 2,
+                    optionsButtonBase.Height / 2
+                    ),
+                exitRollOver
+                );
+
             #endregion
 
             //background art
@@ -418,7 +442,7 @@ namespace Opossum_Game
                     }
 
                     //to exit the game from menu
-                    if (quitButton.MouseClick() && quitButton.MouseContains())
+                    if (exitButton.MouseClick() && exitButton.MouseContains())
                     {
                         Exit();
                     }
@@ -638,6 +662,7 @@ namespace Opossum_Game
                     //drawing of the buttons
                     startButton.Draw(_spriteBatch);
                     optionsButton.Draw(_spriteBatch);
+                    exitButton.Draw(_spriteBatch);
 
                     _spriteBatch.DrawString(
                         comicsans30,
