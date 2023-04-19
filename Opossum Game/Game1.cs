@@ -678,7 +678,15 @@ namespace Opossum_Game
             base.Draw(gameTime);
         }
 
-        // helper methods ------------------------------------------------------------
+        // HELPER METHODS ---------------------------------------------------------------------------------------------------
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="currentState"></param>
+        /// <param name="previousState"></param>
+        /// <returns></returns>
         private bool SingleKeyPress (
             Keys key, KeyboardState currentState, KeyboardState previousState)
         {

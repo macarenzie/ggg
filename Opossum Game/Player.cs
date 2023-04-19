@@ -100,25 +100,6 @@ namespace Opossum_Game
         }
 
         /// <summary>
-        /// player's collecting food method based on user input
-        /// </summary>
-        /// <param name="prevState">keyboard's previous state</param>
-        /// <param name="curState">keyboard's current state</param>
-        /// <param name="otherObject"></param>
-        //public void Collect(KeyboardState prevState, KeyboardState curState, Collectible food)
-        //{
-        //    //TODO: Check for press and release of space bar
-        //    //Only collect if collectible is in range, check if collectible is collectible
-        //    //Complete IsInRange() method before this one
-        //    if(prevState.IsKeyDown(Keys.Space) &&               //key release check
-        //       curState.IsKeyUp(Keys.Space) &&
-        //        IsInRange(food.ObjectDimensions))      //Check if in range 
-        //    {
-        //        foodCollected++;
-        //    }
-        //}
-
-        /// <summary>
         /// Checking if another object is in range
         /// Used to determine if a food collectible is in range
         /// or a hiding spot is in range to collect or use
