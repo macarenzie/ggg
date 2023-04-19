@@ -885,7 +885,7 @@ namespace Opossum_Game
 
             collectiblesList = level.CollectiblesList;
 
-            timer = 150;
+            timer = 60;
 
             player = level.Player;
         }

@@ -176,8 +176,8 @@ namespace Opossum_Game
                         new Rectangle(      // position and dimensions
                             int.Parse(objectData[1]) * 90,
                             int.Parse(objectData[0]) * 90,
-                            enemyTexture.Width / 20,
-                            enemyTexture.Height / 10), 
+                            enemyTexture.Width / 6,
+                            enemyTexture.Height / 6), 
                         new Rectangle(),    // light
                         MovementDirection.Left);    // direction
                     }
@@ -188,8 +188,8 @@ namespace Opossum_Game
                         new Rectangle(      // position and dimensions
                             int.Parse(objectData[1]) * 90,
                             int.Parse(objectData[0]) * 90,
-                            enemyTexture.Width / 20,
-                            enemyTexture.Height / 10),
+                            enemyTexture.Width / 6,
+                            enemyTexture.Height / 6),
                         new Rectangle(),    // light
                         MovementDirection.Left);    // direction
                     }
