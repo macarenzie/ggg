@@ -1050,7 +1050,7 @@ namespace Opossum_Game
                 
             }
 
-            System.Diagnostics.Debug.WriteLine("Player is hiding: {0}", player.IsHiding);
+            //System.Diagnostics.Debug.WriteLine("Player is hiding: {0}", player.IsHiding);
         }
 
 
