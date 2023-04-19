@@ -432,15 +432,7 @@ namespace Opossum_Game
                 //all posibilities for the menu screen
                 case GameState.Menu:
 
-                    if (SingleKeyPress(Keys.U, kbstate, previousKbState) && debug == false)
-                    {
-                        debug = true;
-                    }
-
-                    else if (SingleKeyPress(Keys.U, kbstate, previousKbState) && debug == true)
-                    {
-                        debug = false;
-                    }
+                    
 
                     if (startButton.MouseClick() && startButton.MouseContains())
                     {
@@ -466,12 +458,18 @@ namespace Opossum_Game
                 case GameState.Options:
 
                     // PLACEHOLDER TO TEST TRANSITIONS
-                    if (SingleKeyPress(Keys.M, kbstate, previousKbState)
-                        /*menuButton.MouseClick() && menuButton.MouseContains()*/)
+
+                    if (SingleKeyPress(Keys.U, kbstate, previousKbState) && debug == false)
                     {
-                        currentState = GameState.Menu;
+                        debug = true;
                     }
 
+                    else if (SingleKeyPress(Keys.U, kbstate, previousKbState) && debug == true)
+                    {
+                        debug = false;
+                    }
+
+                    //exit from the options
                     if (xMarkButton.MouseClick() && xMarkButton.MouseContains())
                     {
                         currentState = GameState.Menu;
@@ -683,17 +681,19 @@ namespace Opossum_Game
                     optionsButton.Draw(_spriteBatch);
                     exitButton.Draw(_spriteBatch);
 
-                    _spriteBatch.DrawString(
-                        comicsans30,
-                        string.Format("Press 'U' to toggle debug mode!\nDebug mode: " + debug),
-                        new Vector2(0, 5),
-                        Color.Pink);
+
                     break;
                 case GameState.Options:
 
                     _spriteBatch.Draw(optionScreen, new Rectangle(0, 0, 900, 900), Color.White);
 
                     xMarkButton.Draw(_spriteBatch);
+
+                    _spriteBatch.DrawString(
+                        comicsans30,
+                        string.Format("Press 'U' to toggle debug mode!\nDebug mode: " + debug),
+                        new Vector2(90, 700),
+                        Color.Pink);
 
                     /*
                     if (debug == true)
