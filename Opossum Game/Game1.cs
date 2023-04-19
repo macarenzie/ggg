@@ -874,17 +874,6 @@ namespace Opossum_Game
         }
 
         /// <summary>
-        /// draws the collectibles to the screen
-        /// </summary>
-        public void CollectibleDraw()
-        {
-            for (int i = 0; i < collectiblesList.Count; i++)
-            {
-                collectiblesList[i].Draw(_spriteBatch, Color.White);
-            }
-        }
-
-        /// <summary>
         /// resets all the game conditions
         /// </summary>
         public void ResetGame()
