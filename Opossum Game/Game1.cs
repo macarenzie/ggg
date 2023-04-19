@@ -687,7 +687,7 @@ namespace Opossum_Game
                         {
                             //test code for hideable objects
                             
-                            if (IsInRange(obstaclesList[i].Rectangle, player) 
+                            if (IsInRange(obstaclesList[i].Rect, player) 
                                 && obstaclesList[i].IsHideable)
                             {
                                 obstaclesList[i].Draw(_spriteBatch, Color.Green);
@@ -719,7 +719,7 @@ namespace Opossum_Game
                         // draw the player based on collisions with light
                         foreach (Enemy enemy in enemyList)
                         {
-                            bool collide = player.IndividualCollision(enemy.Rectangle);
+                            bool collide = player.IndividualCollision(enemy.Rect);
 
                             if (collide)
                             {
@@ -811,7 +811,7 @@ namespace Opossum_Game
             //collectible collision
             for (int i = 0; i < collectiblesList.Count; i++)
             {
-                bool collide = player.IndividualCollision(collectiblesList[i].Rectangle);
+                bool collide = player.IndividualCollision(collectiblesList[i].Rect);
 
                 if (collide && SingleKeyPress(Keys.E, kbstate, previousKbState))
                 {
@@ -869,18 +869,18 @@ namespace Opossum_Game
                 foreach (Obstacle obstacle in obstaclesList)
                 {
                     //If the intersection returns true
-                    if (player.Rectangle.Intersects(obstacle.Rectangle))
+                    if (player.Rect.Intersects(obstacle.Rect))
                     {
                         //Get the intersection area
                         Rectangle intersectionArea = Rectangle.Intersect(
-                            player.Rectangle, obstacle.Rectangle);
+                            player.Rect, obstacle.Rect);
 
                         //If the width is less than the height, adjust the X position
                         if (intersectionArea.Width < intersectionArea.Height)
                         {
                             //LEFT side of obstacle
                             //player.X is less than the midpoint of the obstacle's width
-                            if (player.X < (obstacle.Rectangle.X + obstacle.Rectangle.Width / 2))
+                            if (player.X < (obstacle.Rect.X + obstacle.Rect.Width / 2))
                             {
                                 player.X -= intersectionArea.Width;
 
@@ -899,7 +899,7 @@ namespace Opossum_Game
                         {
                             //TOP side of the obstacle;
                             //If player.Y is less than the obstacle's Height midpoint
-                            if (player.Y < (obstacle.Rectangle.Y + obstacle.Rectangle.Height / 2))
+                            if (player.Y < (obstacle.Rect.Y + obstacle.Rect.Height / 2))
                             {
                                 player.Y -= intersectionArea.Height;
 
@@ -933,12 +933,12 @@ namespace Opossum_Game
             //These numbers can be adjusted when visuals are implemented and do what looks good
             //the distance in the x and y direction.
             //Half of player's width/ height + half of the other objects width/ height
-            float dx = Math.Abs((player.Rectangle.Width / 2) + (otherObject.Width / 2));
-            float dy = Math.Abs((player.Rectangle.Height / 2) + (otherObject.Height / 2));
+            float dx = Math.Abs((player.Rect.Width / 2) + (otherObject.Width / 2));
+            float dy = Math.Abs((player.Rect.Height / 2) + (otherObject.Height / 2));
 
             //player mid point coordinates
-            float pMidX = player.X + player.Rectangle.Width / 2;
-            float pMidY = player.Y + player.Rectangle.Height / 2;
+            float pMidX = player.X + player.Rect.Width / 2;
+            float pMidY = player.Y + player.Rect.Height / 2;
 
             //otherObject midpoint coordinates
             float oMidX = otherObject.X + otherObject.Width / 2;
@@ -972,7 +972,7 @@ namespace Opossum_Game
             KeyboardState curState, Obstacle otherObstacle, Player player)
         {
             //get mid points lined up
-            if (IsInRange(otherObstacle.Rectangle, player)
+            if (IsInRange(otherObstacle.Rect, player)
                 && otherObstacle.IsHideable 
                 //&& !player.IsHiding
                 )
@@ -986,11 +986,11 @@ namespace Opossum_Game
                         //These obstacles have to be the same size or larger than the player 
                         //or in draw logic if the player is hiding then don't draw
                         //Centers the player with the obstacle
-                        player.X = (otherObstacle.Rectangle.X + (otherObstacle.Rectangle.Width / 2))
-                            - (player.Rectangle.Width / 2);
+                        player.X = (otherObstacle.Rect.X + (otherObstacle.Rect.Width / 2))
+                            - (player.Rect.Width / 2);
 
-                        player.Y = (otherObstacle.Rectangle.Y + (otherObstacle.Rectangle.Height / 2))
-                            - (player.Rectangle.Height / 2);
+                        player.Y = (otherObstacle.Rect.Y + (otherObstacle.Rect.Height / 2))
+                            - (player.Rect.Height / 2);
 
                         player.IsHiding = true;
                     }

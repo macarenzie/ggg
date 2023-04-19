@@ -32,7 +32,7 @@ namespace Opossum_Game
         /// <summary>
         /// gets and sets the player texture
         /// </summary>
-        public Texture2D Texture
+        public Texture2D Sprite
         {
             get
             {
@@ -68,7 +68,7 @@ namespace Opossum_Game
         /// Get only, although the X and Y properties allow for set
         /// No reason to change dimensions
         /// </summary>
-        public Rectangle Rectangle
+        public Rectangle Rect
         {
             get { return playerRectangle; }
             set { playerRectangle = value; }
@@ -139,25 +139,6 @@ namespace Opossum_Game
                     playerState = PlayerState.Left;
                     playerRectangle.X -= 5;
                 }
-        /// or a hiding spot is in range to collect or use
-        /// </summary>
-        /// <param name="otherObject"></param>
-        /// <returns></returns>
-        public bool IsInRange(Rectangle otherObject)
-        {
-            //These numbers can be adjusted when visuals are implemented and do what looks good
-            float dx = Math.Abs((this.playerRectangle.Width / 2) - (otherObject.Width / 2));
-            float dy = Math.Abs((this.playerRectangle.Height / 2) - (otherObject.Height / 2));
-               
-            if (
-                //TODO: Check distance between objects
-                //distance is based on midpoint of each object??
-                (dx + 20) >= (playerRectangle.X + playerRectangle.Width) - (otherObject.X + otherObject.Width)
-                && (dy + 20) >= (playerRectangle.Y + playerRectangle.Width) - (otherObject.Y + otherObject.Height)
-                )
-            {
-                return true;
-            }
 
                 //D pressed 
                 if (currKB.IsKeyDown(Keys.D))

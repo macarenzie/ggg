@@ -39,7 +39,7 @@ namespace Opossum_Game
         /// <summary>
         /// Get-only property for enemy texture
         /// </summary>
-        public Texture2D Texture
+        public Texture2D Sprite
         {
             get
             {
@@ -54,7 +54,7 @@ namespace Opossum_Game
         /// <summary>
         /// Get-only property for enemy position
         /// </summary>
-        public Rectangle Rectangle
+        public Rectangle Rect
         {
             get
             {
@@ -164,7 +164,7 @@ namespace Opossum_Game
             //Iterates through the entire list and checks intersect status of each obstacle. Stops early if collision is found.
             for (int i = 0; i < obstacles.Count || isColliding; i++)
             {
-                if (position.Intersects(obstacles[i].Rectangle))
+                if (position.Intersects(obstacles[i].Rect))
                 {
                     isColliding = true;
                 }

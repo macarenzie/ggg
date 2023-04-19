@@ -22,8 +22,6 @@ namespace Opossum_Game
         Rectangle position;
         bool isHideable;
 
-
-
         /// <summary>
         /// Get-only property for isHideable status
         /// </summary>

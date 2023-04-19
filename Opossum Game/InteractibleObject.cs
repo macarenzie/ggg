@@ -23,7 +23,7 @@ namespace Opossum_Game
         /// <summary>
         /// Get/set for obstacle texture
         /// </summary>
-        public Texture2D Texture
+        public Texture2D Sprite
         {
             get
             {
@@ -38,7 +38,7 @@ namespace Opossum_Game
         /// <summary>
         /// Get/set for obstacle position
         /// </summary>
-        public Rectangle Rectangle
+        public Rectangle Rect
         {
             get
             {

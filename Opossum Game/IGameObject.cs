@@ -18,8 +18,8 @@ namespace Opossum_Game
     internal interface IGameObject
     {
         //necessary accessors for every class
-        Rectangle Rectangle { get; }
-        Texture2D Texture { get; }
+        Rectangle Rect { get; }
+        Texture2D Sprite { get; }
 
         void Draw(SpriteBatch sb, Color color);
 
