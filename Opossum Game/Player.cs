@@ -14,7 +14,7 @@ namespace Opossum_Game
     /// Majority Written by: Jamie Zheng
     /// Code optimization done by Ariel and McKenzie
     /// </summary>
-    internal class Player
+    internal class Player : IGameObject
     {
         //fields
         private Rectangle playerRectangle; //dimensions pSprite dimensions
@@ -32,7 +32,7 @@ namespace Opossum_Game
         /// <summary>
         /// gets and sets the player texture
         /// </summary>
-        public Texture2D PSprite
+        public Texture2D Texture
         {
             get
             {
@@ -68,9 +68,10 @@ namespace Opossum_Game
         /// Get only, although the X and Y properties allow for set
         /// No reason to change dimensions
         /// </summary>
-        public Rectangle PRectangle
+        public Rectangle Rectangle
         {
             get { return playerRectangle; }
+            set { playerRectangle = value; }
         }
 
         /// <summary>

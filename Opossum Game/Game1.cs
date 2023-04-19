@@ -414,6 +414,10 @@ namespace Opossum_Game
                     if (debug)
                     {
                         player.Update(gameTime);
+                         
+                        
+                        //turn collisions off
+                        //for each game object check if the player is colliding with it and return false every time
                     }
 
                     if (!debug)
@@ -567,10 +571,7 @@ namespace Opossum_Game
                     {
                         Exit();
                     }
-                    break;
-
-
-                    
+                    break; 
             }
 
             // update the previous keyboard state
@@ -624,6 +625,21 @@ namespace Opossum_Game
                     {
                         // DRAW ORDER: obstacle, collectibles, enemy, player
 
+                        foreach (IGameObject obstacle in obstacleList)
+                        {
+                            obstacle.Draw(_spriteBatch, Color.White);
+                        }
+
+                        foreach (IGameObject collectible in collectiblesList)
+                        {
+                            collectible.Draw(_spriteBatch, Color.White);
+                        }
+
+                        foreach (IGameObject enemy in enemyList)
+                        {
+                            enemy.Draw(_spriteBatch, Color.White);
+                        }
+
                         player.Draw(_spriteBatch, Color.White);
 
                         //drawing the timer to the screen
@@ -633,8 +649,7 @@ namespace Opossum_Game
                             new Vector2(0, 5),
                             Color.White);
                     }
-
-                    if (!debug)
+                    else
                     {
                         // DRAW ORDER: player, collectibles, obstacle, enemy
 
@@ -642,10 +657,28 @@ namespace Opossum_Game
 
                         player.Draw(_spriteBatch, Color.White);
 
-                        
+                        foreach (IGameObject collectible in collectiblesList)
+                        {
+                            collectible.Draw(_spriteBatch, Color.White);
+                        }
 
-                        //draw all the collectibles
-                        CollectibleDraw();
+                        foreach (IGameObject obstacle in obstacleList)
+                        {
+                            obstacle.Draw(_spriteBatch, Color.White);
+                        }
+
+                        foreach (IGameObject enemy in enemyList)
+                        {
+                            enemy.Draw(_spriteBatch, Color.White);
+                        }
+
+                        //drawing the timer to the screen
+                        _spriteBatch.DrawString(
+                            comicsans30,
+                            string.Format("Time left: {0:0}", timer),
+                            new Vector2(0, 5),
+                            Color.White
+                            );
 
                         // LEVEL ------------------------------------------
                         
@@ -654,7 +687,7 @@ namespace Opossum_Game
                         {
                             //test code for hideable objects
                             
-                            if (IsInRange(obstaclesList[i].Position, player) 
+                            if (IsInRange(obstaclesList[i].Rectangle, player) 
                                 && obstaclesList[i].IsHideable)
                             {
                                 obstaclesList[i].Draw(_spriteBatch, Color.Green);
@@ -678,15 +711,15 @@ namespace Opossum_Game
                         }
 
                         // draw each enemy
-                        for (int i = 0; i < enemyList.Count; i++)
-                        {
-                            enemyList[i].Draw(_spriteBatch);
-                        }
+                        //for (int i = 0; i < enemyList.Count; i++)
+                        //{
+                        //    enemyList[i].Draw(_spriteBatch, Color.White);
+                        //}
 
                         // draw the player based on collisions with light
                         foreach (Enemy enemy in enemyList)
                         {
-                            bool collide = player.IndividualCollision(enemy.Position);
+                            bool collide = player.IndividualCollision(enemy.Rectangle);
 
                             if (collide)
                             {
@@ -770,7 +803,7 @@ namespace Opossum_Game
             //collectible collision
             for (int i = 0; i < collectiblesList.Count; i++)
             {
-                bool collide = player.IndividualCollision(collectiblesList[i].Position);
+                bool collide = player.IndividualCollision(collectiblesList[i].Rectangle);
 
                 if (collide && SingleKeyPress(Keys.E, kbstate, previousKbState))
                 {
@@ -828,18 +861,18 @@ namespace Opossum_Game
                 foreach (Obstacle obstacle in obstaclesList)
                 {
                     //If the intersection returns true
-                    if (player.PRectangle.Intersects(obstacle.Position))
+                    if (player.Rectangle.Intersects(obstacle.Rectangle))
                     {
                         //Get the intersection area
                         Rectangle intersectionArea = Rectangle.Intersect(
-                            player.PRectangle, obstacle.Position);
+                            player.Rectangle, obstacle.Rectangle);
 
                         //If the width is less than the height, adjust the X position
                         if (intersectionArea.Width < intersectionArea.Height)
                         {
                             //LEFT side of obstacle
                             //player.X is less than the midpoint of the obstacle's width
-                            if (player.X < (obstacle.Position.X + obstacle.Position.Width / 2))
+                            if (player.X < (obstacle.Rectangle.X + obstacle.Rectangle.Width / 2))
                             {
                                 player.X -= intersectionArea.Width;
 
@@ -858,7 +891,7 @@ namespace Opossum_Game
                         {
                             //TOP side of the obstacle;
                             //If player.Y is less than the obstacle's Height midpoint
-                            if (player.Y < (obstacle.Position.Y + obstacle.Position.Height / 2))
+                            if (player.Y < (obstacle.Rectangle.Y + obstacle.Rectangle.Height / 2))
                             {
                                 player.Y -= intersectionArea.Height;
 
@@ -891,14 +924,14 @@ namespace Opossum_Game
         bool IsInRange(Rectangle otherObject, Player player)
         {
             //These numbers can be adjusted when visuals are implemented and do what looks good
-            float dx = Math.Abs((player.PRectangle.Width / 2) - (otherObject.Width / 2));
-            float dy = Math.Abs((player.PRectangle.Height / 2) - (otherObject.Height / 2));
+            float dx = Math.Abs((player.Rectangle.Width / 2) - (otherObject.Width / 2));
+            float dy = Math.Abs((player.Rectangle.Height / 2) - (otherObject.Height / 2));
 
             if (
                 //TODO: Check distance between objects
                 //distance is based on midpoint of each object??
-                (dx + 20) >= (player.PRectangle.X + player.PRectangle.Width) - (otherObject.X + otherObject.Width)
-                && (dy + 20) >= (player.PRectangle.Y + player.PRectangle.Width) - (otherObject.Y + otherObject.Height)
+                (dx + 20) >= (player.Rectangle.X + player.Rectangle.Width) - (otherObject.X + otherObject.Width)
+                && (dy + 20) >= (player.Rectangle.Y + player.Rectangle.Width) - (otherObject.Y + otherObject.Height)
                 )
             {
                 return true;
@@ -923,18 +956,18 @@ namespace Opossum_Game
             KeyboardState curState, Obstacle otherObstacle, Player player)
         {
             //get mid points lined up
-            if (IsInRange(otherObstacle.Position, player)
+            if (IsInRange(otherObstacle.Rectangle, player)
                 && otherObstacle.IsHideable)
             {
                 if (curState.IsKeyDown(Keys.Space) && prevState.IsKeyUp(Keys.Space) && !player.IsHiding)
                 {
                     //These obstacles have to be the same size or larger than the player 
                     //Centers the player with the obstacle
-                    player.X = (otherObstacle.Position.X + (otherObstacle.Position.Width / 2))
-                        - (player.PRectangle.Width / 2);
+                    player.X = (otherObstacle.Rectangle.X + (otherObstacle.Rectangle.Width / 2))
+                        - (player.Rectangle.Width / 2);
 
-                    player.Y = (otherObstacle.Position.Y + (otherObstacle.Position.Height / 2))
-                        - (player.PRectangle.Height / 2);
+                    player.Y = (otherObstacle.Rectangle.Y + (otherObstacle.Rectangle.Height / 2))
+                        - (player.Rectangle.Height / 2);
 
                     player.IsHiding = true;
                 }

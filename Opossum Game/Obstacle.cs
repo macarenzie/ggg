@@ -15,12 +15,14 @@ namespace Opossum_Game
     /// Inherits from InteractibleObject.
     /// Worked on by: McKenzie Lam, Julia Rissberger
     /// </summary>
-    internal class Obstacle : InteractibleObject
+    internal class Obstacle : InteractibleObject, IGameObject
     {
         //Fields
         Texture2D texture;
         Rectangle position;
         bool isHideable;
+
+
 
         /// <summary>
         /// Get-only property for isHideable status

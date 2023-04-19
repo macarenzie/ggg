@@ -15,8 +15,10 @@ namespace Opossum_Game
     /// Inherits from InteractibleObject.
     /// Worked on by: McKenzie Lam, Julia Rissberger
     /// </summary>
-    internal class Collectible : InteractibleObject
+    internal class Collectible : InteractibleObject, IGameObject
     {
+        Texture2D texture;
+        Rectangle position;
 
         /// <summary>
         /// Constructor for individual collectible objects
@@ -26,8 +28,8 @@ namespace Opossum_Game
         public Collectible (Texture2D objectTexture, Rectangle objectDimensions) :
             base (objectTexture, objectDimensions) 
         {
-            //texture = objectTexture;
-            //position = objectDimensions;
+            texture = objectTexture;
+            position = objectDimensions;
         }
 
         /// <summary>
