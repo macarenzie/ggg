@@ -56,30 +56,6 @@
 /processorParam:TextureFormat=Compressed
 /build:comicsans30.spritefont
 
-#begin D:/Profiles/ejk2827/Downloads/optionsScreen.PNG
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:D:/Profiles/ejk2827/Downloads/optionsScreen.PNG;optionsScreen.PNG
-
-#begin D:/Profiles/ejk2827/Downloads/optionsScreen.PNG
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:D:/Profiles/ejk2827/Downloads/optionsScreen.PNG;optionsScreen.PNG
-
 #begin debugModeBase.PNG
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -199,6 +175,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:optionButtonRollOver.PNG
+
+#begin optionsScreenFixed.PNG
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:optionsScreenFixed.PNG
 
 #begin playerSprite.PNG
 /importer:TextureImporter

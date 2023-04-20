@@ -386,7 +386,7 @@ namespace Opossum_Game
             menuScreen = Content.Load<Texture2D>("startScreen");
 
             //optionScreen
-            optionScreen = Content.Load<Texture2D>("optionsScreen");
+            optionScreen = Content.Load<Texture2D>("optionsScreenFixed");
 
             //winScreen
 
