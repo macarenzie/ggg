@@ -233,13 +233,13 @@ namespace Opossum_Game
                             int.Parse(objectData[1]) * 90,
                             int.Parse(objectData[0]) * 90,
                             playerTexture.Width / 5, 
-                            playerTexture.Height / 5),
-                        playerTextureSide,
-                        new Rectangle(
+                            playerTexture.Height / 5)
+                        //playerTextureSide,
+                        /*new Rectangle(
                             int.Parse(objectData[1]) * 90,
                             int.Parse(objectData[0]) * 90,
                             playerTextureSide.Width / 5,
-                            playerTextureSide.Height / 5));
+                            playerTextureSide.Height / 5)*/);
                 }
                
             }
