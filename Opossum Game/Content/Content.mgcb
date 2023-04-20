@@ -56,6 +56,18 @@
 /processorParam:TextureFormat=Compressed
 /build:comicsans30.spritefont
 
+#begin D:/Profiles/ejk2827/Downloads/optionsScreen.PNG
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:D:/Profiles/ejk2827/Downloads/optionsScreen.PNG;optionsScreen.PNG
+
 #begin debugModeBase.PNG
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -103,6 +115,30 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:environmentalArt.PNG
+
+#begin exitButtonBase.PNG
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:exitButtonBase.PNG
+
+#begin exitButtonRollOver.PNG
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:exitButtonRollOver.PNG
 
 #begin gameOverScreen.PNG
 /importer:TextureImporter
@@ -152,18 +188,6 @@
 /processorParam:TextureFormat=Color
 /build:optionButtonRollOver.PNG
 
-#begin optionsScreen.PNG
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:optionsScreen.PNG
-
 #begin playerSprite.PNG
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -175,6 +199,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:playerSprite.PNG
+
+#begin playerSpriteSide.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:playerSpriteSide.png
 
 #begin quitBase.PNG
 /importer:TextureImporter
@@ -259,4 +295,16 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:tryAgainRollOver.PNG
+
+#begin xMark.PNG
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:xMark.PNG
 

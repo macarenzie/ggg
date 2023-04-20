@@ -19,6 +19,8 @@ namespace Opossum_Game
         //fields
         private Rectangle playerRectangle; //dimensions pSprite dimensions
         private Texture2D pSprite;
+        //private Texture2D pSpriteSide;
+        //private Rectangle sideRectangle;
 
         //player movement stuff
         private KeyboardState currKB;
@@ -90,12 +92,14 @@ namespace Opossum_Game
         /// </summary>
         /// <param name="pSprite">The image to represent the player</param>
         /// <param name="pLocation">Dimensions are dependent on pSprite Texture2D</param>
-        public Player(Texture2D pSprite, Rectangle pLocation)
+        public Player(Texture2D pSprite, Rectangle pLocation)//Texture2D pSpriteSide, Rectangle sideRectangle)
         {
             //foodCollected = 0;
             this.pSprite = pSprite;
             this.playerRectangle = pLocation;
             isHiding = false;
+            //this.pSpriteSide = pSpriteSide;
+            //this.sideRectangle = sideRectangle;
         }
 
 
@@ -118,12 +122,14 @@ namespace Opossum_Game
             //This means that PlayDead resolution needs to set the player state to movement. -Julia
             if (!isHiding && playerState != PlayerState.PlayDead)
             {
-                //Player movement. Gives priority of current state to left/right for potential drawing purposes.
+                //Player movement. Gives priority of current state to front/back for potential drawing purposes.
+
                 //W pressed
-                if (currKB.IsKeyDown(Keys.W)) 
+                if (currKB.IsKeyDown(Keys.W))
                 {
                     playerState = PlayerState.Front;
                     playerRectangle.Y -= 5;
+                    //sideRectangle.Y -= 5;
                 }
 
                 //S pressed 
@@ -131,6 +137,7 @@ namespace Opossum_Game
                 {
                     playerState = PlayerState.Back;
                     playerRectangle.Y += 5;
+                    //sideRectangle.Y += 5;
                 }
 
                 //A pressed
@@ -138,6 +145,7 @@ namespace Opossum_Game
                 {
                     playerState = PlayerState.Left;
                     playerRectangle.X -= 5;
+                    //sideRectangle.X -= 5;
                 }
 
                 //D pressed 
@@ -145,6 +153,7 @@ namespace Opossum_Game
                 {
                     playerState = PlayerState.Right;
                     playerRectangle.X += 5;
+                   // sideRectangle.X += 5;
                 }
 
                 //Adjusting for diagonal movement. Decreases speed in the Y direction
@@ -152,114 +161,18 @@ namespace Opossum_Game
                 if (currKB.IsKeyDown(Keys.W) && (currKB.IsKeyDown(Keys.A) || currKB.IsKeyDown(Keys.D)))
                 {
                     playerRectangle.Y += 2;
+                    //sideRectangle.Y += 2;
                 }
 
                 //Diagonally down
                 if (currKB.IsKeyDown(Keys.S) && (currKB.IsKeyDown(Keys.A) || currKB.IsKeyDown(Keys.D)))
                 {
                     playerRectangle.Y -= 2;
+                    //sideRectangle.Y -= 2;
                 }
 
-                //Commenting out switch statement to try a different movement system.
-                //Will remove later when it's clear we don't need anything from here. -Julia
-                /*switch (playerState)
-                {
-                    //===================================================================
-                    case PlayerState.Left:
-                        //if A is pressed
-                        if (currKB.IsKeyDown(Keys.A))
-                        {
-                            playerRectangle.X -= 5;
-                        }
-
-                        //TRANSITIONS
-                        if (currKB.IsKeyDown(Keys.D) && prevKB.IsKeyUp(Keys.D))
-                            playerState = PlayerState.Right;
-
-                        if (currKB.IsKeyDown(Keys.W) && prevKB.IsKeyUp(Keys.W))
-                            playerState = PlayerState.Front;
-
-                        if (currKB.IsKeyDown(Keys.S) && prevKB.IsKeyUp(Keys.S))
-                            playerState = PlayerState.Back;
-
-                        break;
-                    //===================================================================
-                    case PlayerState.Right:
-                        //if D is pressed
-                        if (currKB.IsKeyDown(Keys.D))
-                        {
-                            playerRectangle.X += 5;
-                        }
-
-                        //TRANSITIONS
-                        if (currKB.IsKeyDown(Keys.A) && prevKB.IsKeyUp(Keys.A))
-                            playerState = PlayerState.Left;
-
-                        if (currKB.IsKeyDown(Keys.W) && prevKB.IsKeyUp(Keys.W))
-                            playerState = PlayerState.Front;
-
-                        if (currKB.IsKeyDown(Keys.S) && prevKB.IsKeyUp(Keys.S))
-                            playerState = PlayerState.Back;
-
-                        break;
-
-                    case PlayerState.Front:
-                        //if W is pressed
-                        if (currKB.IsKeyDown(Keys.W))
-                        {
-                            playerRectangle.Y -= 5;
-                        }
-
-                        //TRANSITIONS
-                        if (currKB.IsKeyDown(Keys.A) && prevKB.IsKeyUp(Keys.A))
-                            playerState = PlayerState.Left;
-
-                        if (currKB.IsKeyDown(Keys.D) && prevKB.IsKeyUp(Keys.D))
-                            playerState = PlayerState.Right;
-
-                        if (currKB.IsKeyDown(Keys.S) && prevKB.IsKeyUp(Keys.S))
-                            playerState = PlayerState.Back;
-
-                        break;
-                    //===================================================================
-                    case PlayerState.Back:
-                        //if S is pressed
-                        if (currKB.IsKeyDown(Keys.S))
-                        {
-                            playerRectangle.Y += 5;
-                        }
-
-                        //TRANSITIONS
-                        if (currKB.IsKeyDown(Keys.A) && prevKB.IsKeyUp(Keys.A))
-                            playerState = PlayerState.Left;
-
-                        if (currKB.IsKeyDown(Keys.D) && prevKB.IsKeyUp(Keys.D))
-                            playerState = PlayerState.Right;
-
-                        if (currKB.IsKeyDown(Keys.W) && prevKB.IsKeyUp(Keys.W))
-                            playerState = PlayerState.Front;
-
-                        break;
-                        //===================================================================
-                        //will update this when enemy obstacles have been made
-                        //case PlayerState.PlayDead:
-                        //    if (Collision() == true)
-                        //    {
-                        //        pLocation.X += 0;
-                        //        pLocation.Y += 0;
-                        //    }
-                        //    break;
-                } */
+                
             }
-            else
-            {
-                //logically, the player can't move in this else
-                //Do not move
-                //playerRectangle.X += 0;
-                //playerRectangle.Y += 0;
-            }
-            
-            //---------------------------------------------------------------
 
             //update prevKB
             prevKB = currKB;
@@ -285,11 +198,64 @@ namespace Opossum_Game
             //Only draws the player if they aren't hiding
             if (!isHiding)
             {
-                sb.Draw(
-                pSprite,
-                playerRectangle,
-                color
-                );
+                //Rotates the player sprite based on the direction they are facing.
+                //TODO: this is buggy. Commented out for now--figure it out during milestone 4, or cut.
+                switch (playerState)
+                {
+                    //Facing right
+                    /*case PlayerState.Right:
+                        sb.Draw(
+                            pSpriteSide,
+                            sideRectangle,
+                            null,
+                            color,
+                            (float)Math.PI/2,
+                            new Vector2(pSpriteSide.Width/2, pSpriteSide.Height/2),
+                            SpriteEffects.None,
+                            0);
+                        break;
+
+                    //Facing left
+                    case PlayerState.Left:
+                        sb.Draw(
+                            pSpriteSide,
+                            sideRectangle,
+                            null,
+                            color,
+                            (float)-Math.PI / 2,
+                            new Vector2(pSpriteSide.Width/2, pSpriteSide.Height/2),
+                            SpriteEffects.None,
+                            0);
+                        break; 
+                    
+                    //Facing back
+                    case PlayerState.Back:
+                        sb.Draw(
+                            pSprite,
+                            playerRectangle,
+                            null,
+                            color,
+                            (float)Math.PI,
+                            new Vector2(pSprite.Width / 2, pSprite.Height / 2),
+                            SpriteEffects.None,
+                            0);
+                        break;
+
+                    //Facing front--default version of sprite
+                    case PlayerState.Front:
+                        sb.Draw(
+                            pSprite,
+                            playerRectangle,
+                            color);
+                        break; */
+
+                    default:
+                        sb.Draw(
+                            pSprite,
+                            playerRectangle,
+                            color);
+                        break; 
+                }
             }
 
         }
