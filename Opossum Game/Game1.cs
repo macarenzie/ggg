@@ -133,7 +133,6 @@ namespace Opossum_Game
         private List<InteractibleObject> objects;
 
         //Obstacle test. Texture and rectangle and obstacle list
-        private List<Obstacle> obstacleList;
         private Texture2D obstacleTexture;
         private Rectangle obstacleDimensions;
         private Obstacle hideableTestObstacle;
@@ -154,11 +153,15 @@ namespace Opossum_Game
         private List<Collectible> collectiblesList;
         private List<Obstacle> obstaclesList;
         private List<Enemy> enemyList;
-        private string levelFile;
-        private Level level;
+        private Level lvl1;
+        private Level lvl2;
+        private Level lvl3;
+        private List<Level> lvls;
         private string level1;
         private string level2;
         private string level3;
+        private List<string> levels;
+        private int levelCount;
         #endregion
 
         // DEBUG MODE
@@ -191,21 +194,29 @@ namespace Opossum_Game
             currentScreen = GameScreen.One;
 
             //Test for list collision
-            obstacleList = new List<Obstacle>();
+            obstaclesList = new List<Obstacle>();
 
             //Initializing timer
             timer = 200; //15 seconds
 
-            //testing for reseting level
+            // level loading
             level1 = "levelScreen1";
             level2 = "levelScreen2";
             level3 = "levelScreen3";
+
+            levels = new List<string>();
+            levels.Add(level1);
+            levels.Add(level2);
+            levels.Add(level3);
 
             // debug mode
             debug = false;
 
             // initialize the collectible texture list
             collectibleTextures = new List<Texture2D>();
+
+            // level shit
+            levelCount = 0;
 
             base.Initialize(); 
         }
@@ -365,20 +376,38 @@ namespace Opossum_Game
             // enemy
             enemyTexture = Content.Load<Texture2D>("enemyTexture");
 
+            
 
             // level loading
-            level = new Level(
+            lvl1 = new Level(
+                level1,
                 collectibleTextures,       // collectible texture
                 obstacleTexture,         // obstacle texture
                 pSprite,                // player texture
                 enemyTexture);          // enemy texture
-            level.LoadLevel(level1);
+            lvl2 = new Level(
+                level2,
+                collectibleTextures,       // collectible texture
+                obstacleTexture,         // obstacle texture
+                pSprite,                // player texture
+                enemyTexture);          // enemy texture
+            lvl3 = new Level(
+                level3,
+                collectibleTextures,       // collectible texture
+                obstacleTexture,         // obstacle texture
+                pSprite,                // player texture
+                enemyTexture);          // enemy texture
+
+            lvls = new List<Level>();
+            lvls.Add(lvl1);
+            lvls.Add(lvl2);
+            lvls.Add(lvl3);
 
             // pass in the fields from the level class to the game1 class
-            player = level.Player;
-            collectiblesList = level.CollectiblesList;
-            obstaclesList = level.ObstacleList;
-            enemyList = level.EnemyList;
+            player = lvl1.Player;
+            collectiblesList = lvl1.CollectiblesList;
+            obstaclesList = lvl1.ObstacleList;
+            enemyList = lvl1.EnemyList;
         }
 
         protected override void Update(GameTime gameTime)
@@ -407,7 +436,8 @@ namespace Opossum_Game
                     if (startButton.MouseClick() && startButton.MouseContains())
                     {
                         //resetting game
-                        ResetGame();
+                        timer = 60;
+                        //level.ResetGame();
                         currentState = GameState.Game;
                     }
 
@@ -454,6 +484,12 @@ namespace Opossum_Game
                 //all options for the state of playing the game
                 case GameState.Game:
 
+                    if (player.Y + player.Rect.Height < 0 && levelCount < lvls.Count)
+                    {
+                        ResetGame();
+                        NextLevel();
+                    }
+
                     if (debug)
                     {
                         player.Update(gameTime);
@@ -469,73 +505,11 @@ namespace Opossum_Game
 
                         player.Update(gameTime);
 
-                        #region Game Level Screen
-                        switch (currentScreen)
-                        {
-                            case GameScreen.One:
-
-                                if (player.Y == windowHeight)
-                                {
-                                    currentScreen = GameScreen.Two;
-                                    player = level.Player;
-                                }
-
-                                if (SingleKeyPress(Keys.Escape, kbstate, previousKbState))
-                                {
-                                    currentState = GameState.Menu;
-                                }
-                                break;
-                                #region GameScreenTwo
-                                //case GameScreen.Two:
-                                //    if (player.Y == windowHeight)
-                                //    {
-                                //        currentScreen = GameScreen.Three;
-                                //        player.ResetPosition();
-                                //    }
-
-                                //    if (SingleKeyPress(Keys.Escape, kbstate, previousKbState))
-                                //    {
-                                //        currentState = GameState.Menu;
-                                //    }
-                                //    break;
-                                //case GameScreen.Three:
-
-                                //    if (player.Y == windowHeight)
-                                //    {
-                                //        currentScreen = GameScreen.Three;
-                                //        player.ResetPosition();
-                                //    }
-
-                                //    if (SingleKeyPress(Keys.Escape, kbstate, previousKbState))
-                                //    {
-                                //        currentState = GameState.Menu;
-                                //    }
-
-                                //    if (SingleKeyPress(Keys.Z, kbstate, previousKbState))
-                                //    {
-                                //        currentState = GameState.GameWin;
-                                //    }
-                                //    else if (SingleKeyPress(Keys.L, kbstate, previousKbState))
-                                //    {
-                                //        currentState = GameState.GameLose;
-                                //    }
-
-                                //    //to go back to main menu from game screen
-                                //    else if (SingleKeyPress(Keys.Escape, kbstate, previousKbState))
-                                //    {
-                                //        currentState = GameState.Menu;
-                                //    }
-                                //    break;
-                                #endregion
-
-                        }
-                        #endregion
-
                         #region Collisions
                         //this method is to adjust the player's position with an non-overlappable object 
                         if (!player.IsHiding)
                         {
-                            CheckObstacleCollision(player, level.ObstacleList);         //edge collision
+                            CheckObstacleCollision(player, obstaclesList);         //edge collision
                         }
 
                         // test if the player is able to hide in an obstacle
@@ -561,28 +535,17 @@ namespace Opossum_Game
                         #endregion
 
                         //win conditions for now -- moving later to game screen 3
-                        if (timer <= 0 && collectiblesList.Count != 0)
+                        if (timer <= 0 && collectiblesList.Count != 0 && levelCount == lvls.Count)
                         {
                             currentState = GameState.GameLose;
                         }
-                        else if (timer >= 0 && collectiblesList.Count == 0)
+                        
+                        else if (timer >= 0 && collectiblesList.Count == 0 && levelCount == lvls.Count)
                         {
                             currentState = GameState.GameWin;
                         }
+                        
                     }
-
-
-                    //PSEUDOCODE FOR THE FREEZING AND SLOWING
-                    /*
-                     ********ENEMY DOES NOT KEEP MOVING**************
-                    IF ENEMY.LIGHTINTERSECTS == TRUE
-                    Put in a freeze method that would tick down for a certain amount of time.
-                        - Must be in a method to pause everything else within the game.
-                    Once the timer runs out, the enemy TURNS
-                        - Because the enemy has turned, the player will no longer intersect with the enemy light
-                    Freeze method is done, and all player movement and enemy movement is in tact
-                    */
-
 
                     break;
 
@@ -679,7 +642,7 @@ namespace Opossum_Game
                     {
                         // DRAW ORDER: obstacle, collectibles, enemy, player
 
-                        foreach (IGameObject obstacle in obstacleList)
+                        foreach (IGameObject obstacle in obstaclesList)
                         {
                             obstacle.Draw(_spriteBatch, Color.White);
                         }
@@ -716,7 +679,7 @@ namespace Opossum_Game
                             collectible.Draw(_spriteBatch, Color.White);
                         }
 
-                        foreach (IGameObject obstacle in obstacleList)
+                        foreach (IGameObject obstacle in obstaclesList)
                         {
                             obstacle.Draw(_spriteBatch, Color.White);
                         }
@@ -875,22 +838,6 @@ namespace Opossum_Game
             }
         }
 
-        /// <summary>
-        /// resets all the game conditions
-        /// </summary>
-        public void ResetGame()
-        {
-            collectiblesList.Clear();
-            obstaclesList.Clear();
-            enemyList.Clear();
-            level.LoadLevel(level1);
-
-            collectiblesList = level.CollectiblesList;
-
-            timer = 60;
-
-            player = level.Player;
-        }
 
         /// <summary>
         /// Checks if the player is overlapping with any Obstacle object
@@ -1047,10 +994,37 @@ namespace Opossum_Game
 
                 
             }
-
-            //System.Diagnostics.Debug.WriteLine("Player is hiding: {0}", player.IsHiding);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public void NextLevel()
+        {
+            levelCount++;
+
+            if (levelCount < lvls.Count)
+            {
+                player.Rect = lvls[levelCount].Player.Rect;
+                collectiblesList = lvls[levelCount].CollectiblesList;
+                obstaclesList = lvls[levelCount].ObstacleList;
+                enemyList = lvls[levelCount].EnemyList;
+            }
+            else
+            {
+                return;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void ResetGame()
+        {
+            collectiblesList.Clear();
+            obstaclesList.Clear();
+            enemyList.Clear();
+        }
 
     }
 }

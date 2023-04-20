@@ -33,6 +33,10 @@ namespace Opossum_Game
         private Texture2D playerTexture;
         private Texture2D enemyTexture;
 
+        // level tracking
+        private int levelNum;
+        private List<string> levels;
+
         /// <summary>
         /// 
         /// </summary>
@@ -77,6 +81,20 @@ namespace Opossum_Game
             }
         }
 
+        public int LevelNum
+        {
+            get
+            {
+                return levelNum;
+            }
+            set { levelNum = value; }
+        }
+
+        public List<string> Levels
+        {
+            set { levels = value; }
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -85,6 +103,7 @@ namespace Opossum_Game
         /// <param name="playerTexture"></param>
         /// <param name="enemyTexture"></param>
         public Level(
+            string level,
             List<Texture2D> collectibleTextures, 
             Texture2D obstacleTexture, 
             Texture2D playerTexture, 
@@ -100,16 +119,23 @@ namespace Opossum_Game
             this.obstacleTexture = obstacleTexture;
             this.playerTexture = playerTexture;
             this.enemyTexture = enemyTexture;
+
+            // initialize level tracking
+            levelNum = 0;
+            levels = new List<string>();
+
+            //load level
+            LoadLevel(level);
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="levelFile"></param>
-        public void LoadLevel(string levelFile)
+        public void LoadLevel(string level)
         {
             // read in the file
-            reader = new StreamReader("../../../" + levelFile + ".txt");
+            reader = new StreamReader("../../../" + level + ".txt");
 
             // iterate through each line in the file
             while ((lineOfData = reader.ReadLine()) != null)
@@ -196,7 +222,7 @@ namespace Opossum_Game
                     
                     EnemyList.Add(enemy);
                 }
-                else if (objectData[2] == "player")
+                else if(objectData[2] == "player")
                 {
                     player = new Player(
                         playerTexture, 
