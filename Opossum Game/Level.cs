@@ -241,6 +241,7 @@ namespace Opossum_Game
                             playerTextureSide.Width / 5,
                             playerTextureSide.Height / 5));
                 }
+               
             }
         }
     }
