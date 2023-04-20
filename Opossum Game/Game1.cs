@@ -538,39 +538,40 @@ namespace Opossum_Game
                     {
                         timer -= gameTime.ElapsedGameTime.TotalSeconds;
 
-                        player.Update(gameTime);
-
-                        #region Collisions
-                        //this method is to adjust the player's position with an non-overlappable object 
-                        if (!player.IsHiding)
+                        if (timer > 0 && foodCollected != 0 && levelCount < lvls.Count)
                         {
-                            CheckObstacleCollision(player, obstaclesList);         //edge collision
-                        }
+                            player.Update(gameTime);
 
-                        // test if the player is able to hide in an obstacle
-                        /*
-                        foreach (Obstacle obs in obstaclesList)
-                        {
-                            bool collide = player.IndividualCollision(obs.Position);
-
-                            if (collide)
+                            #region Collisions
+                            //this method is to adjust the player's position with an non-overlappable object 
+                            if (!player.IsHiding)
                             {
-                                player.Hide(kbstate, previousKbState, obs.Position);
+                                CheckObstacleCollision(player, obstaclesList);         //edge collision
                             }
-                        }
-                        */
-                        //cleaner hide loop
-                        foreach (Obstacle obstacle in obstaclesList)
-                        {
-                            Hide(previousKbState, kbstate, obstacle, player);
-                        }
 
-                        //collectible collision
-                        CollectibleCollision();
-                        #endregion
+                            // test if the player is able to hide in an obstacle
+                            /*
+                            foreach (Obstacle obs in obstaclesList)
+                            {
+                                bool collide = player.IndividualCollision(obs.Position);
 
-                        //win conditions for now
-                        if ((timer <= 0 || foodCollected != 0) && levelCount == lvls.Count)
+                                if (collide)
+                                {
+                                    player.Hide(kbstate, previousKbState, obs.Position);
+                                }
+                            }
+                            */
+                            //cleaner hide loop
+                            foreach (Obstacle obstacle in obstaclesList)
+                            {
+                                Hide(previousKbState, kbstate, obstacle, player);
+                            }
+
+                            //collectible collision
+                            CollectibleCollision();
+                            #endregion
+                        }
+                        else if (timer <= 0 || foodCollected != 0 && levelCount == lvls.Count)
                         {
                             currentState = GameState.GameLose;
                         }
