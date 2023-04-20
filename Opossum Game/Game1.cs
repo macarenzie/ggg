@@ -869,7 +869,9 @@ namespace Opossum_Game
             {
                 bool collide = player.IndividualCollision(collectiblesList[i].Rect);
 
-                if (collide && SingleKeyPress(Keys.LeftShift, kbstate, previousKbState))
+                if (collide && 
+                    (SingleKeyPress(Keys.LeftShift, kbstate, previousKbState) 
+                    || SingleKeyPress(Keys.RightShift, kbstate, previousKbState)))
                 {
                     collectiblesList.Remove(collectiblesList[i]);
                     i--;
@@ -1004,12 +1006,10 @@ namespace Opossum_Game
                 //&& !player.IsHiding
                 )
             {
-                if (curState.IsKeyDown(Keys.Space) && prevState.IsKeyUp(Keys.Space))
+                if (SingleKeyPress(Keys.Space, curState, prevState))
                 {
                     if (!player.IsHiding)
                     {
-                        //These obstacles have to be the same size or larger than the player 
-                        //or in draw logic if the player is hiding then don't draw
                         //Centers the player with the obstacle
                         player.X = (otherObstacle.Rect.X + (otherObstacle.Rect.Width / 2))
                             - (player.Rect.Width / 2);
@@ -1021,12 +1021,23 @@ namespace Opossum_Game
                     }
 
                     //if the space bar is pressed again then unhide
+                    //Also check if the direction the player wants to unhide from is valid
                     else if (player.IsHiding)
                     {
+                        //W; Up direction
+                        if(SingleKeyPress(Keys.W, curState, prevState))
                         player.IsHiding = false;
                         
                         //position changing logic
-                        //by the edge collision logic, the player will move to the closest open area
+
+                        //A; Left Direction
+
+                        //S; Down Direction
+
+                        //D; Right Direction
+
+                        //check for intersection. If intersection is false, then do no move in that direction and go back to hiding
+                        
                     }
                     
                 }
