@@ -98,6 +98,7 @@ namespace Opossum_Game
         private Texture2D collectibleCandy;
         private Texture2D collectibleChips;
         private List<Texture2D> collectibleTextures;
+        private int foodCollected;
         #endregion
 
         #region Player
@@ -430,6 +431,11 @@ namespace Opossum_Game
             lvls.Add(lvl2);
             lvls.Add(lvl3);
 
+            foreach (Level l in lvls)
+            {
+                foodCollected += l.CollectiblesList.Count;
+            }
+
             // pass in the fields from the level class to the game1 class
             /*
             player = lvl1.Player;
@@ -456,7 +462,7 @@ namespace Opossum_Game
                     {
                         //resetting game
                         levelCount = -1;
-                        timer = 60;
+                        timer = 600;
                         NextLevel();
                         
                         currentState = GameState.Game;
@@ -519,7 +525,10 @@ namespace Opossum_Game
                     if (debug)
                     {
                         player.Update(gameTime);
-                         
+                        foreach (Enemy e in enemyList)
+                        {
+                            e.Update(gameTime);
+                        }
                         
                         //turn collisions off
                         //for each game object check if the player is colliding with it and return false every time
@@ -561,12 +570,11 @@ namespace Opossum_Game
                         #endregion
 
                         //win conditions for now
-                        if (timer <= 0 && collectiblesList.Count != 0 && levelCount == lvls.Count)
+                        if ((timer <= 0 || foodCollected != 0) && levelCount == lvls.Count)
                         {
                             currentState = GameState.GameLose;
                         }
-                        
-                        else if (timer >= 0 && collectiblesList.Count == 0 && levelCount == lvls.Count)
+                        else if (timer >= 0 && foodCollected == 1 && levelCount == lvls.Count)
                         {
                             currentState = GameState.GameWin;
                         }
@@ -851,6 +859,7 @@ namespace Opossum_Game
                 if (collide && SingleKeyPress(Keys.LeftShift, kbstate, previousKbState))
                 {
                     collectiblesList.Remove(collectiblesList[i]);
+                    foodCollected--;
                     i--;
                 }
             }
