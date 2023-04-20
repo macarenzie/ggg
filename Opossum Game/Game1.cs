@@ -82,6 +82,15 @@ namespace Opossum_Game
         private Button debugModeButtonOff;
         private Button debugModeButtonOn;
 
+        //exit button
+        private Texture2D exitBase;
+        private Texture2D exitRollOver;
+        private Button exitButton;
+
+        //tiny button for exit
+        private Texture2D xMarkTexture;
+        private Button xMarkButton;
+
         #endregion
 
         #region Collectibles
@@ -306,6 +315,35 @@ namespace Opossum_Game
                 debugModeRollOver
                 );
 
+            //exit from main menu button
+            exitBase =
+                Content.Load<Texture2D>("exitButtonBase");
+            exitRollOver =
+                Content.Load<Texture2D>("exitButtonRollOver");
+            exitButton = new Button(
+                 exitBase,
+                new Rectangle(
+                    (windowWidth / 2) - (optionsButtonBase.Width / 4),
+                    (windowHeight / 2) + (optionsButtonBase.Height / 4) + 175,
+                    optionsButtonBase.Width / 2,
+                    optionsButtonBase.Height / 2
+                    ),
+                exitRollOver
+                );
+
+            xMarkTexture =
+                Content.Load<Texture2D>("xMark");
+            xMarkButton = new Button(
+                xMarkTexture,
+                new Rectangle(
+                    90,
+                    90,
+                    xMarkTexture.Width / 2,
+                    xMarkTexture.Height / 2
+                    ),
+                xMarkTexture
+                );
+
             #endregion
 
             //background art
@@ -400,15 +438,7 @@ namespace Opossum_Game
                 //all posibilities for the menu screen
                 case GameState.Menu:
 
-                    if (SingleKeyPress(Keys.U, kbstate, previousKbState) && debug == false)
-                    {
-                        debug = true;
-                    }
-
-                    else if (SingleKeyPress(Keys.U, kbstate, previousKbState) && debug == true)
-                    {
-                        debug = false;
-                    }
+                    
 
                     if (startButton.MouseClick() && startButton.MouseContains())
                     {
@@ -424,7 +454,7 @@ namespace Opossum_Game
                     }
 
                     //to exit the game from menu
-                    if (quitButton.MouseClick() && quitButton.MouseContains())
+                    if (exitButton.MouseClick() && exitButton.MouseContains())
                     {
                         Exit();
                     }
@@ -434,14 +464,25 @@ namespace Opossum_Game
                 case GameState.Options:
 
                     // PLACEHOLDER TO TEST TRANSITIONS
-                    if (SingleKeyPress(Keys.M, kbstate, previousKbState)
-                        /*menuButton.MouseClick() && menuButton.MouseContains()*/)
+
+                    if (SingleKeyPress(Keys.U, kbstate, previousKbState) && debug == false)
+                    {
+                        debug = true;
+                    }
+
+                    else if (SingleKeyPress(Keys.U, kbstate, previousKbState) && debug == true)
+                    {
+                        debug = false;
+                    }
+
+                    //exit from the options
+                    if (xMarkButton.MouseClick() && xMarkButton.MouseContains())
                     {
                         currentState = GameState.Menu;
                     }
 
                     //for when we do have the gode mode stuff implemented
-                    if (debug == false)
+                  /*  if (debug == false)
                     {
                         if (debugModeButtonOn.MouseClick() && debugModeButtonOn.MouseContains())
                         {
@@ -454,6 +495,7 @@ namespace Opossum_Game
                             debug = false;
                         }
                     }
+                  */
                     break;
 
                 //all options for the state of playing the game
@@ -643,18 +685,23 @@ namespace Opossum_Game
                     //drawing of the buttons
                     startButton.Draw(_spriteBatch);
                     optionsButton.Draw(_spriteBatch);
+                    exitButton.Draw(_spriteBatch);
 
-                    _spriteBatch.DrawString(
-                        comicsans30,
-                        string.Format("Press 'U' to toggle debug mode!\nDebug mode: " + debug),
-                        new Vector2(0, 5),
-                        Color.Pink);
+
                     break;
                 case GameState.Options:
 
                     _spriteBatch.Draw(optionScreen, new Rectangle(0, 0, 900, 900), Color.White);
 
+                    xMarkButton.Draw(_spriteBatch);
 
+                    _spriteBatch.DrawString(
+                        comicsans30,
+                        string.Format("Press 'U' to toggle debug mode!\nDebug mode: " + debug),
+                        new Vector2(90, 700),
+                        Color.Pink);
+
+                    /*
                     if (debug == true)
                     {
                         debugModeButtonOn.Draw(_spriteBatch);
@@ -663,18 +710,7 @@ namespace Opossum_Game
                     {
                         debugModeButtonOff.Draw(_spriteBatch);
                     }
-
-                    // TEMP
-                    _spriteBatch.DrawString(
-                        comicsans30,
-                        string.Format("OPTIONS SCREEN"),
-                        new Vector2(10, 100),
-                        Color.White);
-                    _spriteBatch.DrawString(
-                        comicsans30,
-                        string.Format("PRESS 'M' FOR MAIN MENU"),
-                        new Vector2(10, 200),
-                        Color.White);
+                    */
                     break;
 
                 case GameState.Game:
@@ -891,7 +927,7 @@ namespace Opossum_Game
 
             collectiblesList = level.CollectiblesList;
 
-            timer = 150;
+            timer = 60;
 
             player = level.Player;
         }
@@ -1009,12 +1045,10 @@ namespace Opossum_Game
         /// <summary>
         /// Will change the player's position to be overlapping with the hideable obstacle
         /// Check if IsInRange is true
-        /// Press and release space bar
+        /// Press and release space bar. Hide and UnHide are the same. 
+        /// If unhiding, then currently by edge collision logic, 
+        /// it will set you outside automatically
         /// </summary>
-        /// 
-        //TODO: Implement a way to exit hide state, otherwise player will be stuck within object. -Julia
-        //^^ bool to allow for exit
-        //DONE^^ -Jamie
         void Hide(KeyboardState prevState,
             KeyboardState curState, Obstacle otherObstacle, Player player)
         {
@@ -1024,9 +1058,7 @@ namespace Opossum_Game
                 //&& !player.IsHiding
                 )
             {
-                if (curState.IsKeyDown(Keys.Space) && prevState.IsKeyUp(Keys.Space) 
-                    //&& !player.IsHiding
-                    )
+                if (curState.IsKeyDown(Keys.Space) && prevState.IsKeyUp(Keys.Space))
                 {
                     if (!player.IsHiding)
                     {
