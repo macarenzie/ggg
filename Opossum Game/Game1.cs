@@ -93,6 +93,7 @@ namespace Opossum_Game
 
         #region Player
         private Texture2D pSprite;
+        //private Texture2D pSpriteSide;
         private Player player;
         #endregion
 
@@ -312,11 +313,15 @@ namespace Opossum_Game
 
             // player sprite
             pSprite = Content.Load<Texture2D>("playerSprite");
+            //pSpriteSide = Content.Load<Texture2D>("playerSpriteSide");
+
 
             // player initialization
             player = new Player(
                 pSprite,
                 new Rectangle(10, 10, pSprite.Width / 4, pSprite.Height / 4));
+                //pSpriteSide,
+                //new Rectangle(10, 10, pSpriteSide.Width/4, pSpriteSide.Height/4));
 
             #region Collectibles
             collectibleBurger = Content.Load<Texture2D>("colBurger");
@@ -371,7 +376,8 @@ namespace Opossum_Game
                 collectibleTextures,       // collectible texture
                 obstacleTexture,         // obstacle texture
                 pSprite,                // player texture
-                enemyTexture);          // enemy texture
+                enemyTexture);        //enemy texture
+                //pSpriteSide);          // player side texture
             level.LoadLevel(level1);
 
             // pass in the fields from the level class to the game1 class

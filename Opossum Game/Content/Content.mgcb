@@ -176,6 +176,18 @@
 /processorParam:TextureFormat=Color
 /build:playerSprite.PNG
 
+#begin playerSpriteSide.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:playerSpriteSide.png
+
 #begin quitBase.PNG
 /importer:TextureImporter
 /processor:TextureProcessor
