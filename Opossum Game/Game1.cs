@@ -468,6 +468,11 @@ namespace Opossum_Game
                         currentState = GameState.Game;
                     }
 
+                    if (optionsButton.MouseClick() && optionsButton.MouseContains())
+                    {
+                        currentState = GameState.Options;
+                    }
+
                     //to exit the game from menu
                     if (exitButton.MouseClick() && exitButton.MouseContains())
                     {
@@ -525,11 +530,14 @@ namespace Opossum_Game
                     if (debug)
                     {
                         player.Update(gameTime);
+
                         foreach (Enemy e in enemyList)
                         {
                             e.Update(gameTime);
                         }
-                        
+
+                        CollectibleCollision();
+
                         //turn collisions off
                         //for each game object check if the player is colliding with it and return false every time
                     }
@@ -538,9 +546,17 @@ namespace Opossum_Game
                     {
                         timer -= gameTime.ElapsedGameTime.TotalSeconds;
 
+                        //PUT ALL GAME CODE IN HERE 
+                        //THIS ENSURES THE GAME RUNS CORRECTLY
                         if (timer > 0 && foodCollected != 0 && levelCount < lvls.Count)
                         {
                             player.Update(gameTime);
+                            foreach (Enemy e in enemyList)
+                            {
+                                e.Update(gameTime);
+                                //e.enemyObstacleCollision(obstaclesList);
+                                e.LightIntersects(player.Rect);
+                            }
 
                             #region Collisions
                             //this method is to adjust the player's position with an non-overlappable object 
@@ -571,7 +587,9 @@ namespace Opossum_Game
                             CollectibleCollision();
                             #endregion
                         }
-                        else if (timer <= 0 || foodCollected != 0 && levelCount == lvls.Count)
+
+                        //these two are the win or lose conditions
+                        else if ((timer <= 0 || foodCollected != 1) && levelCount == lvls.Count)
                         {
                             currentState = GameState.GameLose;
                         }
@@ -649,9 +667,9 @@ namespace Opossum_Game
 
                     _spriteBatch.DrawString(
                         comicsans30,
-                        string.Format("Press 'U' to toggle debug mode!\nDebug mode: " + debug),
+                        string.Format("Press 'U' to toggle erin mode!\nErin mode: " + debug),
                         new Vector2(90, 700),
-                        Color.Pink);
+                        Color.LightSteelBlue);
 
                     /*
                     if (debug == true)
@@ -670,6 +688,9 @@ namespace Opossum_Game
                     if (debug)
                     {
                         // DRAW ORDER: obstacle, collectibles, enemy, player
+
+                        // background art
+                        _spriteBatch.Draw(environmentalArt, new Rectangle(0, 0, 900, 900), Color.White);
 
                         foreach (IGameObject obstacle in obstaclesList)
                         {
@@ -699,6 +720,7 @@ namespace Opossum_Game
                     {
                         // DRAW ORDER: player, collectibles, obstacle, enemy
 
+                        // background art
                         _spriteBatch.Draw(environmentalArt, new Rectangle(0, 0, 900, 900), Color.White);
 
                         player.Draw(_spriteBatch, Color.White);

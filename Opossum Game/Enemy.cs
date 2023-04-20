@@ -96,7 +96,7 @@ namespace Opossum_Game
                 //Moves to the right until the right edge is hit by the right edge
                 case MovementDirection.Right:
                     position.X += 3;
-                    lightRectangle.X += 3; 
+                    lightRectangle.X += 3;
                     if (position.X + position.Width > 900)
                     {
                         currentDirection = MovementDirection.Left;
