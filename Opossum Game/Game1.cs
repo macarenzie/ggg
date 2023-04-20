@@ -152,8 +152,12 @@ namespace Opossum_Game
         private List<Collectible> collectiblesList;
         private List<Obstacle> obstaclesList;
         private List<Enemy> enemyList;
-        
+
         // level objects
+        private string level1;
+        private string level2;
+        private string level3;
+        private List<string> levelStrings;
         private Level lvl1;
         private Level lvl2;
         private Level lvl3;
@@ -200,8 +204,15 @@ namespace Opossum_Game
             // initialize the collectible texture list
             collectibleTextures = new List<Texture2D>();
 
-            // level count
+            // level
             levelCount = -1;
+            level1 = "levelScreen1";
+            level2 = "levelScreen2";
+            level3 = "levelScreen3";
+            levelStrings = new List<string>();
+            levelStrings.Add(level1);
+            levelStrings.Add(level2);
+            levelStrings.Add(level3);
 
             base.Initialize(); 
         }
@@ -396,19 +407,19 @@ namespace Opossum_Game
 
             // level loading
             lvl1 = new Level(
-                "levelScreen1",
+                level1,
                 collectibleTextures,       // collectible texture
                 obstacleTexture,         // obstacle texture
                 pSprite,                // player texture
                 enemyTexture);          // enemy texture
             lvl2 = new Level(
-                "levelScreen2",
+                level2,
                 collectibleTextures,       // collectible texture
                 obstacleTexture,         // obstacle texture
                 pSprite,                // player texture
                 enemyTexture);          // enemy texture
             lvl3 = new Level(
-                "levelScreen3",
+                level3,
                 collectibleTextures,       // collectible texture
                 obstacleTexture,         // obstacle texture
                 pSprite,                // player texture
@@ -549,7 +560,7 @@ namespace Opossum_Game
                         CollectibleCollision();
                         #endregion
 
-                        //win conditions for now -- moving later to game screen 3
+                        //win conditions for now
                         if (timer <= 0 && collectiblesList.Count != 0 && levelCount == lvls.Count)
                         {
                             currentState = GameState.GameLose;
@@ -559,7 +570,6 @@ namespace Opossum_Game
                         {
                             currentState = GameState.GameWin;
                         }
-                        
                     }
 
                     break;
@@ -570,6 +580,7 @@ namespace Opossum_Game
                     if (SingleKeyPress(Keys.M, kbstate, previousKbState) ||
                         tryAgainButton.MouseClick() && tryAgainButton.MouseContains())
                     {
+                        ResetGame();
                         currentState = GameState.Menu;
                     }
 
@@ -584,6 +595,7 @@ namespace Opossum_Game
                     if (SingleKeyPress(Keys.M, kbstate, previousKbState)
                         /*menuButton.MouseClick() && menuButton.MouseContains()*/)
                     {
+                        ResetGame();
                         currentState = GameState.Menu;
                     }
 
@@ -1030,6 +1042,15 @@ namespace Opossum_Game
             collectiblesList.Clear();
             obstaclesList.Clear();
             enemyList.Clear();
+        }
+
+        public void ResetGame()
+        {
+            levelCount = 0;
+            for (int i = 0; i < lvls.Count; i++)
+            {
+                lvls[i].LoadLevel(levelStrings[i]);
+            }
         }
     }
 }
