@@ -869,7 +869,7 @@ namespace Opossum_Game
             {
                 bool collide = player.IndividualCollision(collectiblesList[i].Rect);
 
-                if (collide && SingleKeyPress(Keys.E, kbstate, previousKbState))
+                if (collide && SingleKeyPress(Keys.LeftShift, kbstate, previousKbState))
                 {
                     collectiblesList.Remove(collectiblesList[i]);
                     i--;
