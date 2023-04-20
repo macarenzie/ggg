@@ -190,19 +190,14 @@ namespace Opossum_Game
         /// </summary>
         /// <param name="player">Player or other object that would interact with the light</param>
         /// <returns>True if light intersects, otherwise false.</returns>
-        public bool LightIntersects(Rectangle player)
+        public void LightIntersects(Rectangle player)
         {
             if (lightRectangle.Intersects(player)) 
             {
                 //Records last direction the enemy was moving and sets to pause state
                 previousDirection = currentDirection;
                 currentDirection = MovementDirection.Pause;
-                return true;
             } 
-            else
-            {
-                return false;
-            }
         }
     }
 }
