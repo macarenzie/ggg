@@ -75,7 +75,7 @@ namespace Opossum_Game
             this.position = position;
             this.currentDirection = currentDirection;
             this.lightRectangle = lightRectangle;
-            freezeTimer = new Stopwatch();  
+            freezeTimer = new Stopwatch();
         }
 
         public void Update(GameTime gameTime)
