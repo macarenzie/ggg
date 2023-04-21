@@ -13,7 +13,7 @@ namespace Opossum_Game
     /// <summary>
     /// Will represent the object the player is controlling
     /// Majority Written by: Jamie Zheng
-    /// Code optimization done by Ariel and McKenzie
+    /// Code optimization / freeze mechanics done by Ariel and McKenzie
     /// </summary>
     internal class Player : IGameObject
     {

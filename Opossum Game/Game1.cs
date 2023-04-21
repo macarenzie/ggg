@@ -9,13 +9,13 @@ using System.IO;
 namespace Opossum_Game
 {
     /// <summary>
-    /// McKenzie: added enums and started loading in content, worked on 
-    ///    temp fsm for update and draw, did all data driven level loading,
-    ///    helped with collision handling in update and draw for each game object
+    /// McKenzie: added enums and did all level texture loading, assisted in level design,
+    ///     freeze mechanics, level switching, and code optimization
     /// Hui Lin: worked on enums and current state game state stuff
-    /// Ariel: finalized UI fsm and implimented camera movement fsm
+    /// Ariel: finalized UI fsm and implimented level switching / design, collectible mechanics,
+    ///     player freeze mechanics, win/lose conditions, gameplay testing, and code optimization
     /// Jamie: edge collision so the player does not go over obstacles that the player
-    /// cannot go through & Hide()
+    ///     cannot go through and Hide()
     /// </summary>
     #region Enums
 
@@ -99,7 +99,7 @@ namespace Opossum_Game
         private Texture2D collectibleCandy;
         private Texture2D collectibleChips;
         private List<Texture2D> collectibleTextures;
-        private int foodCollected;
+        private int foodLeft;
         #endregion
 
         #region Player
@@ -440,7 +440,7 @@ namespace Opossum_Game
 
             foreach (Level l in lvls)
             {
-                foodCollected += l.CollectiblesList.Count;
+                foodLeft += l.CollectiblesList.Count;
             }
         }
 
@@ -456,15 +456,14 @@ namespace Opossum_Game
             {
                 // MAIN MENU SCREEN ---------------------------------------------------------------
                 case GameState.Menu:
-                    
+
                     // start the game
                     if (startButton.MouseClick() && startButton.MouseContains())
                     {
                         //resetting game
-                        levelCount = -1;
-                        timer = 600;
+                        timer = 100;
                         NextLevel();
-                        
+
                         currentState = GameState.Game;
                     }
 
@@ -501,20 +500,20 @@ namespace Opossum_Game
                     }
 
                     //for when we do have the gode mode stuff implemented
-                  /*  if (debug == false)
-                    {
-                        if (debugModeButtonOn.MouseClick() && debugModeButtonOn.MouseContains())
-                        {
-                            debug = true;
-                        }
-                    } else
-                    {
-                        if (debugModeButtonOff.MouseClick() && debugModeButtonOff.MouseContains())
-                        {
-                            debug = false;
-                        }
-                    }
-                  */
+                    /*  if (debug == false)
+                      {
+                          if (debugModeButtonOn.MouseClick() && debugModeButtonOn.MouseContains())
+                          {
+                              debug = true;
+                          }
+                      } else
+                      {
+                          if (debugModeButtonOff.MouseClick() && debugModeButtonOff.MouseContains())
+                          {
+                              debug = false;
+                          }
+                      }
+                    */
                     break;
 
                 // GAMEPLAY SCREEN ----------------------------------------------------------------
@@ -551,12 +550,13 @@ namespace Opossum_Game
                         e.Update(gameTime);
                     }
 
-                    // determine what occurs based on whether or not debug mode is on
+                    // everything that happens in debug mode
                     if (debug)
                     {
-                        // determine if the player wants to hide
-                        if (foodCollected != 0 && levelCount < lvls.Count)
+                        //if the game is still going w/o timer
+                        if (foodLeft != 0 && levelCount != lvls.Count)
                         {
+                            // determine if the player wants to hide
                             foreach (Obstacle obstacle in obstaclesList)
                             {
                                 if (player.IsHiding)
@@ -569,27 +569,40 @@ namespace Opossum_Game
                                     Hide(previousKbState, kbstate, obstacle, player);
                                 }
                             }
+
+                            //enemy obstacle collision
+                            foreach (Enemy e in enemyList)
+                            {
+                                e.EnemyObstacleCollision(obstaclesList);
+                            }
                         }
 
-                        // win/lose conditions
-                        else if (foodCollected != 0 && levelCount == lvls.Count)
+                        // win/lose conditions w/o timer
+                        else if (foodLeft != 0 && levelCount == lvls.Count)
                         {
                             currentState = GameState.GameLose;
                         }
-                        else if (foodCollected == 0 && levelCount == lvls.Count)
+                        else if (foodLeft == 0 && levelCount == lvls.Count)
                         {
                             currentState = GameState.GameWin;
                         }
                     }
-
+                    //everything that happens in regular mode
                     if (!debug)
                     {
                         // decrease the timer
                         timer -= gameTime.ElapsedGameTime.TotalSeconds;
 
-                        //PUT ALL GAME CODE IN HERE 
-                        //   THIS ENSURES THE GAME RUNS CORRECTLY
-                        if (timer > 0 && foodCollected >= 0 && levelCount < lvls.Count)
+                        // win/lose conditions
+                        if (timer <= 0 && foodLeft != 0 && levelCount < lvls.Count)
+                        {
+                            currentState = GameState.GameLose;
+                        }
+                        else if (timer >= 0 && foodLeft == 0 && levelCount == lvls.Count)
+                        {
+                            currentState = GameState.GameWin;
+                        }
+                        else
                         {
                             // determine enemy behavior
                             foreach (Enemy e in enemyList)
@@ -599,7 +612,7 @@ namespace Opossum_Game
                                 // create immunity buff after player escapes play dead state
                                 if (player.IsImmune)
                                 {
-                                    
+                                    //start timer to have player imunity
                                     timer2.Start();
                                     if (timer2.Elapsed.TotalSeconds > 3)
                                     {
@@ -610,20 +623,18 @@ namespace Opossum_Game
                                 }
                                 else
                                 {
+                                    //continue checking collisions
                                     if (player.IndividualCollision(e.Rect))
                                     {
                                         e.LightIntersects(player.Rect);
                                         player.LightIntersects(e.Rect);
                                     }
                                     player.IsImmune = false;
-                                    
+
                                 }
                             }
 
-                            
-
-                            //this method is to adjust the player's position with an
-                            //    non-overlappable object 
+                            //collision checking
                             if (!player.IsHiding)
                             {
                                 CheckObstacleCollision(player, obstaclesList);    //edge collision
@@ -644,31 +655,16 @@ namespace Opossum_Game
                                 }
                             }
                         }
-
-                        // win/lose conditions
-                        else if ((timer <= 0 || foodCollected != 0) && levelCount == lvls.Count)
-                        {
-                            currentState = GameState.GameLose;
-                        }
-                        else if (timer >= 0 && foodCollected == 0 && levelCount == lvls.Count)
-                        {
-                            currentState = GameState.GameWin;
-                        }
                     }
-                    if (SingleKeyPress(Keys.F, kbstate, previousKbState))
-                    {
-                        currentState = GameState.GameWin;
-                    }
-
                     break;
 
                 // GAME LOSE SCREEN ---------------------------------------------------------------
                 case GameState.GameLose:
 
                     //go back to menu
-                    if (SingleKeyPress(Keys.M, kbstate, previousKbState) ||
-                        tryAgainButton.MouseClick() && tryAgainButton.MouseContains())
+                    if (tryAgainButton.MouseClick() && tryAgainButton.MouseContains())
                     {
+                        ResetLevel();
                         ResetGame();
                         currentState = GameState.Menu;
                     }
@@ -683,9 +679,9 @@ namespace Opossum_Game
                 // GAME WIN SCREEN ----------------------------------------------------------------
                 case GameState.GameWin:
                     
-                    if (SingleKeyPress(Keys.M, kbstate, previousKbState)
-                        /*menuButton.MouseClick() && menuButton.MouseContains()*/)
+                    if (playAgainButton.MouseClick() && playAgainButton.MouseContains())
                     {
+                        ResetLevel();
                         ResetGame();
                         currentState = GameState.Menu;
                     }
@@ -866,19 +862,6 @@ namespace Opossum_Game
 
                     playAgainButton.Draw(_spriteBatch);
                     exitWinButton.Draw(_spriteBatch);
-
-                    //TEMP
-                    _spriteBatch.DrawString(
-                        comicsans30,
-                        string.Format("GAME WIN SCREEN"),
-                        new Vector2(10, 100),
-                        Color.White);
-
-                    _spriteBatch.DrawString(
-                        comicsans30,
-                        string.Format("PRESS 'M' FOR MAIN MENU"),
-                        new Vector2(10, 200),
-                        Color.White);
                     break;
             }
 
@@ -890,11 +873,11 @@ namespace Opossum_Game
         // HELPER METHODS ---------------------------------------------------------------------------------------------------
 
         /// <summary>
-        /// 
+        /// checks for singlekey press
         /// </summary>
-        /// <param name="key"></param>
-        /// <param name="currentState"></param>
-        /// <param name="previousState"></param>
+        /// <param name="key"> a keyboard key </param>
+        /// <param name="currentState"> current kb state </param>
+        /// <param name="previousState">prev kb state </param>
         /// <returns></returns>
         private bool SingleKeyPress (
             Keys key, KeyboardState currentState, KeyboardState previousState)
@@ -910,12 +893,13 @@ namespace Opossum_Game
         }
 
         /// <summary>
-        /// TODO: Clean up
         /// checks for collectible collision
+        /// worked on by ariel cthwe
         /// </summary>
         void CollectibleCollision()
         {
             //collectible collision
+            //remove if shift key is pressed and decrease food collected count
             for (int i = 0; i < collectiblesList.Count; i++)
             {
                 bool collide = player.IndividualCollision(collectiblesList[i].Rect);
@@ -925,7 +909,7 @@ namespace Opossum_Game
                     || SingleKeyPress(Keys.RightShift, kbstate, previousKbState)))
                 {
                     collectiblesList.Remove(collectiblesList[i]);
-                    foodCollected--;
+                    foodLeft--;
                     i--;
                 }
             }
@@ -1152,7 +1136,8 @@ namespace Opossum_Game
         }
 
         /// <summary>
-        /// 
+        /// clears the level to be reloaded
+        /// worked on by mckenzie lam
         /// </summary>
         void NextLevel()
         {
@@ -1172,7 +1157,8 @@ namespace Opossum_Game
         }
 
         /// <summary>
-        /// 
+        /// resets the level 
+        /// worked on by mckenzie lam
         /// </summary>
         void ResetLevel()
         {
@@ -1181,9 +1167,13 @@ namespace Opossum_Game
             enemyList.Clear();
         }
 
+        /// <summary>
+        /// resets the entire game
+        /// worked on my mckenzie lam and ariel cthwe
+        /// </summary>
         void ResetGame()
         {
-            levelCount = 0;
+            levelCount = -1;
             for (int i = 0; i < lvls.Count; i++)
             {
                 lvls[i].LoadLevel(levelStrings[i]);
