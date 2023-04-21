@@ -580,7 +580,16 @@ namespace Opossum_Game
                             //cleaner hide loop
                             foreach (Obstacle obstacle in obstaclesList)
                             {
-                                Hide(previousKbState, kbstate, obstacle, player);
+                                //check for hide attempts
+                                if (!player.IsHiding)
+                                {
+                                    Hide(previousKbState, kbstate, obstacle, player);
+                                }
+                                //check for unhiding attempts
+                                else
+                                {
+                                    UnHide(previousKbState, kbstate, obstacle, player);
+                                }
                             }
 
                             //collectible collision
@@ -1004,56 +1013,107 @@ namespace Opossum_Game
         /// <summary>
         /// Will change the player's position to be overlapping with the hideable obstacle
         /// Check if IsInRange is true
-        /// Press and release space bar. Hide and UnHide are the same. 
-        /// If unhiding, then currently by edge collision logic, 
-        /// it will set you outside automatically
+        /// Press and release space bar. 
         /// </summary>
+        /// <param name="prevState">previous keyboard state</param>
+        /// <param name="curState">current keyboard state</param>
+        /// <param name="otherObstacle">the obstacle you want to check is hideable</param>
+        /// <param name="player">Player object</param>
         void Hide(KeyboardState prevState,
             KeyboardState curState, Obstacle otherObstacle, Player player)
         {
             //get mid points lined up
-            if (IsInRange(otherObstacle.Rect, player)
-                && otherObstacle.IsHideable 
-                //&& !player.IsHiding
-                )
+            if (IsInRange(otherObstacle.Rect, player)               //obstacle in range
+                && otherObstacle.IsHideable                         //check for hideability
+                && !player.IsHiding                                 //is player not hiding
+                && SingleKeyPress(Keys.Space, curState, prevState)) //check for space bar 
             {
-                if (SingleKeyPress(Keys.Space, curState, prevState))
+                //Centers the player with the obstacle
+                player.X = (otherObstacle.Rect.X + (otherObstacle.Rect.Width / 2))
+                    - (player.Rect.Width / 2);
+
+                player.Y = (otherObstacle.Rect.Y + (otherObstacle.Rect.Height / 2))
+                    - (player.Rect.Height / 2);
+
+                player.IsHiding = true;
+            }
+        }
+
+        /// <summary>
+        /// Press either WASD to exit the object the player was previously hiding in. 
+        /// </summary>
+        /// <param name="prevState">previous keyboard state</param>
+        /// <param name="curState">current keyboard state</param>
+        /// <param name="otherObstacle">the obstacle you want to check against</param>
+        /// <param name="player">Player object</param>
+        void UnHide(KeyboardState prevState,
+            KeyboardState curState, Obstacle otherObstacle, Player player)
+        {
+            Rectangle potentialPlayer = player.Rect;
+
+            //if the space bar is pressed again then unhide
+            //Also check if the direction the player wants to unhide from is valid
+            if (player.IsHiding)
+            {
+                //W; Up direction
+                if (SingleKeyPress(Keys.W, curState, prevState))
                 {
-                    if (!player.IsHiding)
+                    //adjust to potential coordinates
+                    potentialPlayer.Y -= potentialPlayer.Height;
+
+                    //check for intersection. If intersection is false,
+                    //then do no move in that direction and go back to hiding
+                    if (!potentialPlayer.Intersects(otherObstacle.Rect))
                     {
-                        //Centers the player with the obstacle
-                        player.X = (otherObstacle.Rect.X + (otherObstacle.Rect.Width / 2))
-                            - (player.Rect.Width / 2);
+                        player.IsHiding = false; //change bool
 
-                        player.Y = (otherObstacle.Rect.Y + (otherObstacle.Rect.Height / 2))
-                            - (player.Rect.Height / 2);
-
-                        player.IsHiding = true;
-                    }
-
-                    //if the space bar is pressed again then unhide
-                    //Also check if the direction the player wants to unhide from is valid
-                    else if (player.IsHiding)
-                    {
-                        //W; Up direction
-                        if(SingleKeyPress(Keys.W, curState, prevState))
-                        player.IsHiding = false;
-                        
                         //position changing logic
-
-                        //A; Left Direction
-
-                        //S; Down Direction
-
-                        //D; Right Direction
-
-                        //check for intersection. If intersection is false, then do no move in that direction and go back to hiding
-                        
+                        player.Y -= player.Rect.Width;
                     }
-                    
+
                 }
 
-                
+                //A; Left Direction
+                if (SingleKeyPress(Keys.A, curState, prevState))
+                {
+                    potentialPlayer.X -= potentialPlayer.Width;
+
+                    if (!potentialPlayer.Intersects(otherObstacle.Rect))
+                    {
+                        player.IsHiding = false;
+
+                        player.X -= player.Rect.Width;
+                    }
+                }
+
+                //S; Down Direction
+                if (SingleKeyPress(Keys.S, curState, prevState))
+                {
+                    potentialPlayer.Y += potentialPlayer.Height;
+
+                    if (!potentialPlayer.Intersects(otherObstacle.Rect))
+                    {
+                        player.IsHiding = false;
+
+                        player.Y += player.Rect.Height;
+                    }
+                }
+
+                //D; Right Direction
+                if (SingleKeyPress(Keys.D, curState, prevState))
+                {
+                    potentialPlayer.X += potentialPlayer.Width;
+
+                    if (!potentialPlayer.Intersects(otherObstacle.Rect))
+                    {
+                        player.X += player.Rect.Height;
+                        player.IsHiding = false;
+
+                        
+                    }
+
+                }
+
             }
         }
 
