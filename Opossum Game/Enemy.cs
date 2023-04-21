@@ -17,9 +17,9 @@ namespace Opossum_Game
 
     
     ///<summary>
-    /// Enum used to indicate the current direction the enemy is moving/facing. 
+    /// Enum used to indicate the current status of the enemy (movement). 
     ///</summary>
-    enum MovementDirection
+    enum Status
     {
         Left,
         Right,
@@ -31,8 +31,8 @@ namespace Opossum_Game
         //Fields
         private Texture2D texture;
         private Rectangle position;
-        private MovementDirection currentDirection;
-        private MovementDirection previousDirection;
+        private Status currentDirection;
+        private Status previousDirection;
         private Rectangle lightRectangle;
         private Stopwatch freezeTimer;
 
@@ -69,7 +69,7 @@ namespace Opossum_Game
         /// <param name="position">position and size of enemy</param>
         /// <param name="currentDirection">current direction the enemy is moving in</param>
         /// <param name="lightRectangle">dimensions of the enemy light</param>
-        public Enemy(Texture2D texture, Rectangle position, Rectangle lightRectangle, MovementDirection currentDirection)
+        public Enemy(Texture2D texture, Rectangle position, Rectangle lightRectangle, Status currentDirection)
         {
             this.texture = texture;
             this.position = position;
@@ -84,28 +84,28 @@ namespace Opossum_Game
             switch (currentDirection)
             {
                 //Moves to the left until the left edge is hit by the left edge
-                case MovementDirection.Left:
+                case Status.Right:
                     position.X -= 3;
                     lightRectangle.X -= 3;
                     if (position.X < 0)
                     {
-                        currentDirection = MovementDirection.Right;
+                        currentDirection = Status.Left;
                     }
                     break;
 
                 //Moves to the right until the right edge is hit by the right edge
-                case MovementDirection.Right:
+                case Status.Left:
                     position.X += 3;
                     lightRectangle.X += 3;
                     if (position.X + position.Width > 900)
                     {
-                        currentDirection = MovementDirection.Left;
+                        currentDirection = Status.Right;
                     }
                     break;
 
                 //Occurs when an enemy collides with the player. Freezes for a short time and then flips direction.
                 //TODO: adjust the freezeTimer value once we have a set time for player freeze
-                case MovementDirection.Pause:
+                case Status.Pause:
 
                     //Timer lasts for 5 seconds
                     freezeTimer.Start();
@@ -118,13 +118,13 @@ namespace Opossum_Game
                         freezeTimer.Reset();
                         
                         //Checks what last movement direction was
-                        if (previousDirection == MovementDirection.Left) 
+                        if (previousDirection == Status.Left) 
                         {
-                            currentDirection = MovementDirection.Right;
+                            currentDirection = Status.Right;
                         }
-                        else if (previousDirection == MovementDirection.Right)
+                        else if (previousDirection == Status.Right)
                         {
-                            currentDirection = MovementDirection.Left;
+                            currentDirection = Status.Left;
                         }
                     }
                     break;
@@ -139,12 +139,21 @@ namespace Opossum_Game
         {
             switch(currentDirection)
             {
-                case MovementDirection.Left:
+                case Status.Left:
                     sb.Draw(texture, position, color);
                     break;
 
-                case MovementDirection.Right:
-                    sb.Draw(texture, position, color);
+                case Status.Right:
+                    //sb.Draw(texture, position, color;
+                    sb.Draw(
+                        texture, 
+                        position, 
+                        null, 
+                        color, 
+                        0.0f, 
+                        new Vector2(), 
+                        SpriteEffects.FlipHorizontally, 
+                        1.0f);
                     break;
             }
                 
@@ -173,13 +182,13 @@ namespace Opossum_Game
             //If collision is true, changes the current direction of the enemy. 
             if (isColliding)
             {
-                if (currentDirection == MovementDirection.Left)
+                if (currentDirection == Status.Left)
                 {
-                    currentDirection = MovementDirection.Right;
+                    currentDirection = Status.Right;
                 }
-                else if (currentDirection == MovementDirection.Right)
+                else if (currentDirection == Status.Right)
                 {
-                    currentDirection = MovementDirection.Left;
+                    currentDirection = Status.Left;
                 }
             }
         }
@@ -196,7 +205,7 @@ namespace Opossum_Game
             {
                 //Records last direction the enemy was moving and sets to pause state
                 previousDirection = currentDirection;
-                currentDirection = MovementDirection.Pause;
+                currentDirection = Status.Pause;
             } 
         }
     }
