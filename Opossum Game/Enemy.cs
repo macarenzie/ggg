@@ -60,6 +60,36 @@ namespace Opossum_Game
                 return position;
             }
         }
+
+        /// <summary>
+        /// get and set of enemy's Y coordinate
+        /// </summary>
+        public int Y
+        {
+            get
+            {
+                return position.Y; 
+            }
+            set
+            {
+                position.Y = value;
+            }
+        }
+
+        /// <summary>
+        /// get and set of enemy's X coordinate
+        /// </summary>
+        public int X
+        {
+            get
+            {
+                return position.X;
+            }
+            set
+            {
+                position.X = value;
+            }
+        }
         
         /// <summary>
         /// Parameterized constructor for enemy objects
@@ -193,18 +223,61 @@ namespace Opossum_Game
         /// <param name="obstacles"> List of obstacles currently on screen. </param>
         public void enemyObstacleCollision (List<Obstacle> obstacles)
         {
-            //Indicates if collision is occurring. Set to false by default.
             bool isColliding = false;
 
-            //Iterates through the entire list and checks intersect status of each obstacle. Stops early if collision is found.
-            for (int i = 0; i < obstacles.Count; i++)
+            //Going through each obstacle in the list of obstacles to check for intersection
+            foreach (Obstacle obstacle in obstacles)
             {
-                if (position.Intersects(obstacles[i].Rect))
+                //If the intersection returns true
+                if (position.Intersects(obstacle.Rect))
                 {
-                    isColliding = true;
-                    break;
+                    isColliding = true; //adjust return bool
+
+                    //Get the intersection area
+                    Rectangle intersectionArea = Rectangle.Intersect(
+                        position, obstacle.Rect);
+
+                    //If the width is less than the height, adjust the X position
+                    if (intersectionArea.Width < intersectionArea.Height)
+                    {
+                        //LEFT side of obstacle
+                        //player.X is less than the midpoint of the obstacle's width
+                        if (position.X < (obstacle.Rect.X + obstacle.Rect.Width / 2))
+                        {
+                            position.X -= intersectionArea.Width;
+
+                        }
+                        //RIGHT
+                        else
+                        {
+                            position.X += intersectionArea.Width;
+
+                        }
+
+                    }
+
+                    //If the height it less than the width, adjust the Y position
+                    else if (intersectionArea.Height < intersectionArea.Width)
+                    {
+                        //TOP side of the obstacle;
+                        //If player.Y is less than the obstacle's Height midpoint
+                        if (position.Y < (obstacle.Rect.Y + obstacle.Rect.Height / 2))
+                        {
+                            position.Y -= intersectionArea.Height;
+
+                        }
+                        //BOTTOM
+                        else
+                        {
+                            position.Y += intersectionArea.Height;
+
+                        }
+                    }
+
                 }
             }
+
+
 
             //If collision is true, changes the current direction of the enemy. 
             if (isColliding)
@@ -218,6 +291,8 @@ namespace Opossum_Game
                     currentDirection = Status.Left;
                 }
             }
+
+            
         }
 
         /// <summary>

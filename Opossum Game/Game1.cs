@@ -539,6 +539,7 @@ namespace Opossum_Game
                         foreach (Enemy e in enemyList)
                         {
                             e.Update(gameTime);
+                            
                         }
 
                         if (foodCollected != 0 && levelCount < lvls.Count)
@@ -582,7 +583,7 @@ namespace Opossum_Game
                             foreach (Enemy e in enemyList)
                             {
                                 e.Update(gameTime);
-                                //e.enemyObstacleCollision(obstaclesList);
+                                e.enemyObstacleCollision(obstaclesList);
                                 e.LightIntersects(player.Rect);
                             }
 
@@ -988,6 +989,8 @@ namespace Opossum_Game
 
 
         }
+
+
 
 
         /// <summary>
