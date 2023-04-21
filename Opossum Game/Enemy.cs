@@ -84,7 +84,7 @@ namespace Opossum_Game
                 //Moves to the left until the left edge is hit by the left edge
                 case Status.Right:
                     position.X -= 3;
-                    lightRectangle.X -= 3;
+                    //lightRectangle.X -= 3;
                     if (position.X < 0)
                     {
                         currentDirection = Status.Left;
@@ -94,7 +94,7 @@ namespace Opossum_Game
                 //Moves to the right until the right edge is hit by the right edge
                 case Status.Left:
                     position.X += 3;
-                    lightRectangle.X += 3;
+                    //lightRectangle.X += 3;
                     if (position.X + position.Width > 900)
                     {
                         currentDirection = Status.Right;

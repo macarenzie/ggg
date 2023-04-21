@@ -951,6 +951,7 @@ namespace Opossum_Game
         /// Checking if another object is in range
         /// Used to determine if a food collectible is in range
         /// or a hiding spot is in range to collect or use
+        /// Worked on by Jamie Zheng
         /// </summary>
         /// <param name="otherObject"></param>
         /// <returns>A bool on is the object is in range. In draw 
@@ -990,6 +991,7 @@ namespace Opossum_Game
         /// Will change the player's position to be overlapping with the hideable obstacle
         /// Check if IsInRange is true
         /// Press and release space bar. 
+        /// Worked on by Jamie Zheng
         /// </summary>
         /// <param name="prevState">previous keyboard state</param>
         /// <param name="curState">current keyboard state</param>
@@ -1017,6 +1019,8 @@ namespace Opossum_Game
 
         /// <summary>
         /// Press either WASD to exit the object the player was previously hiding in. 
+        /// Assuming there is no obstacle blocking the player's path. Then do no move
+        /// Written by Jamie Zheng
         /// </summary>
         /// <param name="prevState">previous keyboard state</param>
         /// <param name="curState">current keyboard state</param>
