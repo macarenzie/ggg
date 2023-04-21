@@ -190,7 +190,7 @@ namespace Opossum_Game
 
         /// <summary>
         /// Draw the player to the screen, highlight if collision with light is true 
-        /// maybe have the light collision be handled in level manager. just a thought --Jamie
+        /// maybe have the light collision be handled in game1. just a thought --Jamie
         /// </summary>
         //Color specifier is a TEMP until playdead is implemented
         public void Draw(SpriteBatch sb, Color color)

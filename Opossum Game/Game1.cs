@@ -545,7 +545,15 @@ namespace Opossum_Game
                         {
                             foreach (Obstacle obstacle in obstaclesList)
                             {
-                                Hide(previousKbState, kbstate, obstacle, player);
+                                if (player.IsHiding)
+                                {
+                                    UnHide(previousKbState, kbstate, obstacle, player);
+
+                                }
+                                else
+                                {
+                                    Hide(previousKbState, kbstate, obstacle, player);
+                                }
                             }
                         }
 
@@ -610,7 +618,7 @@ namespace Opossum_Game
                             foreach (Enemy e in enemyList)
                             {
                                 e.Update(gameTime);
-                                //e.enemyObstacleCollision(obstaclesList);
+                                e.enemyObstacleCollision(obstaclesList);
                                 e.LightIntersects(player.Rect);
                             }
 

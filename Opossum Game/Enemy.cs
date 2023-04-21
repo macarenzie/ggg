@@ -169,11 +169,12 @@ namespace Opossum_Game
             bool isColliding = false;
 
             //Iterates through the entire list and checks intersect status of each obstacle. Stops early if collision is found.
-            for (int i = 0; i < obstacles.Count || isColliding; i++)
+            for (int i = 0; i < obstacles.Count; i++)
             {
                 if (position.Intersects(obstacles[i].Rect))
                 {
                     isColliding = true;
+                    break;
                 }
             }
 
