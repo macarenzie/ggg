@@ -107,7 +107,6 @@ namespace Opossum_Game
         private Player player;
         #endregion
 
-        
 
         #region KBState
         private KeyboardState kbstate;
@@ -884,7 +883,7 @@ namespace Opossum_Game
         /// TODO: Clean up
         /// checks for collectible collision
         /// </summary>
-        public void CollectibleCollision()
+        void CollectibleCollision()
         {
             //collectible collision
             for (int i = 0; i < collectiblesList.Count; i++)
@@ -972,8 +971,6 @@ namespace Opossum_Game
 
 
         }
-
-
 
 
         /// <summary>
@@ -1127,7 +1124,7 @@ namespace Opossum_Game
         /// <summary>
         /// 
         /// </summary>
-        public void NextLevel()
+        void NextLevel()
         {
             levelCount++;
 
@@ -1147,14 +1144,14 @@ namespace Opossum_Game
         /// <summary>
         /// 
         /// </summary>
-        public void ResetLevel()
+        void ResetLevel()
         {
             collectiblesList.Clear();
             obstaclesList.Clear();
             enemyList.Clear();
         }
 
-        public void ResetGame()
+        void ResetGame()
         {
             levelCount = 0;
             for (int i = 0; i < lvls.Count; i++)
