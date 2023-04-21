@@ -521,25 +521,43 @@ namespace Opossum_Game
                 //all options for the state of playing the game
                 case GameState.Game:
 
+                    // advance to the next level
                     if (player.Y + player.Rect.Height < 0 && levelCount < lvls.Count)
                     {
                         ResetLevel();
                         NextLevel();
                     }
 
+                    // general game functions
+                    player.Update(gameTime);
+
+                    // determine what occurs based on whether or not debug mode is on
                     if (debug)
                     {
-                        player.Update(gameTime);
+                        CollectibleCollision();
 
                         foreach (Enemy e in enemyList)
                         {
                             e.Update(gameTime);
                         }
 
-                        CollectibleCollision();
+                        if (foodCollected != 0 && levelCount < lvls.Count)
+                        {
+                            foreach (Obstacle obstacle in obstaclesList)
+                            {
+                                Hide(previousKbState, kbstate, obstacle, player);
+                            }
+                        }
 
-                        //turn collisions off
-                        //for each game object check if the player is colliding with it and return false every time
+                        //these two are the win or lose conditions
+                        else if (foodCollected != 0 && levelCount == lvls.Count)
+                        {
+                            currentState = GameState.GameLose;
+                        }
+                        else if (foodCollected == 0 && levelCount == lvls.Count)
+                        {
+                            currentState = GameState.GameWin;
+                        }
                     }
 
                     if (!debug)
@@ -561,24 +579,13 @@ namespace Opossum_Game
                             }
 
                             #region Collisions
-                            //this method is to adjust the player's position with an non-overlappable object 
+                            //this method is to adjust the player's position with an
+                            //    non-overlappable object 
                             if (!player.IsHiding)
                             {
-                                CheckObstacleCollision(player, obstaclesList);         //edge collision
+                                CheckObstacleCollision(player, obstaclesList);    //edge collision
                             }
 
-                            // test if the player is able to hide in an obstacle
-                            /*
-                            foreach (Obstacle obs in obstaclesList)
-                            {
-                                bool collide = player.IndividualCollision(obs.Position);
-
-                                if (collide)
-                                {
-                                    player.Hide(kbstate, previousKbState, obs.Position);
-                                }
-                            }
-                            */
                             //cleaner hide loop
                             foreach (Obstacle obstacle in obstaclesList)
                             {
