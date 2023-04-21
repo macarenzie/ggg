@@ -1108,8 +1108,6 @@ namespace Opossum_Game
                     {
                         player.X += player.Rect.Height;
                         player.IsHiding = false;
-
-                        
                     }
 
                 }
