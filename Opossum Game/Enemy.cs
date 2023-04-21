@@ -221,7 +221,7 @@ namespace Opossum_Game
         /// Needs to be called in game1 due to utilizing the obstacle list.
         /// </summary>
         /// <param name="obstacles"> List of obstacles currently on screen. </param>
-        public void enemyObstacleCollision (List<Obstacle> obstacles)
+        public void EnemyObstacleCollision (List<Obstacle> obstacles)
         {
             bool isColliding = false;
 
