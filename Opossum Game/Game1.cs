@@ -701,99 +701,32 @@ namespace Opossum_Game
                         // background art
                         _spriteBatch.Draw(environmentalArt, new Rectangle(0, 0, 900, 900), Color.White);
 
-                        foreach (IGameObject obstacle in obstaclesList)
+                        // draw each obstacle
+                        foreach (Obstacle obstacle in obstaclesList)
                         {
-                            obstacle.Draw(_spriteBatch, Color.White);
-                        }
-
-                        foreach (IGameObject collectible in collectiblesList)
-                        {
-                            collectible.Draw(_spriteBatch, Color.White);
-                        }
-
-                        foreach (IGameObject enemy in enemyList)
-                        {
-                            enemy.Draw(_spriteBatch, Color.White);
-                        }
-
-                        player.Draw(_spriteBatch, Color.White);
-
-                        //drawing the timer to the screen
-                        _spriteBatch.DrawString(
-                            comicsans30,
-                            string.Format("Time left: {0:0}", timer),
-                            new Vector2(0, 5),
-                            Color.White);
-                    }
-                    else
-                    {
-                        // DRAW ORDER: player, collectibles, obstacle, enemy
-
-                        // background art
-                        _spriteBatch.Draw(environmentalArt, new Rectangle(0, 0, 900, 900), Color.White);
-
-                        player.Draw(_spriteBatch, Color.White);
-
-                        foreach (IGameObject collectible in collectiblesList)
-                        {
-                            collectible.Draw(_spriteBatch, Color.White);
-                        }
-
-                        foreach (IGameObject obstacle in obstaclesList)
-                        {
-                            obstacle.Draw(_spriteBatch, Color.White);
-                        }
-
-                        foreach (IGameObject enemy in enemyList)
-                        {
-                            enemy.Draw(_spriteBatch, Color.White);
-                        }
-
-                        //drawing the timer to the screen
-                        _spriteBatch.DrawString(
-                            comicsans30,
-                            string.Format("Time left: {0:0}", timer),
-                            new Vector2(0, 5),
-                            Color.White
-                            );
-
-                        // LEVEL ------------------------------------------
-                        
-                        // draw obstacles based on player collision
-                        for (int i = 0; i < obstaclesList.Count; i++)
-                        {
-                            //test code for hideable objects
-                            
-                            if (IsInRange(obstaclesList[i].Rect, player) 
-                                && obstaclesList[i].IsHideable)
+                            if (IsInRange(obstacle.Rect, player) && obstacle.IsHideable)
                             {
-                                obstaclesList[i].Draw(_spriteBatch, Color.Green);
+                                obstacle.Draw(_spriteBatch, Color.LightSteelBlue);
                             }
                             else
                             {
-                                obstaclesList[i].Draw(_spriteBatch, Color.White);
+                                obstacle.Draw(_spriteBatch, Color.White);
                             }
-                            
-                            /*
-                            if (player.IndividualCollision(obstaclesList[i].Position))
-                            {
-                                obstaclesList[i].Draw(_spriteBatch, Color.Green);
-                            }
-                            else
-                            {
-                                obstaclesList[i].Draw(_spriteBatch, Color.White);
-                            }
-                            */
-                            
+                        }
+
+                        // draw each collectible
+                        foreach (IGameObject collectible in collectiblesList)
+                        {
+                            collectible.Draw(_spriteBatch, Color.White);
                         }
 
                         // draw each enemy
-                        //for (int i = 0; i < enemyList.Count; i++)
-                        //{
-                        //    enemyList[i].Draw(_spriteBatch, Color.White);
-                        //}
+                        foreach (IGameObject enemy in enemyList)
+                        {
+                            enemy.Draw(_spriteBatch, Color.White);
+                        }
 
-                        // draw the player based on collisions with light
+                        // draw the player based on collision
                         foreach (Enemy enemy in enemyList)
                         {
                             bool collide = player.IndividualCollision(enemy.Rect);
@@ -806,30 +739,64 @@ namespace Opossum_Game
 
                             player.Draw(_spriteBatch, Color.White);
                         }
-
-
-                        //drawing the timer to the screen
-                        _spriteBatch.DrawString(
-                            comicsans30,
-                            string.Format("Time left: {0:0}", timer),
-                            new Vector2(0, 5),
-                            Color.White
-                            );
-                        // LEVEL ------------------------------------------
                     }
+                    else
+                    {
+                        // DRAW ORDER: collectibles, player, obstacle, enemy
+
+                        // background art
+                        _spriteBatch.Draw(environmentalArt, new Rectangle(0, 0, 900, 900), Color.White);
+
+                        // draw each collectible
+                        foreach (IGameObject collectible in collectiblesList)
+                        {
+                            collectible.Draw(_spriteBatch, Color.White);
+                        }
+
+                        // draw the player
+                        player.Draw(_spriteBatch, Color.White);
+
+                        // draw each obstacle
+                        foreach (Obstacle obstacle in obstaclesList)
+                        {
+                            if (IsInRange(obstacle.Rect, player) && obstacle.IsHideable)
+                            {
+                                obstacle.Draw(_spriteBatch, Color.LightSteelBlue);
+                            }
+                            else
+                            {
+                                obstacle.Draw(_spriteBatch, Color.White);
+                            }
+                        }
+
+                        // draw each enemy
+                        foreach (IGameObject enemy in enemyList)
+                        {
+                            enemy.Draw(_spriteBatch, Color.White);
+                        }
+                    }
+
+                    //drawing the timer to the screen
+                    _spriteBatch.DrawString(
+                        comicsans30,
+                        string.Format("Time left: {0:0}", timer),
+                        new Vector2(0, 5),
+                        Color.White);
 
                     break;
 
                 case GameState.GameLose:
 
+                    // draw the lose screen
                     _spriteBatch.Draw(
                         loseScreen,
                         new Vector2(0, 0),
-                        Color.White
-                        );
+                        Color.White);
 
+                    // draw each button
                     quitButton.Draw(_spriteBatch);
                     tryAgainButton.Draw(_spriteBatch);
+
                     break;
                 case GameState.GameWin:
 

@@ -203,24 +203,24 @@ namespace Opossum_Game
                         enemy = new Enemy(
                         enemyTexture,       // texture
                         new Rectangle(      // position and dimensions
-                            int.Parse(objectData[1]) * 90,
-                            int.Parse(objectData[0]) * 90,
+                            int.Parse(objectData[1]) * 90 + 15,
+                            int.Parse(objectData[0]) * 90 + 15,
                             enemyTexture.Width / 6,
                             enemyTexture.Height / 6), 
                         new Rectangle(),    // light
-                        MovementDirection.Left);    // direction
+                        Status.Left);    // direction
                     }
                     else
                     {
                         enemy = new Enemy(
                         enemyTexture,       // texture
                         new Rectangle(      // position and dimensions
-                            int.Parse(objectData[1]) * 90 + 10,
-                            int.Parse(objectData[0]) * 90 + 10,
+                            int.Parse(objectData[1]) * 90 + 15,
+                            int.Parse(objectData[0]) * 90 + 15,
                             enemyTexture.Width / 6,
                             enemyTexture.Height / 6),
                         new Rectangle(),    // light
-                        MovementDirection.Left);    // direction
+                        Status.Right);    // direction
                     }
                     
                     EnemyList.Add(enemy);
