@@ -582,7 +582,7 @@ namespace Opossum_Game
                             foreach (Enemy e in enemyList)
                             {
                                 e.Update(gameTime);
-                                e.enemyObstacleCollision(obstaclesList);
+                                e.EnemyObstacleCollision(obstaclesList);
                                 e.LightIntersects(player.Rect);
                             }
 
@@ -618,7 +618,7 @@ namespace Opossum_Game
                             foreach (Enemy e in enemyList)
                             {
                                 e.Update(gameTime);
-                                e.enemyObstacleCollision(obstaclesList);
+                                e.EnemyObstacleCollision(obstaclesList);
                                 e.LightIntersects(player.Rect);
                             }
 
