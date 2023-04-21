@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 
 namespace Opossum_Game
@@ -165,6 +166,7 @@ namespace Opossum_Game
 
         // DEBUG MODE
         private bool debug;
+        Stopwatch timer2;
 
         public Game1()
         {
@@ -204,6 +206,8 @@ namespace Opossum_Game
             levelStrings.Add(level1);
             levelStrings.Add(level2);
             levelStrings.Add(level3);
+
+            timer2 = new Stopwatch();
 
             base.Initialize(); 
         }
@@ -591,8 +595,29 @@ namespace Opossum_Game
                             foreach (Enemy e in enemyList)
                             {
                                 e.EnemyObstacleCollision(obstaclesList);
-                                e.LightIntersects(player.Rect);
-                                player.LightIntersects(e.Rect);
+
+                                // create immunity buff after player escapes play dead state
+                                if (player.IsImmune)
+                                {
+                                    
+                                    timer2.Start();
+                                    if (timer2.Elapsed.TotalSeconds > 3)
+                                    {
+                                        player.IsImmune = false;
+                                        timer2.Stop();
+                                        timer2.Reset();
+                                    }
+                                }
+                                else
+                                {
+                                    if (player.IndividualCollision(e.Rect))
+                                    {
+                                        e.LightIntersects(player.Rect);
+                                        player.LightIntersects(e.Rect);
+                                    }
+                                    player.IsImmune = false;
+                                    
+                                }
                             }
 
                             
@@ -809,6 +834,8 @@ namespace Opossum_Game
                         {
                             enemy.Draw(_spriteBatch, Color.White);
                         }
+
+                        // draw the player if it is playing dead
                     }
 
                     //drawing the timer to the screen

@@ -32,6 +32,9 @@ namespace Opossum_Game
         //hiding stuff
         private bool isHiding;
 
+        // immmunity after dead
+        private bool isImmune;
+
         // freeze timer
         private Stopwatch freezeTimer;
 
@@ -91,6 +94,12 @@ namespace Opossum_Game
             set { isHiding = value; }
         }
 
+        public bool IsImmune
+        {
+            get { return isImmune; }
+            set { isImmune = value; }
+        }
+
         //constructor
         /// <summary>
         /// Creates what the player will control.
@@ -106,6 +115,7 @@ namespace Opossum_Game
             //this.pSpriteSide = pSpriteSide;
             //this.sideRectangle = sideRectangle;
             freezeTimer = new Stopwatch();
+            isImmune = false;
         }
 
 
@@ -202,8 +212,9 @@ namespace Opossum_Game
                 //Also resets stopwatch for next use.
                 if (freezeTimer.Elapsed.TotalSeconds > 3)
                 {
+                    
                     freezeTimer.Stop();
-
+                    isImmune = true;
                     // check to see which direction the player wants to go
                     if (prevState == PlayerState.Front)
                     {
@@ -221,6 +232,8 @@ namespace Opossum_Game
                     {
                         playerState = PlayerState.Right;
                     }
+
+                    
                     freezeTimer.Reset();
                 }
             }
@@ -306,7 +319,7 @@ namespace Opossum_Game
                         sb.Draw(
                             pSprite,
                             playerRectangle,
-                            color);
+                            Color.SteelBlue);
                         break;
                     
                     default:
@@ -315,6 +328,14 @@ namespace Opossum_Game
                             playerRectangle,
                             color);
                         break; 
+                }
+
+                if (isImmune)
+                {
+                    sb.Draw(
+                        pSprite, 
+                        playerRectangle,
+                        Color.Yellow);
                 }
             }
 
