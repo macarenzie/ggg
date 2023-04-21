@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,9 +27,13 @@ namespace Opossum_Game
         private KeyboardState currKB;
         private KeyboardState prevKB;
         private PlayerState playerState;
+        private PlayerState prevState;
 
         //hiding stuff
         private bool isHiding;
+
+        // freeze timer
+        private Stopwatch freezeTimer;
 
         //properties
         /// <summary>
@@ -100,6 +105,7 @@ namespace Opossum_Game
             isHiding = false;
             //this.pSpriteSide = pSpriteSide;
             //this.sideRectangle = sideRectangle;
+            freezeTimer = new Stopwatch();
         }
 
 
@@ -187,6 +193,37 @@ namespace Opossum_Game
 
                 
             }
+            if (!isHiding && playerState == PlayerState.PlayDead)
+            {
+                //Timer lasts for 3 seconds
+                freezeTimer.Start();
+
+                //Changes the movement direction to be opposite what the last movement direction was.
+                //Also resets stopwatch for next use.
+                if (freezeTimer.Elapsed.TotalSeconds > 3)
+                {
+                    freezeTimer.Stop();
+
+                    // check to see which direction the player wants to go
+                    if (prevState == PlayerState.Front)
+                    {
+                        playerState = PlayerState.Front;
+                    }
+                    else if (prevState == PlayerState.Back)
+                    {
+                        playerState = PlayerState.Back;
+                    }
+                    else if (prevState == PlayerState.Left)
+                    {
+                        playerState = PlayerState.Left;
+                    }
+                    else if (prevState == PlayerState.Right)
+                    {
+                        playerState = PlayerState.Right;
+                    }
+                    freezeTimer.Reset();
+                }
+            }
 
             //update prevKB
             prevKB = currKB;
@@ -200,6 +237,8 @@ namespace Opossum_Game
         public void Update(GameTime gameTime)
         {
             ProcessInput();
+
+            
         }
 
         /// <summary>
@@ -263,6 +302,13 @@ namespace Opossum_Game
                             color);
                         break; */
 
+                    case PlayerState.PlayDead:
+                        sb.Draw(
+                            pSprite,
+                            playerRectangle,
+                            color);
+                        break;
+                    
                     default:
                         sb.Draw(
                             pSprite,
@@ -290,6 +336,19 @@ namespace Opossum_Game
                 return false;
             }
 
+        }
+
+        public void LightIntersects(Rectangle enemy)
+        {
+            if (Rect.Intersects(enemy))
+            {
+                if (playerState != PlayerState.PlayDead)
+                {
+                    prevState = playerState;
+                }
+                
+                playerState = PlayerState.PlayDead;
+            }
         }
     }
 }

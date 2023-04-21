@@ -590,9 +590,12 @@ namespace Opossum_Game
                             // determine enemy behavior
                             foreach (Enemy e in enemyList)
                             {
-                                //e.enemyObstacleCollision(obstaclesList);
+                                e.EnemyObstacleCollision(obstaclesList);
                                 e.LightIntersects(player.Rect);
+                                player.LightIntersects(e.Rect);
                             }
+
+                            
 
                             //this method is to adjust the player's position with an
                             //    non-overlappable object 
