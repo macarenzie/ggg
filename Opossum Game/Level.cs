@@ -207,7 +207,6 @@ namespace Opossum_Game
                             int.Parse(objectData[0]) * 90 + 15,
                             enemyTexture.Width / 6,
                             enemyTexture.Height / 6), 
-                        new Rectangle(),    // light
                         Status.Left);    // direction
                     }
                     else
@@ -219,7 +218,6 @@ namespace Opossum_Game
                             int.Parse(objectData[0]) * 90 + 15,
                             enemyTexture.Width / 6,
                             enemyTexture.Height / 6),
-                        new Rectangle(),    // light
                         Status.Right);    // direction
                     }
                     

@@ -33,7 +33,6 @@ namespace Opossum_Game
         private Rectangle position;
         private Status currentDirection;
         private Status previousDirection;
-        private Rectangle lightRectangle;
         private Stopwatch freezeTimer;
 
         /// <summary>
@@ -69,12 +68,11 @@ namespace Opossum_Game
         /// <param name="position">position and size of enemy</param>
         /// <param name="currentDirection">current direction the enemy is moving in</param>
         /// <param name="lightRectangle">dimensions of the enemy light</param>
-        public Enemy(Texture2D texture, Rectangle position, Rectangle lightRectangle, Status currentDirection)
+        public Enemy(Texture2D texture, Rectangle position, Status currentDirection)
         {
             this.texture = texture;
             this.position = position;
             this.currentDirection = currentDirection;
-            this.lightRectangle = lightRectangle;
             freezeTimer = new Stopwatch();
         }
 
@@ -201,7 +199,7 @@ namespace Opossum_Game
         /// <returns>True if light intersects, otherwise false.</returns>
         public void LightIntersects(Rectangle player)
         {
-            if (lightRectangle.Intersects(player)) 
+            if (Rect.Intersects(player)) 
             {
                 //Records last direction the enemy was moving and sets to pause state
                 previousDirection = currentDirection;
