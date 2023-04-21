@@ -551,6 +551,8 @@ namespace Opossum_Game
                         if (timer > 0 && foodCollected != 0 && levelCount < lvls.Count)
                         {
                             player.Update(gameTime);
+
+                            //enemy update loop
                             foreach (Enemy e in enemyList)
                             {
                                 e.Update(gameTime);
