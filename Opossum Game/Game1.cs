@@ -906,7 +906,8 @@ namespace Opossum_Game
 
                 if (collide && 
                     (SingleKeyPress(Keys.LeftShift, kbstate, previousKbState) 
-                    || SingleKeyPress(Keys.RightShift, kbstate, previousKbState)))
+                    || SingleKeyPress(Keys.RightShift, kbstate, previousKbState))
+                    && player.PlayerState != PlayerState.PlayDead)
                 {
                     collectiblesList.Remove(collectiblesList[i]);
                     foodLeft--;

@@ -100,6 +100,14 @@ namespace Opossum_Game
             set { isImmune = value; }
         }
 
+        /// <summary>
+        /// Returns the current state of the player
+        /// </summary>
+        public PlayerState PlayerState
+        {
+            get { return playerState; }
+        }
+
         //constructor
         /// <summary>
         /// Creates what the player will control.
