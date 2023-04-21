@@ -138,6 +138,11 @@ namespace Opossum_Game
                     playerState = PlayerState.Back;
                     playerRectangle.Y += 5;
                     //sideRectangle.Y += 5;
+
+                    if (playerRectangle.Y + playerRectangle.Height >= 900)
+                    {
+                        playerRectangle.Y = 900 - playerRectangle.Height;
+                    }
                 }
 
                 //A pressed
@@ -146,6 +151,10 @@ namespace Opossum_Game
                     playerState = PlayerState.Left;
                     playerRectangle.X -= 5;
                     //sideRectangle.X -= 5;
+                    if (playerRectangle.X <= 0)
+                    {
+                        playerRectangle.X = 0;
+                    }
                 }
 
                 //D pressed 
@@ -153,7 +162,12 @@ namespace Opossum_Game
                 {
                     playerState = PlayerState.Right;
                     playerRectangle.X += 5;
-                   // sideRectangle.X += 5;
+                    // sideRectangle.X += 5;
+
+                    if (playerRectangle.X + playerRectangle.Width >= 900)
+                    {
+                        playerRectangle.X = 900 - playerRectangle.Width;
+                    }
                 }
 
                 //Adjusting for diagonal movement. Decreases speed in the Y direction
