@@ -602,13 +602,48 @@ namespace Opossum_Game
                             CollectibleCollision();
                             #endregion
                         }
+                        else if (timer > 0 && foodCollected == 0 && levelCount < lvls.Count)
+                        {
+                            foreach (Enemy e in enemyList)
+                            {
+                                e.Update(gameTime);
+                                //e.enemyObstacleCollision(obstaclesList);
+                                e.LightIntersects(player.Rect);
+                            }
 
+                            #region Collisions
+                            //this method is to adjust the player's position with an
+                            //    non-overlappable object 
+                            if (!player.IsHiding)
+                            {
+                                CheckObstacleCollision(player, obstaclesList);    //edge collision
+                            }
+
+                            //cleaner hide loop
+                            foreach (Obstacle obstacle in obstaclesList)
+                            {
+                                //check for hide attempts
+                                if (!player.IsHiding)
+                                {
+                                    Hide(previousKbState, kbstate, obstacle, player);
+                                }
+                                //check for unhiding attempts
+                                else
+                                {
+                                    UnHide(previousKbState, kbstate, obstacle, player);
+                                }
+                            }
+
+                            //collectible collision
+                            CollectibleCollision();
+                            #endregion
+                        }
                         //these two are the win or lose conditions
-                        else if ((timer <= 0 || foodCollected != 1) && levelCount == lvls.Count)
+                        else if ((timer <= 0 || foodCollected != 0) && levelCount == lvls.Count)
                         {
                             currentState = GameState.GameLose;
                         }
-                        else if (timer >= 0 && foodCollected == 1 && levelCount == lvls.Count)
+                        else if (timer >= 0 && foodCollected == 0 && levelCount == lvls.Count)
                         {
                             currentState = GameState.GameWin;
                         }
