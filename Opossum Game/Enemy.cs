@@ -84,7 +84,7 @@ namespace Opossum_Game
                 //Moves to the left until the left edge is hit by the left edge
                 case Status.Right:
                     position.X -= 3;
-                    //lightRectangle.X -= 3;
+                    
                     if (position.X < 0)
                     {
                         currentDirection = Status.Left;
@@ -94,7 +94,7 @@ namespace Opossum_Game
                 //Moves to the right until the right edge is hit by the right edge
                 case Status.Left:
                     position.X += 3;
-                    //lightRectangle.X += 3;
+                    
                     if (position.X + position.Width > 900)
                     {
                         currentDirection = Status.Right;
@@ -105,28 +105,29 @@ namespace Opossum_Game
                 //TODO: adjust the freezeTimer value once we have a set time for player freeze
                 case Status.Pause:
 
-                    //Timer lasts for 5 seconds
-                    freezeTimer.Start();
+                   //Timer lasts for 3 seconds
+                   freezeTimer.Start();
 
-                    //Changes the movement direction to be opposite what the last movement direction was.
-                    //Also resets stopwatch for next use.
-                    if (freezeTimer.ElapsedMilliseconds > 5000)
-                    {
-                        freezeTimer.Stop();
-                        freezeTimer.Reset();
-                        
-                        //Checks what last movement direction was
-                        if (previousDirection == Status.Left) 
-                        {
-                            currentDirection = Status.Right;
-                        }
-                        else if (previousDirection == Status.Right)
-                        {
-                            currentDirection = Status.Left;
-                        }
-                    }
-                    break;
+                   //Changes the movement direction to be opposite what the last movement direction was.
+                   //Also resets stopwatch for next use.
+                   if (freezeTimer.Elapsed.TotalSeconds > 3)
+                   {
+                      freezeTimer.Stop();
+
+                      //Checks what last movement direction was
+                      if (previousDirection == Status.Left)
+                      {
+                          currentDirection = Status.Right;
+                      }
+                      else if (previousDirection == Status.Right)
+                      {
+                          currentDirection = Status.Left;
+                      }
+                      freezeTimer.Reset();
+                   }
+                   break; 
             }
+            
         }
 
         /// <summary>
@@ -138,11 +139,13 @@ namespace Opossum_Game
             switch(currentDirection)
             {
                 case Status.Left:
-                    sb.Draw(texture, position, color);
+                    sb.Draw(
+                        texture, 
+                        position, 
+                        color);
                     break;
 
                 case Status.Right:
-                    //sb.Draw(texture, position, color;
                     sb.Draw(
                         texture, 
                         position, 
@@ -152,6 +155,31 @@ namespace Opossum_Game
                         new Vector2(), 
                         SpriteEffects.FlipHorizontally, 
                         1.0f);
+                    break;
+
+                //Draws enemy in the direction of movement before pause
+                case Status.Pause:
+
+                    //Checks for recorded previous direction
+                    if (previousDirection == Status.Left)
+                    {
+                        sb.Draw(
+                            texture, 
+                            position, 
+                            color);
+                    }
+                    else if (previousDirection == Status.Right)
+                    {
+                        sb.Draw(
+                        texture,
+                        position,
+                        null,
+                        color,
+                        0.0f,
+                        new Vector2(),
+                        SpriteEffects.FlipHorizontally,
+                        1.0f);
+                    }
                     break;
             }
                 
@@ -202,8 +230,13 @@ namespace Opossum_Game
         {
             if (Rect.Intersects(player)) 
             {
-                //Records last direction the enemy was moving and sets to pause state
-                previousDirection = currentDirection;
+                //Records last direction the enemy was moving (if not paused)
+                if (currentDirection != Status.Pause)
+                {
+                    previousDirection = currentDirection;
+                }
+
+                //Sets current direction to pause
                 currentDirection = Status.Pause;
             } 
         }
