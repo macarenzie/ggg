@@ -135,6 +135,12 @@ namespace Opossum_Game
         // enemy
         private Texture2D enemyTexture;
 
+        // play again
+        private Texture2D playAgainBase;
+        private Texture2D playAgainRollOver;
+        private Button playAgainButton;
+        private Button exitWinButton;
+
         #region Level
         // level lists
         private List<Collectible> collectiblesList;
@@ -314,6 +320,7 @@ namespace Opossum_Game
                 exitRollOver
                 );
 
+            //x mark from options
             xMarkTexture =
                 Content.Load<Texture2D>("xMark");
             xMarkButton = new Button(
@@ -326,6 +333,34 @@ namespace Opossum_Game
                     ),
                 xMarkTexture
                 );
+
+            //win play again
+            playAgainBase =
+                Content.Load<Texture2D>("playAgainBase");
+            playAgainRollOver =
+                Content.Load<Texture2D>("playAgainRollOver");
+            playAgainButton = new Button(
+                playAgainBase,
+                new Rectangle(
+                    (windowWidth / 2) - (optionsButtonBase.Width / 4) - 200,
+                    150,
+                    optionsButtonBase.Width / 2,
+                    optionsButtonBase.Height / 2
+                    ),
+                playAgainRollOver
+                );
+
+            //win exit
+            exitWinButton = new Button(
+                exitBase,
+                new Rectangle(
+                    (windowWidth / 2) - (optionsButtonBase.Width / 4) + 200,
+                    150,
+                    optionsButtonBase.Width / 2,
+                    optionsButtonBase.Height / 2
+                    ),
+                exitRollOver
+    );
 
             #endregion
 
@@ -357,9 +392,10 @@ namespace Opossum_Game
             menuScreen = Content.Load<Texture2D>("startScreen");
 
             //optionScreen
-            optionScreen = Content.Load<Texture2D>("optionsScreenFixed");
+            optionScreen = Content.Load<Texture2D>("optionsScreenFixedAgain");
 
             //winScreen
+            winScreen = Content.Load<Texture2D>("winScreen");
 
             //loseScreen
             loseScreen = Content.Load<Texture2D>("gameOverScreen");
@@ -520,7 +556,15 @@ namespace Opossum_Game
                         {
                             foreach (Obstacle obstacle in obstaclesList)
                             {
-                                Hide(previousKbState, kbstate, obstacle, player);
+                                if (player.IsHiding)
+                                {
+                                    UnHide(previousKbState, kbstate, obstacle, player);
+
+                                }
+                                else
+                                {
+                                    Hide(previousKbState, kbstate, obstacle, player);
+                                }
                             }
                         }
 
@@ -583,6 +627,10 @@ namespace Opossum_Game
                         {
                             currentState = GameState.GameWin;
                         }
+                    }
+                    if (SingleKeyPress(Keys.F, kbstate, previousKbState))
+                    {
+                        currentState = GameState.GameWin;
                     }
 
                     break;
@@ -785,7 +833,10 @@ namespace Opossum_Game
                     break;
                 case GameState.GameWin:
 
-                    //_spriteBatch.Draw(winScreen, new Rectangle(0, 0, 900, 900), Color.White);
+                    _spriteBatch.Draw(winScreen, new Rectangle(0, 0, 900, 900), Color.White);
+
+                    playAgainButton.Draw(_spriteBatch);
+                    exitWinButton.Draw(_spriteBatch);
 
                     //TEMP
                     _spriteBatch.DrawString(
@@ -923,10 +974,13 @@ namespace Opossum_Game
         }
 
 
+
+
         /// <summary>
         /// Checking if another object is in range
         /// Used to determine if a food collectible is in range
         /// or a hiding spot is in range to collect or use
+        /// Worked on by Jamie Zheng
         /// </summary>
         /// <param name="otherObject"></param>
         /// <returns>A bool on is the object is in range. In draw 
@@ -966,6 +1020,7 @@ namespace Opossum_Game
         /// Will change the player's position to be overlapping with the hideable obstacle
         /// Check if IsInRange is true
         /// Press and release space bar. 
+        /// Worked on by Jamie Zheng
         /// </summary>
         /// <param name="prevState">previous keyboard state</param>
         /// <param name="curState">current keyboard state</param>
@@ -993,6 +1048,8 @@ namespace Opossum_Game
 
         /// <summary>
         /// Press either WASD to exit the object the player was previously hiding in. 
+        /// Assuming there is no obstacle blocking the player's path. Then do no move
+        /// Written by Jamie Zheng
         /// </summary>
         /// <param name="prevState">previous keyboard state</param>
         /// <param name="curState">current keyboard state</param>
