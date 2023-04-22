@@ -1179,6 +1179,11 @@ namespace Opossum_Game
             {
                 lvls[i].LoadLevel(levelStrings[i]);
             }
+
+            foreach (Level l in lvls)
+            {
+                foodLeft += l.CollectiblesList.Count;
+            }
         }
     }
 }
