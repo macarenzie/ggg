@@ -120,9 +120,11 @@ namespace Opossum_Game
         private Player player;
         #endregion
 
-        #region KBState
+        #region keyboard and mouse states
         private KeyboardState kbstate;
         private KeyboardState previousKbState;
+        private MouseState mouseState;
+        private MouseState previousMState;
         #endregion
 
         // font fields
@@ -145,12 +147,6 @@ namespace Opossum_Game
 
         // enemy
         private Texture2D enemyTexture;
-
-        // play again
-        private Texture2D playAgainBase;
-        private Texture2D playAgainRollOver;
-        private Button playAgainButton;
-        private Button exitWinButton;
 
         // instructions pages
         private List<Texture2D> instructionsPage;
@@ -511,6 +507,7 @@ namespace Opossum_Game
                 Exit();
 
             kbstate = Keyboard.GetState();
+            mouseState = Mouse.GetState();
 
             switch (currentState)
             {
@@ -558,37 +555,50 @@ namespace Opossum_Game
                         currentState = GameState.Menu;
                     }
                     break;
-                // INSTRUCTIONS -------------------------------------------------------------------
+                #endregion
+                #region INSTRUCTIONS SCREEN -------------------------------------------------------
                 case GameState.Instructions:
+                   
+                   // advance to the next page of the instructions
                    if (nextButton.MouseClick() && nextButton.MouseContains())
                    {
-                        currentPage++;
+                       // increase the current page only by one
+                       if (mouseState.LeftButton == ButtonState.Pressed 
+                           && previousMState.LeftButton != ButtonState.Pressed)
+                       {
+                           currentPage++;
+                       }
 
-                        if (currentPage >= 4)
-                        {
-                            
-                            //resetting the game
-                            timer = 100;
-                            NextLevel();
-                            currentState = GameState.Game;
+                       if (currentPage >= 4)
+                       {
+                           
+                           //resetting the game
+                           timer = 100;
+                           NextLevel();
+                           currentState = GameState.Game;
 
-                        }
-                    
+                       }
+                   
                    }
+
+                   // go back a page in the instructions
                    if (backButton.MouseClick() && backButton.MouseContains())
                    {
+                        // decrease the current page only by one
+                        if (mouseState.LeftButton == ButtonState.Pressed
+                            && previousMState.LeftButton != ButtonState.Pressed)
+                        {
+                            currentPage--;
+                        }
+
+                        // take the player back to the main menu
                         if (currentPage == 0)
                         {
                             currentState = GameState.Menu;
                         }
-                        else
-                        {
-                            currentPage--;
-                        }
                    }
 
                     break;
-                // GAMEPLAY SCREEN ----------------------------------------------------------------
                 #endregion
                 #region GAMEPLAY SCREEN ------------------------------------------------------------
                 case GameState.Game:
@@ -763,8 +773,9 @@ namespace Opossum_Game
                     #endregion
             }
 
-            // update the previous keyboard state
+            // update the previous keyboard and mouse state
             previousKbState = kbstate;
+            previousMState = mouseState;
 
             base.Update(gameTime);
         }
