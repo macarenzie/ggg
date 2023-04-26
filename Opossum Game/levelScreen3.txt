@@ -1,6 +1,6 @@
 9,1,player
 0,0,obstacle,f
-0,1,obstacle,f
+0,1,obstacle,f   
 0,2,obstacle,f
 0,3,obstacle,f
 0,4,obstacle,f
@@ -41,7 +41,7 @@
 8,1,obstacle,t
 8,2,obstacle,f
 8,3,obstacle,f
-8,6,obstacle,t
+8,6,obstacle,f
 8,7,obstacle,f
 8,8,obstacle,f
 8,9,obstacle,f
