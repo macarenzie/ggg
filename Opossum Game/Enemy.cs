@@ -12,6 +12,9 @@ using Microsoft.Xna.Framework.Input;
 namespace Opossum_Game
 {
     /// <summary>
+    /// Class for enemy objects which interact with the player and obstacles.
+    /// Move back and forth, changing direction when hitting an obstacle or player.
+    /// Pauses before flipping when colliding with player.
     /// Worked on by: McKenzie Lam, Julia Rissberger, Hui Lin Khouw
     /// </summary>
 
@@ -132,7 +135,6 @@ namespace Opossum_Game
                     break;
 
                 //Occurs when an enemy collides with the player. Freezes for a short time and then flips direction.
-                //TODO: adjust the freezeTimer value once we have a set time for player freeze
                 case Status.Pause:
 
                    //Timer lasts for 3 seconds
@@ -144,7 +146,7 @@ namespace Opossum_Game
                    {
                       freezeTimer.Stop();
 
-                      //Checks what last movement direction was
+                      //Checks what last movement direction was, flips the enemy
                       if (previousDirection == Status.Left)
                       {
                           currentDirection = Status.Right;
@@ -163,11 +165,11 @@ namespace Opossum_Game
         /// <summary>
         /// Draws enemy in the direction they are currently facing based on the direction enum.
         /// </summary>
-        //TODO: Implement texture and texture flipping. Currently draws the same each direction.
         public void Draw(SpriteBatch sb, Color color)
         {
             switch(currentDirection)
             {
+                //Facing left
                 case Status.Left:
                     sb.Draw(
                         texture, 
@@ -175,6 +177,7 @@ namespace Opossum_Game
                         color);
                     break;
 
+                //Facing right(flipped sprite)
                 case Status.Right:
                     sb.Draw(
                         texture, 
@@ -223,6 +226,7 @@ namespace Opossum_Game
         /// <param name="obstacles"> List of obstacles currently on screen. </param>
         public void EnemyObstacleCollision (List<Obstacle> obstacles)
         {
+            //Default value for collision
             bool isColliding = false;
 
             //Going through each obstacle in the list of obstacles to check for intersection
@@ -277,8 +281,6 @@ namespace Opossum_Game
                 }
             }
 
-
-
             //If collision is true, changes the current direction of the enemy. 
             if (isColliding)
             {
@@ -291,17 +293,14 @@ namespace Opossum_Game
                     currentDirection = Status.Left;
                 }
             }
-
-            
         }
 
         /// <summary>
-        /// Checks if the player hits the rectangle that is the light.
-        /// Also puts the enemy into the pause state
+        /// Checks if the enemy intersects with the player. 
+        /// Sets the enemy state to pause if collision is detected.
         /// </summary>
-        /// <param name="player">Player or other object that would interact with the light</param>
-        /// <returns>True if light intersects, otherwise false.</returns>
-        public void LightIntersects(Rectangle player)
+        /// <param name="player">Player rectangle</param>
+        public void intersectsPlayer(Rectangle player)
         {
             if (Rect.Intersects(player)) 
             {

@@ -534,7 +534,7 @@ namespace Opossum_Game
                     if (debug)
                     {
                         //if the game is still going w/o timer
-                        if (foodLeft != 0 && levelCount != lvls.Count)
+                        if ((foodLeft != 0 || foodLeft == 0) && levelCount != lvls.Count)
                         {
                             // determine if the player wants to hide
                             foreach (Obstacle obstacle in obstaclesList)
@@ -556,12 +556,6 @@ namespace Opossum_Game
                                 e.EnemyObstacleCollision(obstaclesList);
                             }
                         }
-
-                        // win/lose conditions w/o timer
-                        else if (foodLeft != 0 && levelCount == lvls.Count)
-                        {
-                            currentState = GameState.GameLose;
-                        }
                         else if (foodLeft == 0 && levelCount == lvls.Count)
                         {
                             currentState = GameState.GameWin;
@@ -574,7 +568,7 @@ namespace Opossum_Game
                         timer -= gameTime.ElapsedGameTime.TotalSeconds;
 
                         // win/lose conditions
-                        if (timer <= 0 && foodLeft != 0 && levelCount < lvls.Count)
+                        if (timer <= 0 && (foodLeft != 0 || foodLeft == 0) && levelCount <= lvls.Count)
                         {
                             currentState = GameState.GameLose;
                         }
@@ -606,8 +600,8 @@ namespace Opossum_Game
                                     //continue checking collisions
                                     if (player.IndividualCollision(e.Rect))
                                     {
-                                        e.LightIntersects(player.Rect);
-                                        player.LightIntersects(e.Rect);
+                                        e.intersectsPlayer(player.Rect);
+                                        player.intersectsEnemy(e.Rect);
                                     }
                                     player.IsImmune = false;
 
