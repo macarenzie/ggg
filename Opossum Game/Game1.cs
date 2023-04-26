@@ -152,12 +152,6 @@ namespace Opossum_Game
         //Texture of enemies
         private Texture2D enemyTexture;
 
-        // play again
-        private Texture2D playAgainBase;
-        private Texture2D playAgainRollOver;
-        private Button playAgainButton;
-        private Button exitWinButton;
-
         // instructions pages
         private List<Texture2D> instructionsPage;
         private Texture2D instructionPage1;
@@ -770,18 +764,20 @@ namespace Opossum_Game
                 #region GAME WIN SCREEN -----------------------------------------------------------
                 case GameState.GameWin:
                     
-                    //Moves to menu
+                    //Restarts the game
                     if (playAgainButton.MouseClick() && playAgainButton.MouseContains())
                     {
                         ResetLevel();
                         ResetGame();
-                        currentState = GameState.Menu;
+                        currentState = GameState.Game;
                     }
 
-                    //to exit the game from gameWin
+                    //Returns to main menu
                     if (exitWinButton.MouseClick() && exitWinButton.MouseContains())
                     {
-                        Exit();
+                        ResetLevel();
+                        ResetGame();
+                        currentState = GameState.Menu;
                     }
                     break;
                     #endregion
