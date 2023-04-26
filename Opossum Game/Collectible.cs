@@ -17,6 +17,7 @@ namespace Opossum_Game
     /// </summary>
     internal class Collectible : InteractibleObject, IGameObject
     {
+        //Fields
         Texture2D texture;
         Rectangle position;
 
