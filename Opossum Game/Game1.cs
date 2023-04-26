@@ -744,7 +744,7 @@ namespace Opossum_Game
                         {
                             if (IsInRange(obstacle.Rect, player) && obstacle.IsHideable)
                             {
-                                obstacle.Draw(_spriteBatch, Color.LightSteelBlue);
+                                obstacle.Draw(_spriteBatch, Color.DarkGoldenrod);
                             }
                             else
                             {
@@ -799,7 +799,7 @@ namespace Opossum_Game
                         {
                             if (IsInRange(obstacle.Rect, player) && obstacle.IsHideable)
                             {
-                                obstacle.Draw(_spriteBatch, Color.LightSteelBlue);
+                                obstacle.Draw(_spriteBatch, Color.DarkGoldenrod);
                             }
                             else
                             {
