@@ -1045,7 +1045,8 @@ namespace Opossum_Game
             if (IsInRange(otherObstacle.Rect, player)               //obstacle in range
                 && otherObstacle.IsHideable                         //check for hideability
                 && !player.IsHiding                                 //is player not hiding
-                && SingleKeyPress(Keys.Space, curState, prevState)) //check for space bar 
+                && SingleKeyPress(Keys.Space, curState, prevState)  //check for space bar
+                && player.PlayerState != PlayerState.PlayDead)      //Player isn't frozen
             {
                 //Centers the player with the obstacle
                 player.X = (otherObstacle.Rect.X + (otherObstacle.Rect.Width / 2))
