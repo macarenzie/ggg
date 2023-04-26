@@ -1092,7 +1092,7 @@ namespace Opossum_Game
                 //distance needs to be less than or equal to when they touch + 50 pixels
                 (dx + 50) >= Math.Abs(pMidX - oMidX)
                 && (dy + 50) >= Math.Abs(pMidY - oMidY)
-                )
+                && !player.IsHiding)
             {
                 return true;
             }
@@ -1165,7 +1165,7 @@ namespace Opossum_Game
                         player.IsHiding = false; //change bool
 
                         //position changing logic
-                        player.Y -= player.Rect.Width;
+                        player.Y -= otherObstacle.Rect.Width;
                     }
 
                 }
@@ -1179,7 +1179,7 @@ namespace Opossum_Game
                     {
                         player.IsHiding = false;
 
-                        player.X -= player.Rect.Width;
+                        player.X -= otherObstacle.Rect.Width;
                     }
                 }
 
@@ -1192,7 +1192,7 @@ namespace Opossum_Game
                     {
                         player.IsHiding = false;
 
-                        player.Y += player.Rect.Height;
+                        player.Y += otherObstacle.Rect.Height;
                     }
                 }
 
@@ -1203,7 +1203,7 @@ namespace Opossum_Game
 
                     if (!potentialPlayer.Intersects(otherObstacle.Rect))
                     {
-                        player.X += player.Rect.Height;
+                        player.X += otherObstacle.Rect.Height;
                         player.IsHiding = false;
                     }
                 }
