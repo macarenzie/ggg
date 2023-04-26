@@ -1171,7 +1171,7 @@ namespace Opossum_Game
                 }
 
                 //A; Left Direction
-                if (SingleKeyPress(Keys.A, curState, prevState))
+                else if (SingleKeyPress(Keys.A, curState, prevState))
                 {
                     potentialPlayer.X -= potentialPlayer.Width;
 
@@ -1184,7 +1184,7 @@ namespace Opossum_Game
                 }
 
                 //S; Down Direction
-                if (SingleKeyPress(Keys.S, curState, prevState))
+                else if (SingleKeyPress(Keys.S, curState, prevState))
                 {
                     potentialPlayer.Y += potentialPlayer.Height;
 
@@ -1197,7 +1197,7 @@ namespace Opossum_Game
                 }
 
                 //D; Right Direction
-                if (SingleKeyPress(Keys.D, curState, prevState))
+                else if (SingleKeyPress(Keys.D, curState, prevState))
                 {
                     potentialPlayer.X += potentialPlayer.Width;
 
