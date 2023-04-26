@@ -626,8 +626,8 @@ namespace Opossum_Game
                                     //continue checking collisions
                                     if (player.IndividualCollision(e.Rect))
                                     {
-                                        e.LightIntersects(player.Rect);
-                                        player.LightIntersects(e.Rect);
+                                        e.intersectsPlayer(player.Rect);
+                                        player.intersectsEnemy(e.Rect);
                                     }
                                     player.IsImmune = false;
 
