@@ -31,7 +31,6 @@ namespace Opossum_Game
         private List<Texture2D> collectibleTextures;
         private Texture2D obstacleTexture;
         private Texture2D playerTexture;
-        //private Texture2D playerTextureSide;
         private Texture2D enemyTexture;
 
         // level tracking
@@ -39,7 +38,7 @@ namespace Opossum_Game
         private List<string> levels;
 
         /// <summary>
-        /// 
+        /// gets the collectible list
         /// </summary>
         public List<Collectible> CollectiblesList
         {
@@ -50,7 +49,7 @@ namespace Opossum_Game
         }
 
         /// <summary>
-        /// 
+        /// gets the obstacle list
         /// </summary>
         public List<Obstacle> ObstacleList
         {
@@ -61,7 +60,7 @@ namespace Opossum_Game
         }
 
         /// <summary>
-        /// 
+        /// gets the enemy
         /// </summary>
         public List<Enemy> EnemyList
         {
@@ -72,7 +71,7 @@ namespace Opossum_Game
         }
 
         /// <summary>
-        /// 
+        /// gets the player
         /// </summary>
         public Player Player
         {
@@ -82,22 +81,8 @@ namespace Opossum_Game
             }
         }
 
-        public int LevelNum
-        {
-            get
-            {
-                return levelNum;
-            }
-            set { levelNum = value; }
-        }
-
-        public List<string> Levels
-        {
-            set { levels = value; }
-        }
-
         /// <summary>
-        /// 
+        /// initializes a level object
         /// </summary>
         /// <param name="collectibleTextures"></param>
         /// <param name="obstacleTexture"></param>
@@ -109,7 +94,6 @@ namespace Opossum_Game
             Texture2D obstacleTexture, 
             Texture2D playerTexture, 
             Texture2D enemyTexture)
-            //Texture2D playerTextureSide)
         {
             // initialize each game object list
             collectiblesList = new List<Collectible>();
@@ -120,7 +104,6 @@ namespace Opossum_Game
             this.collectibleTextures = collectibleTextures;
             this.obstacleTexture = obstacleTexture;
             this.playerTexture = playerTexture;
-            //this.playerTextureSide = playerTextureSide;
             this.enemyTexture = enemyTexture;
 
             // initialize level tracking
@@ -231,13 +214,7 @@ namespace Opossum_Game
                             int.Parse(objectData[1]) * 90,
                             int.Parse(objectData[0]) * 90,
                             playerTexture.Width / 5, 
-                            playerTexture.Height / 5)
-                        //playerTextureSide,
-                        /*new Rectangle(
-                            int.Parse(objectData[1]) * 90,
-                            int.Parse(objectData[0]) * 90,
-                            playerTextureSide.Width / 5,
-                            playerTextureSide.Height / 5)*/);
+                            playerTexture.Height / 5));
                 }
                
             }
