@@ -27,7 +27,8 @@ namespace Opossum_Game
         Game,
         GameLose,
         GameWin,
-        Debug
+        Debug,
+        Instructions
     }
 
     //the state of the player
@@ -93,6 +94,12 @@ namespace Opossum_Game
         private Button xMarkButton;
         private Button xMarkButton2;
 
+        //next and back buttons
+        private Texture2D nextBase;
+        private Button nextButton;
+        private Texture2D backBase;
+        private Button backButton;
+
         // play again
         private Texture2D playAgainBase;
         private Texture2D playAgainRollOver;
@@ -139,6 +146,15 @@ namespace Opossum_Game
 
         // enemy
         private Texture2D enemyTexture;
+
+        // instructions pages
+        private List<Texture2D> instructionsPage;
+        private Texture2D instructionPage1;
+        private Texture2D instructionPage2;
+        private Texture2D instructionPage3;
+        private Texture2D instructionPage4;
+        private Texture2D instructionPage5;
+        private int currentPage;
 
         #region Level
         // level lists
@@ -192,6 +208,9 @@ namespace Opossum_Game
 
             // debug mode
             debug = false;
+
+            // instructions
+            instructionsPage = new List<Texture2D>();
 
             // initialize the collectible texture list
             collectibleTextures = new List<Texture2D>();
@@ -373,7 +392,33 @@ namespace Opossum_Game
                     optionsButtonBase.Height / 2
                     ),
                 exitRollOver
-    );
+                );
+
+            //next button
+            nextBase =
+                Content.Load<Texture2D>("nextBase");
+            backBase =
+                Content.Load<Texture2D>("backBase");
+            nextButton = new Button(
+                nextBase,
+                new Rectangle(
+                    (windowWidth / 2) - (optionsButtonBase.Width / 4) + 200,
+                    600,
+                    optionsButtonBase.Width / 2,
+                    optionsButtonBase.Height / 2
+                    ),
+                nextBase
+                );
+            backButton = new Button(
+                backBase,
+                new Rectangle(
+                    (windowWidth / 2) - (optionsButtonBase.Width / 4) - 200,
+                    600,
+                    optionsButtonBase.Width / 2,
+                    optionsButtonBase.Height / 2
+                    ),
+                backBase
+                );
 
             #endregion
 
@@ -410,6 +455,19 @@ namespace Opossum_Game
             //loseScreen
             loseScreen = Content.Load<Texture2D>("gameOverScreen");
             #endregion
+
+            // instruction pages
+            instructionPage1 = Content.Load<Texture2D>("instructionPage1");
+            instructionPage2 = Content.Load<Texture2D>("instructionPage2");
+            instructionPage3 = Content.Load<Texture2D>("instructionPage3");
+            instructionPage4 = Content.Load<Texture2D>("instructionPage4");
+            instructionPage5 = Content.Load<Texture2D>("instructionPage5");
+
+            instructionsPage.Add(instructionPage1);
+            instructionsPage.Add(instructionPage2);
+            instructionsPage.Add(instructionPage3);
+            instructionsPage.Add(instructionPage4);
+            instructionsPage.Add(instructionPage5);
 
             // temporary font
             comicsans30 = Content.Load<SpriteFont>("comicsans30");
@@ -468,6 +526,10 @@ namespace Opossum_Game
                     // start the game
                     if (startButton.MouseClick() && startButton.MouseContains())
                     {
+                        currentState = GameState.Instructions;
+                        // reset instructions
+                        currentPage = 0;
+
                         timer = 100;
                         NextLevel();
                         currentState = GameState.Game;
@@ -505,6 +567,37 @@ namespace Opossum_Game
                         currentState = GameState.Menu;
                     }
                     break;
+                // INSTRUCTIONS -------------------------------------------------------------------
+                case GameState.Instructions:
+                   if (nextButton.MouseClick() && nextButton.MouseContains())
+                   {
+                        currentPage++;
+
+                        if (currentPage >= 4)
+                        {
+                            
+                            //resetting the game
+                            timer = 100;
+                            NextLevel();
+                            currentState = GameState.Game;
+
+                        }
+                    
+                   }
+                   if (backButton.MouseClick() && backButton.MouseContains())
+                   {
+                        if (currentPage == 0)
+                        {
+                            currentState = GameState.Menu;
+                        }
+                        else
+                        {
+                            currentPage--;
+                        }
+                   }
+
+                    break;
+                // GAMEPLAY SCREEN ----------------------------------------------------------------
                 #endregion
                 #region GAMEPLAY SCREEN ------------------------------------------------------------
                 case GameState.Game:
@@ -609,8 +702,8 @@ namespace Opossum_Game
                                     //continue checking collisions
                                     if (player.IndividualCollision(e.Rect))
                                     {
-                                        e.LightIntersects(player.Rect);
-                                        player.LightIntersects(e.Rect);
+                                        e.intersectsPlayer(player.Rect);
+                                        player.intersectsEnemy(e.Rect);
                                     }
                                     player.IsImmune = false;
 
@@ -748,6 +841,18 @@ namespace Opossum_Game
                     }
                     */
                     break;
+
+                case GameState.Instructions:
+
+
+                   _spriteBatch.Draw(instructionsPage[currentPage], new Rectangle(0, 0, 900, 900), Color.White);
+                    
+
+                    nextButton.Draw(_spriteBatch);
+                    backButton.Draw(_spriteBatch);
+
+                    break;
+
                 #endregion
                 #region GAMEPLAY SCREEN ------------------------------------------------------------
                 case GameState.Game:
@@ -764,7 +869,7 @@ namespace Opossum_Game
                         {
                             if (IsInRange(obstacle.Rect, player) && obstacle.IsHideable)
                             {
-                                obstacle.Draw(_spriteBatch, Color.LightSteelBlue);
+                                obstacle.Draw(_spriteBatch, Color.DarkGoldenrod);
                             }
                             else
                             {
@@ -819,7 +924,7 @@ namespace Opossum_Game
                         {
                             if (IsInRange(obstacle.Rect, player) && obstacle.IsHideable)
                             {
-                                obstacle.Draw(_spriteBatch, Color.LightSteelBlue);
+                                obstacle.Draw(_spriteBatch, Color.DarkGoldenrod);
                             }
                             else
                             {
@@ -1021,7 +1126,7 @@ namespace Opossum_Game
                 //distance needs to be less than or equal to when they touch + 50 pixels
                 (dx + 50) >= Math.Abs(pMidX - oMidX)
                 && (dy + 50) >= Math.Abs(pMidY - oMidY)
-                )
+                && !player.IsHiding)
             {
                 return true;
             }
@@ -1094,13 +1199,13 @@ namespace Opossum_Game
                         player.IsHiding = false; //change bool
 
                         //position changing logic
-                        player.Y -= player.Rect.Width;
+                        player.Y -= otherObstacle.Rect.Width;
                     }
 
                 }
 
                 //A; Left Direction
-                if (SingleKeyPress(Keys.A, curState, prevState))
+                else if (SingleKeyPress(Keys.A, curState, prevState))
                 {
                     potentialPlayer.X -= potentialPlayer.Width;
 
@@ -1108,12 +1213,12 @@ namespace Opossum_Game
                     {
                         player.IsHiding = false;
 
-                        player.X -= player.Rect.Width;
+                        player.X -= otherObstacle.Rect.Width;
                     }
                 }
 
                 //S; Down Direction
-                if (SingleKeyPress(Keys.S, curState, prevState))
+                else if (SingleKeyPress(Keys.S, curState, prevState))
                 {
                     potentialPlayer.Y += potentialPlayer.Height;
 
@@ -1121,18 +1226,18 @@ namespace Opossum_Game
                     {
                         player.IsHiding = false;
 
-                        player.Y += player.Rect.Height;
+                        player.Y += otherObstacle.Rect.Height;
                     }
                 }
 
                 //D; Right Direction
-                if (SingleKeyPress(Keys.D, curState, prevState))
+                else if (SingleKeyPress(Keys.D, curState, prevState))
                 {
                     potentialPlayer.X += potentialPlayer.Width;
 
                     if (!potentialPlayer.Intersects(otherObstacle.Rect))
                     {
-                        player.X += player.Rect.Height;
+                        player.X += otherObstacle.Rect.Height;
                         player.IsHiding = false;
                     }
                 }

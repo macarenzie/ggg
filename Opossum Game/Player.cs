@@ -14,33 +14,31 @@ namespace Opossum_Game
     /// Will represent the object the player is controlling
     /// Majority Written by: Jamie Zheng
     /// Code optimization / freeze mechanics done by Ariel and McKenzie
+    /// Some edits and optimization done by Julia
     /// </summary>
     internal class Player : IGameObject
     {
-        //fields
-        private Rectangle playerRectangle; //dimensions pSprite dimensions
+        //Player dimensions and sprite
+        private Rectangle playerRectangle; 
         private Texture2D pSprite;
-        //private Texture2D pSpriteSide;
-        //private Rectangle sideRectangle;
 
-        //player movement stuff
+        //States for keyboard input and corresponding player movement
         private KeyboardState currKB;
         private KeyboardState prevKB;
         private PlayerState playerState;
         private PlayerState prevState;
 
-        //hiding stuff
+        //Tracks if the player is currently hiding
         private bool isHiding;
 
-        // immmunity after dead
+        //Immmunity after playdead
         private bool isImmune;
 
-        // freeze timer
+        //Freeze timer
         private Stopwatch freezeTimer;
 
-        //properties
         /// <summary>
-        /// gets and sets the player texture
+        /// Gets and sets the player texture
         /// </summary>
         public Texture2D Sprite
         {
@@ -56,7 +54,7 @@ namespace Opossum_Game
 
 
         /// <summary>
-        /// gets and sets player's x coordinate
+        /// Gets and sets player's x coordinate
         /// </summary>
         public int X
         {
@@ -65,7 +63,7 @@ namespace Opossum_Game
         }
 
         /// <summary>
-        /// gets and sets player's y coordinate
+        /// Gets and sets player's y coordinate
         /// </summary>
         public int Y
         {
@@ -74,9 +72,7 @@ namespace Opossum_Game
         }
 
         /// <summary>
-        /// Returns the Rectangle associated with the Player.
-        /// Get only, although the X and Y properties allow for set
-        /// No reason to change dimensions
+        /// Returns and sets the Rectangle associated with the Player.
         /// </summary>
         public Rectangle Rect
         {
@@ -108,52 +104,38 @@ namespace Opossum_Game
             get { return playerState; }
         }
 
-        //constructor
         /// <summary>
-        /// Creates what the player will control.
+        /// Creates the user-controlled player object
         /// </summary>
         /// <param name="pSprite">The image to represent the player</param>
         /// <param name="pLocation">Dimensions are dependent on pSprite Texture2D</param>
-        public Player(Texture2D pSprite, Rectangle pLocation)//Texture2D pSpriteSide, Rectangle sideRectangle)
+        public Player(Texture2D pSprite, Rectangle pLocation)
         {
-            //foodCollected = 0;
             this.pSprite = pSprite;
             this.playerRectangle = pLocation;
             isHiding = false;
-            //this.pSpriteSide = pSpriteSide;
-            //this.sideRectangle = sideRectangle;
             freezeTimer = new Stopwatch();
             isImmune = false;
         }
 
 
         /// <summary>
-        /// processes EVERYTHING that affects player movement
+        /// Processes keyboard input for player movement
+        /// Also freezes the player when in playdead state
         /// </summary>
-        //TODO: Implement edge collision--block the player from moving off
-        //    screen (left/right edges), or change panel (top/bottom edges) -Julia
-        //DONE^^ See CheckObstacleCollision in Game1 - Jamie
-        //TODO: is playerstate enum going to be used to change the direction the player is drawn in?
-        //Otherwise the only use is for playdead, which could become a bool if that's the only use for the enum. -Julia
         private void ProcessInput()
         {
             //get current kbState
             currKB = Keyboard.GetState();
 
-            //---------------------------------------------------------------
-            //player can only move if they are not hiding in a box
-            //TODO: tentatively adding PlayDead state as a check here.
-            //This means that PlayDead resolution needs to set the player state to movement. -Julia
+            //Moves player in specified direction if not frozen or hiding
             if (!isHiding && playerState != PlayerState.PlayDead)
             {
-                //Player movement. Gives priority of current state to front/back for potential drawing purposes.
-
                 //W pressed
                 if (currKB.IsKeyDown(Keys.W))
                 {
                     playerState = PlayerState.Front;
                     playerRectangle.Y -= 5;
-                    //sideRectangle.Y -= 5;
                 }
 
                 //S pressed 
@@ -161,8 +143,8 @@ namespace Opossum_Game
                 {
                     playerState = PlayerState.Back;
                     playerRectangle.Y += 5;
-                    //sideRectangle.Y += 5;
 
+                    //Prevents player from moving down off the screen
                     if (playerRectangle.Y + playerRectangle.Height >= 900)
                     {
                         playerRectangle.Y = 900 - playerRectangle.Height;
@@ -174,7 +156,8 @@ namespace Opossum_Game
                 {
                     playerState = PlayerState.Left;
                     playerRectangle.X -= 5;
-                    //sideRectangle.X -= 5;
+
+                    //Prevents the player from moving off screen to the left
                     if (playerRectangle.X <= 0)
                     {
                         playerRectangle.X = 0;
@@ -186,8 +169,8 @@ namespace Opossum_Game
                 {
                     playerState = PlayerState.Right;
                     playerRectangle.X += 5;
-                    // sideRectangle.X += 5;
 
+                    //Prevents the player from moving off screen to the right
                     if (playerRectangle.X + playerRectangle.Width >= 900)
                     {
                         playerRectangle.X = 900 - playerRectangle.Width;
@@ -199,18 +182,18 @@ namespace Opossum_Game
                 if (currKB.IsKeyDown(Keys.W) && (currKB.IsKeyDown(Keys.A) || currKB.IsKeyDown(Keys.D)))
                 {
                     playerRectangle.Y += 2;
-                    //sideRectangle.Y += 2;
                 }
 
                 //Diagonally down
                 if (currKB.IsKeyDown(Keys.S) && (currKB.IsKeyDown(Keys.A) || currKB.IsKeyDown(Keys.D)))
                 {
                     playerRectangle.Y -= 2;
-                    //sideRectangle.Y -= 2;
                 }
 
                 
             }
+
+            //Temporarily freezes the player when playing dead
             if (!isHiding && playerState == PlayerState.PlayDead)
             {
                 //Timer lasts for 3 seconds
@@ -220,28 +203,33 @@ namespace Opossum_Game
                 //Also resets stopwatch for next use.
                 if (freezeTimer.Elapsed.TotalSeconds > 3)
                 {
-                    
+                    //Stops the timer
                     freezeTimer.Stop();
+
+                    //Player becomes immune to being frozen for a short time
                     isImmune = true;
-                    // check to see which direction the player wants to go
-                    if (prevState == PlayerState.Front)
+
+                    //Sets player state to the recorded state before play dead
+                    switch (prevState)
                     {
-                        playerState = PlayerState.Front;
-                    }
-                    else if (prevState == PlayerState.Back)
-                    {
-                        playerState = PlayerState.Back;
-                    }
-                    else if (prevState == PlayerState.Left)
-                    {
-                        playerState = PlayerState.Left;
-                    }
-                    else if (prevState == PlayerState.Right)
-                    {
-                        playerState = PlayerState.Right;
+                        case PlayerState.Front:
+                            playerState = PlayerState.Front;
+                            break;
+
+                        case PlayerState.Back:
+                            playerState = PlayerState.Back;
+                            break;
+
+                        case PlayerState.Left:
+                            playerState = PlayerState.Left;
+                            break;
+
+                        case PlayerState.Right:
+                            playerState = PlayerState.Right;
+                            break;
                     }
 
-                    
+                    //Resets the timer used for freezing the player
                     freezeTimer.Reset();
                 }
             }
@@ -251,112 +239,62 @@ namespace Opossum_Game
         }
 
         /// <summary>
-        /// all update stuff wtihin player
+        /// Runs the process input method
         /// </summary>
-        /// <param name="prevState"></param>
-        /// <param name="curState"></param>
         public void Update(GameTime gameTime)
         {
-            ProcessInput();
-
-            
+            ProcessInput();         
         }
 
         /// <summary>
-        /// Draw the player to the screen, highlight if collision with light is true 
-        /// maybe have the light collision be handled in game1. just a thought --Jamie
+        /// Draws the player with a different tint depending on current state
         /// </summary>
-        //Color specifier is a TEMP until playdead is implemented
+        /// <param name="sb">Spritebatch</param>
         public void Draw(SpriteBatch sb, Color color)
         {
             //Only draws the player if they aren't hiding
             if (!isHiding)
             {
-                //Rotates the player sprite based on the direction they are facing.
-                //TODO: this is buggy. Commented out for now--figure it out during milestone 4, or cut.
-                switch (playerState)
+                //Draws the player with a blue tint when frozen
+                if (playerState == PlayerState.PlayDead)
                 {
-                    //Facing right
-                    /*case PlayerState.Right:
-                        sb.Draw(
-                            pSpriteSide,
-                            sideRectangle,
-                            null,
-                            color,
-                            (float)Math.PI/2,
-                            new Vector2(pSpriteSide.Width/2, pSpriteSide.Height/2),
-                            SpriteEffects.None,
-                            0);
-                        break;
-
-                    //Facing left
-                    case PlayerState.Left:
-                        sb.Draw(
-                            pSpriteSide,
-                            sideRectangle,
-                            null,
-                            color,
-                            (float)-Math.PI / 2,
-                            new Vector2(pSpriteSide.Width/2, pSpriteSide.Height/2),
-                            SpriteEffects.None,
-                            0);
-                        break; 
-                    
-                    //Facing back
-                    case PlayerState.Back:
-                        sb.Draw(
-                            pSprite,
-                            playerRectangle,
-                            null,
-                            color,
-                            (float)Math.PI,
-                            new Vector2(pSprite.Width / 2, pSprite.Height / 2),
-                            SpriteEffects.None,
-                            0);
-                        break;
-
-                    //Facing front--default version of sprite
-                    case PlayerState.Front:
-                        sb.Draw(
-                            pSprite,
-                            playerRectangle,
-                            color);
-                        break; */
-
-                    case PlayerState.PlayDead:
-                        sb.Draw(
-                            pSprite,
-                            playerRectangle,
-                            Color.SteelBlue);
-                        break;
-                    
-                    default:
-                        sb.Draw(
-                            pSprite,
-                            playerRectangle,
-                            color);
-                        break; 
+                    sb.Draw
+                        (
+                        pSprite,
+                        playerRectangle,
+                        Color.SteelBlue);
                 }
 
-                if (isImmune)
+                //Draws the player with a yellow tint if immune to being stopped.
+                else if (isImmune)
                 {
                     sb.Draw(
                         pSprite, 
                         playerRectangle,
                         Color.Yellow);
                 }
+
+                //Draws the player normally
+                else
+                {
+                    sb.Draw(
+                        pSprite,
+                        playerRectangle,
+                        color);
+                }
             }
 
         }
 
         /// <summary>
-        /// detects individual collisions with different game objects
+        /// Detects collision with individual obstacles
         /// </summary>
-        /// <param name="obstacle">The rectangle associated w. the object in question</param>
-        /// <returns>whether the player is colliding with another object</returns>
+        /// <param name="obstacle">The rectangle associated with the object in question</param>
+        /// <returns>Collision status--if the player is currently colliding with an object</returns>
         public bool IndividualCollision(Rectangle obstacle)
         {
-            if (playerRectangle.Intersects(obstacle)) //And !isHidden
+            //Checks if the rectangles intersect, returns true if so
+            if (playerRectangle.Intersects(obstacle))
             {
                 return true;
             }
@@ -367,15 +305,23 @@ namespace Opossum_Game
 
         }
 
-        public void LightIntersects(Rectangle enemy)
+        /// <summary>
+        /// Checks if the player has collided with an enemy
+        /// Sets the player to the playdead state if so
+        /// </summary>
+        /// <param name="enemy">Enemy rectangle</param>
+        public void intersectsEnemy(Rectangle enemy)
         {
-            if (Rect.Intersects(enemy))
+            //Checks if the player rectangle intersects the enemy
+            if (playerRectangle.Intersects(enemy))
             {
+                //Updates previous player state 
                 if (playerState != PlayerState.PlayDead)
                 {
                     prevState = playerState;
                 }
                 
+                //Sets current state to play dead
                 playerState = PlayerState.PlayDead;
             }
         }
