@@ -91,6 +91,7 @@ namespace Opossum_Game
         //tiny button for exit
         private Texture2D xMarkTexture;
         private Button xMarkButton;
+        private Button xMarkButton2;
 
         // play again
         private Texture2D playAgainBase;
@@ -335,6 +336,17 @@ namespace Opossum_Game
                 xMarkTexture
                 );
 
+            xMarkButton2 = new Button(
+                xMarkTexture,
+                new Rectangle(
+                    5,
+                    0,
+                    xMarkTexture.Width / 2,
+                    xMarkTexture.Height / 2
+                    ),
+                xMarkTexture
+                );
+
             //win play again
             playAgainBase =
                 Content.Load<Texture2D>("playAgainBase");
@@ -456,10 +468,8 @@ namespace Opossum_Game
                     // start the game
                     if (startButton.MouseClick() && startButton.MouseContains())
                     {
-                        //resetting game
                         timer = 100;
                         NextLevel();
-
                         currentState = GameState.Game;
                     }
 
@@ -498,7 +508,6 @@ namespace Opossum_Game
                 #endregion
                 #region GAMEPLAY SCREEN ------------------------------------------------------------
                 case GameState.Game:
-
                     // advance to the next level
                     if (player.Y + player.Rect.Height < 0   // player goes to the exit
                         && levelCount < lvls.Count          // there are more levels left
@@ -534,7 +543,7 @@ namespace Opossum_Game
                     if (debug)
                     {
                         //if the game is still going w/o timer
-                        if ((foodLeft != 0 || foodLeft == 0) && levelCount != lvls.Count)
+                        if ((foodLeft >= 0) && levelCount != lvls.Count)
                         {
                             // determine if the player wants to hide
                             foreach (Obstacle obstacle in obstaclesList)
@@ -568,7 +577,7 @@ namespace Opossum_Game
                         timer -= gameTime.ElapsedGameTime.TotalSeconds;
 
                         // win/lose conditions
-                        if (timer <= 0 && (foodLeft != 0 || foodLeft == 0) && levelCount <= lvls.Count)
+                        if (timer <= 0 && foodLeft >= 0 && levelCount <= lvls.Count)
                         {
                             currentState = GameState.GameLose;
                         }
@@ -630,6 +639,15 @@ namespace Opossum_Game
                             }
                         }
                     }
+
+                    //x mark button
+                    if (xMarkButton2.MouseClick() && xMarkButton2.MouseContains())
+                    {
+                        ResetLevel();
+                        ResetGame();
+                        currentState = GameState.Menu;
+                    }
+
                     break;
                 #endregion
                 #region GAME LOSE SCREEN ----------------------------------------------------------
@@ -640,13 +658,17 @@ namespace Opossum_Game
                     {
                         ResetLevel();
                         ResetGame();
-                        currentState = GameState.Menu;
+                        timer = 100;
+                        NextLevel();
+                        currentState = GameState.Game;
                     }
 
                     //to exit the game from gameLose
                     if (quitButton.MouseClick() && quitButton.MouseContains())
                     {
-                        Exit();
+                        ResetLevel();
+                        ResetGame();
+                        currentState = GameState.Menu;
                     }
                     break;
                 #endregion
@@ -657,13 +679,17 @@ namespace Opossum_Game
                     {
                         ResetLevel();
                         ResetGame();
-                        currentState = GameState.Menu;
+                        timer = 100;
+                        NextLevel();
+                        currentState = GameState.Game;
                     }
 
                     //to exit the game from gameWin
                     if (exitWinButton.MouseClick() && exitWinButton.MouseContains())
                     {
-                        Exit();
+                        ResetLevel();
+                        ResetGame();
+                        currentState = GameState.Menu;
                     }
                     break;
                     #endregion
@@ -814,8 +840,11 @@ namespace Opossum_Game
                     _spriteBatch.DrawString(
                         comicsans30,
                         string.Format("Time left: {0:0}", timer),
-                        new Vector2(0, 5),
+                        new Vector2(80, 5),
                         Color.White);
+
+                    // draw the exit button
+                    xMarkButton2.Draw(_spriteBatch);
 
                     break;
                 #endregion
@@ -1140,6 +1169,17 @@ namespace Opossum_Game
         void ResetLevel()
         {
             collectiblesList.Clear();
+            //if (collectiblesList.Count > 0)
+            //{
+            //    foreach (Collectible c in collectiblesList)
+            //    {
+            //        System.Diagnostics.Debug.WriteLine("c");
+            //    }
+            //}
+            //else
+            //{
+            //    System.Diagnostics.Debug.WriteLine("There is nothing in the list");
+            //}
             obstaclesList.Clear();
             enemyList.Clear();
         }
