@@ -526,13 +526,9 @@ namespace Opossum_Game
                     // start the game
                     if (startButton.MouseClick() && startButton.MouseContains())
                     {
-                        currentState = GameState.Instructions;
                         // reset instructions
                         currentPage = 0;
-
-                        timer = 100;
-                        NextLevel();
-                        currentState = GameState.Game;
+                        currentState = GameState.Instructions;
                     }
 
                     // options screen
