@@ -121,9 +121,11 @@ namespace Opossum_Game
         private Player player;
         #endregion
 
-        #region KBState
+        #region keyboard and mouse states
         private KeyboardState kbstate;
         private KeyboardState previousKbState;
+        private MouseState mState;
+        private MouseState prevMState;
         #endregion
 
         // font fields
@@ -516,7 +518,9 @@ namespace Opossum_Game
                 Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            // update the current keyboard and mouse states
             kbstate = Keyboard.GetState();
+            mState = Mouse.GetState();
 
             switch (currentState)
             {
@@ -563,11 +567,17 @@ namespace Opossum_Game
                         currentState = GameState.Menu;
                     }
                     break;
-                // INSTRUCTIONS -------------------------------------------------------------------
+                #endregion
+                #region INSTRUCTIONS SCREEN -------------------------------------------------------
                 case GameState.Instructions:
                    if (nextButton.MouseClick() && nextButton.MouseContains())
                    {
-                        currentPage++;
+                        // increase the current page only by one
+                        if (mState.LeftButton == ButtonState.Pressed
+                            && prevMState.LeftButton != ButtonState.Pressed)
+                        {
+                            currentPage++;
+                        }
 
                         if (currentPage >= 4)
                         {
@@ -580,20 +590,26 @@ namespace Opossum_Game
                         }
                     
                    }
+
+                   // go back a page in the instructions
                    if (backButton.MouseClick() && backButton.MouseContains())
                    {
-                        if (currentPage == 0)
-                        {
-                            currentState = GameState.Menu;
-                        }
-                        else
-                        {
-                            currentPage--;
-                        }
-                   }
+                       // decrease the current page only by one
+                       if (mState.LeftButton == ButtonState.Pressed
+                           && prevMState.LeftButton != ButtonState.Pressed)
+                       {
+                           currentPage--;
+                       }
+                       else
 
+                       // take the player back to the main menu
+                       if (currentPage <= 0)
+                       {
+                           currentState = GameState.Menu;
+                       }
+                   }
                     break;
-                // GAMEPLAY SCREEN ----------------------------------------------------------------
+
                 #endregion
                 #region GAMEPLAY SCREEN ------------------------------------------------------------
                 case GameState.Game:
@@ -784,8 +800,9 @@ namespace Opossum_Game
                     #endregion
             }
 
-            // update the previous keyboard state
+            // update the previous keyboard and mouse state
             previousKbState = kbstate;
+            prevMState = mState;
 
             base.Update(gameTime);
         }
@@ -840,8 +857,14 @@ namespace Opossum_Game
 
                 case GameState.Instructions:
 
-
-                   _spriteBatch.Draw(instructionsPage[currentPage], new Rectangle(0, 0, 900, 900), Color.White);
+                    if (currentPage >= 0)
+                    {
+                        _spriteBatch.Draw(
+                            instructionsPage[currentPage], 
+                            new Rectangle(0, 0, 900, 900), 
+                            Color.White);
+                    }
+                   
                     
 
                     nextButton.Draw(_spriteBatch);
