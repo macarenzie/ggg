@@ -236,7 +236,7 @@ namespace Opossum_Game
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            #region Button
+            #region Buttons
             // start button
             startButtonBase2D =
                 Content.Load<Texture2D>("startButtonBase");
@@ -404,20 +404,20 @@ namespace Opossum_Game
             nextButton = new Button(
                 nextBase,
                 new Rectangle(
-                    (windowWidth / 2) - (optionsButtonBase.Width / 4) + 200,
-                    600,
-                    optionsButtonBase.Width / 2,
-                    optionsButtonBase.Height / 2
+                    (windowWidth / 2) - (optionsButtonBase.Width / 4) + 150,
+                    770,
+                    nextBase.Width / 3,
+                    nextBase.Height / 3
                     ),
                 nextBase
                 );
             backButton = new Button(
                 backBase,
                 new Rectangle(
-                    (windowWidth / 2) - (optionsButtonBase.Width / 4) - 200,
-                    600,
-                    optionsButtonBase.Width / 2,
-                    optionsButtonBase.Height / 2
+                    (windowWidth / 2) - (optionsButtonBase.Width / 4) - 50,
+                    770,
+                    backBase.Width / 3,
+                    backBase.Height / 3
                     ),
                 backBase
                 );
@@ -579,6 +579,7 @@ namespace Opossum_Game
                             currentPage++;
                         }
 
+                        // take the player to the game
                         if (currentPage >= 4)
                         {
                             //resetting the game
