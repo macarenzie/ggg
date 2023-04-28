@@ -581,12 +581,10 @@ namespace Opossum_Game
 
                         if (currentPage >= 4)
                         {
-                            
                             //resetting the game
                             timer = 100;
                             NextLevel();
                             currentState = GameState.Game;
-
                         }
                     
                    }
@@ -600,10 +598,9 @@ namespace Opossum_Game
                        {
                            currentPage--;
                        }
-                       else
 
                        // take the player back to the main menu
-                       if (currentPage <= 0)
+                       if (currentPage < 0)
                        {
                            currentState = GameState.Menu;
                        }
@@ -854,7 +851,8 @@ namespace Opossum_Game
                     }
                     */
                     break;
-
+                #endregion
+                #region INSTRUCTIONS SCREEN -------------------------------------------------------
                 case GameState.Instructions:
 
                     if (currentPage >= 0)
@@ -865,15 +863,13 @@ namespace Opossum_Game
                             Color.White);
                     }
                    
-                    
-
                     nextButton.Draw(_spriteBatch);
                     backButton.Draw(_spriteBatch);
 
                     break;
 
                 #endregion
-                #region GAMEPLAY SCREEN ------------------------------------------------------------
+                #region GAMEPLAY SCREEN -----------------------------------------------------------
                 case GameState.Game:
 
                     if (debug)
