@@ -15,9 +15,9 @@
 3,0,collectible
 3,1,obstacle,f
 3,2,collectible
-4,1,obstacle,t
+4,1,obstacle,f
 4,2,obstacle,f
-4,3,obstacle,f
+4,3,obstacle,t
 4,9,enemy,r
 5,4,obstacle,f
 6,0,enemy,l

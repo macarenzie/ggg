@@ -18,6 +18,7 @@ namespace Opossum_Game
     /// </summary>
     internal class Player : IGameObject
     {
+        #region fields
         //Player dimensions and sprite
         private Rectangle playerRectangle; 
         private Texture2D pSprite;
@@ -37,21 +38,17 @@ namespace Opossum_Game
         //Freeze timer
         private Stopwatch freezeTimer;
 
+        #endregion
+
+        #region properties
         /// <summary>
         /// Gets and sets the player texture
         /// </summary>
         public Texture2D Sprite
         {
-            get
-            {
-                return pSprite;
-            }
-            set
-            {
-                pSprite = value;
-            }
+            get { return pSprite; }
+            set { pSprite = value; }
         }
-
 
         /// <summary>
         /// Gets and sets player's x coordinate
@@ -90,6 +87,9 @@ namespace Opossum_Game
             set { isHiding = value; }
         }
 
+        /// <summary>
+        /// gets and sets whether a player is immune to enemies or not
+        /// </summary>
         public bool IsImmune
         {
             get { return isImmune; }
@@ -103,6 +103,8 @@ namespace Opossum_Game
         {
             get { return playerState; }
         }
+
+        #endregion
 
         /// <summary>
         /// Creates the user-controlled player object
@@ -118,6 +120,7 @@ namespace Opossum_Game
             isImmune = false;
         }
 
+        #region methods
 
         /// <summary>
         /// Processes keyboard input for player movement
@@ -325,5 +328,7 @@ namespace Opossum_Game
                 playerState = PlayerState.PlayDead;
             }
         }
+
+        #endregion
     }
 }

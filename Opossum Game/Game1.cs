@@ -10,7 +10,7 @@ namespace Opossum_Game
 {
     /// <summary>
     /// McKenzie: added enums and did all level texture loading, assisted in level design,
-    ///     freeze mechanics, level switching, and code optimization
+    ///     player freeze mechanics, level switching, instructions, and code optimization
     /// Hui Lin: worked on enums and current state game state stuff
     /// Ariel: finalized UI fsm and implimented level switching / design, collectible mechanics,
     ///     player freeze mechanics, win/lose conditions, gameplay testing, and code optimization
@@ -478,7 +478,7 @@ namespace Opossum_Game
             obstacleTexture = Content.Load<Texture2D>("obstacleTexture");
 
             // enemy
-            enemyTexture = Content.Load<Texture2D>("enemyTexture");
+            enemyTexture = Content.Load<Texture2D>("newEnemyTexture");
 
             // level loading
             lvl1 = new Level(
@@ -609,7 +609,7 @@ namespace Opossum_Game
                     break;
 
                 #endregion
-                #region GAMEPLAY SCREEN ------------------------------------------------------------
+                #region GAMEPLAY SCREEN -----------------------------------------------------------
                 case GameState.Game:
                     // advance to the next level
                     if (player.Y + player.Rect.Height < 0   // player goes to the exit
@@ -1325,6 +1325,10 @@ namespace Opossum_Game
             {
                 foodLeft += l.CollectiblesList.Count;
             }
+
+            // reset the player condition
+            player.IsHiding = false;
+            player.IsImmune = false;
         }
     }
 }
