@@ -583,8 +583,6 @@ namespace Opossum_Game
                         if (currentPage >= 4)
                         {
                             //resetting the game
-                            player.IsHiding = false;
-                            player.IsImmune = false;
                             timer = 100;
                             NextLevel();
                             currentState = GameState.Game;
