@@ -583,6 +583,8 @@ namespace Opossum_Game
                         if (currentPage >= 4)
                         {
                             //resetting the game
+                            player.IsHiding = false;
+                            player.IsImmune = false;
                             timer = 100;
                             NextLevel();
                             currentState = GameState.Game;
@@ -673,6 +675,7 @@ namespace Opossum_Game
                             currentState = GameState.GameWin;
                         }
                     }
+                    
                     //everything that happens in regular mode
                     if (!debug)
                     {
@@ -746,6 +749,7 @@ namespace Opossum_Game
                     //x mark button
                     if (xMarkButton2.MouseClick() && xMarkButton2.MouseContains())
                     {
+                        
                         ResetLevel();
                         ResetGame();
                         currentState = GameState.Menu;
@@ -1311,24 +1315,31 @@ namespace Opossum_Game
         /// </summary>
         void ResetGame()
         {
-            // reset the level counter
-            levelCount = -1;
 
             // reload the level content into the corresponding level objects
-            for (int i = 0; i < lvls.Count; i++)
+            for (int i = 0; i <= levelCount; i++)
             {
                 lvls[i].LoadLevel(levelStrings[i]);
             }
 
+            // reset the level counter
+            levelCount = -1;
+
             // reload the food counter
+            foodLeft = 0;
             foreach (Level l in lvls)
             {
                 foodLeft += l.CollectiblesList.Count;
             }
 
             // reset the player condition
+            player.PlayerState = PlayerState.Front;
             player.IsHiding = false;
             player.IsImmune = false;
+            player.FreezeTimer.Stop();
+            player.FreezeTimer.Reset();
+            frozenTimer.Stop();
+            frozenTimer.Reset();
         }
     }
 }

@@ -102,6 +102,13 @@ namespace Opossum_Game
         public PlayerState PlayerState
         {
             get { return playerState; }
+            set { playerState = value; }
+        }
+
+        public Stopwatch FreezeTimer
+        {
+            get { return freezeTimer; }
+            set { FreezeTimer = value; }
         }
 
         #endregion
