@@ -1238,9 +1238,9 @@ namespace Opossum_Game
                         //always checking against the potential player. as such do not
                         //have to worry about intersecting with the box you are hiding in
                         //Although with the Height and Width of the player, there is a potential
-                        //to check against the box the player is hiding in
-                        //Therefore the < 1 is insurance instead of <= 0
-                        if (numberOfIntersecting < 1 && i >= otherObstacles.Count - 1)
+                        //to check against the box the player is hiding in in the X-axis
+                        //Therefore the <= 1 is insurance instead of <= 0
+                        if (numberOfIntersecting <= 1 && i >= otherObstacles.Count - 1)
                         {
                             player.IsHiding = false; //change bool
 
@@ -1263,7 +1263,7 @@ namespace Opossum_Game
                             numberOfIntersecting++;
                         }
 
-                        if (numberOfIntersecting < 1 && i >= otherObstacles.Count - 1)
+                        if (numberOfIntersecting <= 1 && i >= otherObstacles.Count - 1)
                         {
                             player.IsHiding = false; 
                             player.Rect = potentialPlayer;
@@ -1284,7 +1284,7 @@ namespace Opossum_Game
                             numberOfIntersecting++;
                         }
 
-                        if (numberOfIntersecting < 1 && i >= otherObstacles.Count - 1)
+                        if (numberOfIntersecting <= 1 && i >= otherObstacles.Count - 1)
                         {
                             player.IsHiding = false; 
                             player.Rect = potentialPlayer;
@@ -1306,7 +1306,7 @@ namespace Opossum_Game
                             numberOfIntersecting++;
                         }
 
-                        if (numberOfIntersecting < 1 && i >= otherObstacles.Count - 1)
+                        if (numberOfIntersecting <= 1 && i >= otherObstacles.Count - 1)
                         {
                             player.IsHiding = false; 
                             player.Rect = potentialPlayer;
