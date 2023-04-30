@@ -1203,97 +1203,118 @@ namespace Opossum_Game
         void UnHide(KeyboardState prevState,
             KeyboardState curState, List<Obstacle> otherObstacles, Player player)
         {
-            Rectangle potentialPlayer = player.Rect;
+            //need to create a new rectangle. otherwise if
+            //potentialPlayer = player.Rect then we have a case of polymorphism and
+            //it's just the same rectangle rather than a copy of its values
+            Rectangle potentialPlayer = new Rectangle(
+                player.X, 
+                player.Y,
+                player.Rect.Width,
+                player.Rect.Height
+                );
+            int numberOfIntersecting = 0;
 
-            //if the space bar is pressed again then unhide
+            //if WASD is pressed again then unhide
             //Also check if the direction the player wants to unhide from is valid
             if (player.IsHiding)
             {
-                for(int i = 0; i < otherObstacles.Count; i++)
+                //W; Up direction
+                if (SingleKeyPress(Keys.W, curState, prevState))
                 {
-                    //W; Up direction
-                    if (SingleKeyPress(Keys.W, curState, prevState))
-                    {
-                        //adjust to potential coordinates
-                        potentialPlayer.Y -= potentialPlayer.Height;
+                    //adjust to potential coordinates
+                    potentialPlayer.Y -= potentialPlayer.Height;
 
-                        //check for intersection. If intersection is false,
-                        //then do no move in that direction and go back to hiding
-                        if (!potentialPlayer.Intersects(otherObstacles[i].Rect))
+                    //loop through every object in the otherObstacles list
+                    //Then check after interating through all of the items
+                    //If there was a single collision
+                    for (int i = 0; i < otherObstacles.Count; i++)
+                    {
+                        //check for intersection. If intersection is true, then increment
+                        if (potentialPlayer.Intersects(otherObstacles[i].Rect))
+                        {
+                            numberOfIntersecting++;
+                        }
+
+                        //always checking against the potential player. as such do not
+                        //have to worry about intersecting with the box you are hiding in
+                        //Although with the Height and Width of the player, there is a potential
+                        //to check against the box the player is hiding in
+                        //Therefore the < 1 is insurance instead of <= 0
+                        if (numberOfIntersecting < 1 && i >= otherObstacles.Count - 1)
                         {
                             player.IsHiding = false; //change bool
 
                             //position changing logic
                             player.Rect = potentialPlayer;
                         }
-                        else
-                        {
-                            System.Diagnostics.Debug.WriteLine("Intersection: " +
-                                potentialPlayer.Intersects(otherObstacles[i].Rect));
-                        }
                     }
 
-                    //A; Left Direction
-                    else if (SingleKeyPress(Keys.A, curState, prevState))
-                    {
-                        potentialPlayer.X -= potentialPlayer.Width;
+                }
 
-                        if (!potentialPlayer.Intersects(otherObstacles[i].Rect))
+                //A; Left Direction
+                else if (SingleKeyPress(Keys.A, curState, prevState))
+                {
+                    potentialPlayer.X -= potentialPlayer.Width;
+
+                    for (int i = 0; i < otherObstacles.Count; i++)
+                    {                        
+                        if (potentialPlayer.Intersects(otherObstacles[i].Rect))
                         {
-                            System.Diagnostics.Debug.WriteLine("Player is NOT hiding");
-                            System.Diagnostics.Debug.WriteLine("Intersection: " +
-                                potentialPlayer.Intersects(otherObstacles[i].Rect));
-                            player.IsHiding = false;
+                            numberOfIntersecting++;
+                        }
+
+                        if (numberOfIntersecting < 1 && i >= otherObstacles.Count - 1)
+                        {
+                            player.IsHiding = false; 
                             player.Rect = potentialPlayer;
                         }
-                        else
-                        {
-                            System.Diagnostics.Debug.WriteLine("Intersection: " +
-                                potentialPlayer.Intersects(otherObstacles[i].Rect));
-                        }
                     }
+                        
+                }
 
-                    //S; Down Direction
-                    else if (SingleKeyPress(Keys.S, curState, prevState))
+                //S; Down Direction
+                else if (SingleKeyPress(Keys.S, curState, prevState))
+                {
+                    potentialPlayer.Y += potentialPlayer.Height;
+
+                    for (int i = 0; i < otherObstacles.Count; i++)
                     {
-                        potentialPlayer.Y += potentialPlayer.Height;
-
-                        if (!potentialPlayer.Intersects(otherObstacles[i].Rect))
+                        if (potentialPlayer.Intersects(otherObstacles[i].Rect))
                         {
-                            player.IsHiding = false;
+                            numberOfIntersecting++;
+                        }
+
+                        if (numberOfIntersecting < 1 && i >= otherObstacles.Count - 1)
+                        {
+                            player.IsHiding = false; 
                             player.Rect = potentialPlayer;
                         }
-                        else
-                        {
-                            System.Diagnostics.Debug.WriteLine("Intersection: " +
-                                potentialPlayer.Intersects(otherObstacles[i].Rect));
-                        }
                     }
 
-                    //D; Right Direction
-                    else if (SingleKeyPress(Keys.D, curState, prevState))
+                    
+                }
+
+                //D; Right Direction
+                else if (SingleKeyPress(Keys.D, curState, prevState))
+                {
+                    potentialPlayer.X += potentialPlayer.Width;
+
+                    for (int i = 0; i < otherObstacles.Count; i++)
                     {
-                        potentialPlayer.X += potentialPlayer.Width;
-
-                        if (!potentialPlayer.Intersects(otherObstacles[i].Rect))
+                        if (potentialPlayer.Intersects(otherObstacles[i].Rect))
                         {
-                            System.Diagnostics.Debug.WriteLine("Player is NOT hiding");
-                            System.Diagnostics.Debug.WriteLine("Intersection: {0} " +
-                                "\nPlayer Rectangle: {1} \nObstacleRectangle: {2}",
-                                potentialPlayer.Intersects(otherObstacles[i].Rect),
-                                potentialPlayer,
-                                otherObstacles[i].Rect);
+                            numberOfIntersecting++;
+                        }
 
-                            player.IsHiding = false;
+                        if (numberOfIntersecting < 1 && i >= otherObstacles.Count - 1)
+                        {
+                            player.IsHiding = false; 
                             player.Rect = potentialPlayer;
                         }
-                        else
-                        {
-                            System.Diagnostics.Debug.WriteLine("Intersection: " +
-                                potentialPlayer.Intersects(otherObstacles[i].Rect));
-                        }
                     }
-                } 
+
+                    
+                }
             }
         }
 
