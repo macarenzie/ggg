@@ -655,15 +655,17 @@ namespace Opossum_Game
                             // determine if the player wants to hide
                             foreach (Obstacle obstacle in obstaclesList)
                             {
-                                if (player.IsHiding)
-                                {
-                                    UnHide(previousKbState, kbstate, obstacle, player);
 
-                                }
-                                else
+                                if (!player.IsHiding)
                                 {
                                     Hide(previousKbState, kbstate, obstacle, player);
                                 }
+                            }
+
+                            //different unhiding implementation
+                            if (player.IsHiding)
+                            {
+                                UnHide(previousKbState, kbstate, obstaclesList, player);
                             }
 
                             //enemy obstacle collision
@@ -739,11 +741,13 @@ namespace Opossum_Game
                                 {
                                     Hide(previousKbState, kbstate, obstacle, player);
                                 }
-                                //check for unhiding attempts
-                                else
-                                {
-                                    UnHide(previousKbState, kbstate, obstacle, player);
-                                }
+                                
+                            }
+
+                            //check for unhiding attempts
+                            if (player.IsHiding)
+                            {
+                                UnHide(previousKbState, kbstate, obstaclesList, player);
                             }
                         }
                     }
@@ -1150,7 +1154,8 @@ namespace Opossum_Game
                 //distance needs to be less than or equal to when they touch + 50 pixels
                 (dx + 50) >= Math.Abs(pMidX - oMidX)
                 && (dy + 50) >= Math.Abs(pMidY - oMidY)
-                && !player.IsHiding)
+                //&& !player.IsHiding
+                )
             {
                 return true;
             }
@@ -1202,11 +1207,20 @@ namespace Opossum_Game
         /// <param name="otherObstacle">the obstacle you want to check against</param>
         /// <param name="player">Player object</param>
         void UnHide(KeyboardState prevState,
-            KeyboardState curState, Obstacle otherObstacle, Player player)
+            KeyboardState curState, List<Obstacle> otherObstacles, Player player)
         {
-            Rectangle potentialPlayer = player.Rect;
+            //need to create a new rectangle. otherwise if
+            //potentialPlayer = player.Rect then we have a case of polymorphism and
+            //it's just the same rectangle rather than a copy of its values
+            Rectangle potentialPlayer = new Rectangle(
+                player.X, 
+                player.Y,
+                player.Rect.Width,
+                player.Rect.Height
+                );
+            int numberOfIntersecting = 0;
 
-            //if the space bar is pressed again then unhide
+            //if WASD is pressed again then unhide
             //Also check if the direction the player wants to unhide from is valid
             if (player.IsHiding)
             {
@@ -1216,14 +1230,29 @@ namespace Opossum_Game
                     //adjust to potential coordinates
                     potentialPlayer.Y -= potentialPlayer.Height;
 
-                    //check for intersection. If intersection is false,
-                    //then do no move in that direction and go back to hiding
-                    if (!potentialPlayer.Intersects(otherObstacle.Rect))
+                    //loop through every object in the otherObstacles list
+                    //Then check after interating through all of the items
+                    //If there was a single collision
+                    for (int i = 0; i < otherObstacles.Count; i++)
                     {
-                        player.IsHiding = false; //change bool
+                        //check for intersection. If intersection is true, then increment
+                        if (potentialPlayer.Intersects(otherObstacles[i].Rect))
+                        {
+                            numberOfIntersecting++;
+                        }
 
-                        //position changing logic
-                        player.Y -= otherObstacle.Rect.Width;
+                        //always checking against the potential player. as such do not
+                        //have to worry about intersecting with the box you are hiding in
+                        //Although with the Height and Width of the player, there is a potential
+                        //to check against the box the player is hiding in in the X-axis
+                        //Therefore the <= 1 is insurance instead of <= 0
+                        if (numberOfIntersecting <= 1 && i >= otherObstacles.Count - 1)
+                        {
+                            player.IsHiding = false; //change bool
+
+                            //position changing logic
+                            player.Rect = potentialPlayer;
+                        }
                     }
 
                 }
@@ -1233,12 +1262,20 @@ namespace Opossum_Game
                 {
                     potentialPlayer.X -= potentialPlayer.Width;
 
-                    if (!potentialPlayer.Intersects(otherObstacle.Rect))
-                    {
-                        player.IsHiding = false;
+                    for (int i = 0; i < otherObstacles.Count; i++)
+                    {                        
+                        if (potentialPlayer.Intersects(otherObstacles[i].Rect))
+                        {
+                            numberOfIntersecting++;
+                        }
 
-                        player.X -= otherObstacle.Rect.Width;
+                        if (numberOfIntersecting <= 1 && i >= otherObstacles.Count - 1)
+                        {
+                            player.IsHiding = false; 
+                            player.Rect = potentialPlayer;
+                        }
                     }
+                        
                 }
 
                 //S; Down Direction
@@ -1246,12 +1283,21 @@ namespace Opossum_Game
                 {
                     potentialPlayer.Y += potentialPlayer.Height;
 
-                    if (!potentialPlayer.Intersects(otherObstacle.Rect))
+                    for (int i = 0; i < otherObstacles.Count; i++)
                     {
-                        player.IsHiding = false;
+                        if (potentialPlayer.Intersects(otherObstacles[i].Rect))
+                        {
+                            numberOfIntersecting++;
+                        }
 
-                        player.Y += otherObstacle.Rect.Height;
+                        if (numberOfIntersecting <= 1 && i >= otherObstacles.Count - 1)
+                        {
+                            player.IsHiding = false; 
+                            player.Rect = potentialPlayer;
+                        }
                     }
+
+                    
                 }
 
                 //D; Right Direction
@@ -1259,11 +1305,21 @@ namespace Opossum_Game
                 {
                     potentialPlayer.X += potentialPlayer.Width;
 
-                    if (!potentialPlayer.Intersects(otherObstacle.Rect))
+                    for (int i = 0; i < otherObstacles.Count; i++)
                     {
-                        player.X += otherObstacle.Rect.Height;
-                        player.IsHiding = false;
+                        if (potentialPlayer.Intersects(otherObstacles[i].Rect))
+                        {
+                            numberOfIntersecting++;
+                        }
+
+                        if (numberOfIntersecting <= 1 && i >= otherObstacles.Count - 1)
+                        {
+                            player.IsHiding = false; 
+                            player.Rect = potentialPlayer;
+                        }
                     }
+
+                    
                 }
             }
         }
