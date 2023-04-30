@@ -651,15 +651,17 @@ namespace Opossum_Game
                             // determine if the player wants to hide
                             foreach (Obstacle obstacle in obstaclesList)
                             {
-                                if (player.IsHiding)
-                                {
-                                    UnHide(previousKbState, kbstate, obstacle, player);
 
-                                }
-                                else
+                                if (!player.IsHiding)
                                 {
                                     Hide(previousKbState, kbstate, obstacle, player);
                                 }
+                            }
+
+                            //different unhiding implementation
+                            if (player.IsHiding)
+                            {
+                                UnHide(previousKbState, kbstate, obstaclesList, player);
                             }
 
                             //enemy obstacle collision
@@ -735,11 +737,13 @@ namespace Opossum_Game
                                 {
                                     Hide(previousKbState, kbstate, obstacle, player);
                                 }
-                                //check for unhiding attempts
-                                else
-                                {
-                                    UnHide(previousKbState, kbstate, obstacle, player);
-                                }
+                                
+                            }
+
+                            //check for unhiding attempts
+                            if (player.IsHiding)
+                            {
+                                UnHide(previousKbState, kbstate, obstaclesList, player);
                             }
                         }
                     }
@@ -1144,7 +1148,8 @@ namespace Opossum_Game
                 //distance needs to be less than or equal to when they touch + 50 pixels
                 (dx + 50) >= Math.Abs(pMidX - oMidX)
                 && (dy + 50) >= Math.Abs(pMidY - oMidY)
-                && !player.IsHiding)
+                //&& !player.IsHiding
+                )
             {
                 return true;
             }
@@ -1196,7 +1201,7 @@ namespace Opossum_Game
         /// <param name="otherObstacle">the obstacle you want to check against</param>
         /// <param name="player">Player object</param>
         void UnHide(KeyboardState prevState,
-            KeyboardState curState, Obstacle otherObstacle, Player player)
+            KeyboardState curState, List<Obstacle> otherObstacles, Player player)
         {
             Rectangle potentialPlayer = player.Rect;
 
@@ -1204,61 +1209,91 @@ namespace Opossum_Game
             //Also check if the direction the player wants to unhide from is valid
             if (player.IsHiding)
             {
-                //W; Up direction
-                if (SingleKeyPress(Keys.W, curState, prevState))
+                for(int i = 0; i < otherObstacles.Count; i++)
                 {
-                    //adjust to potential coordinates
-                    potentialPlayer.Y -= potentialPlayer.Height;
-
-                    //check for intersection. If intersection is false,
-                    //then do no move in that direction and go back to hiding
-                    if (!potentialPlayer.Intersects(otherObstacle.Rect))
+                    //W; Up direction
+                    if (SingleKeyPress(Keys.W, curState, prevState))
                     {
-                        player.IsHiding = false; //change bool
+                        //adjust to potential coordinates
+                        potentialPlayer.Y -= potentialPlayer.Height;
 
-                        //position changing logic
-                        player.Y -= otherObstacle.Rect.Width;
+                        //check for intersection. If intersection is false,
+                        //then do no move in that direction and go back to hiding
+                        if (!potentialPlayer.Intersects(otherObstacles[i].Rect))
+                        {
+                            player.IsHiding = false; //change bool
+
+                            //position changing logic
+                            player.Rect = potentialPlayer;
+                        }
+                        else
+                        {
+                            System.Diagnostics.Debug.WriteLine("Intersection: " +
+                                potentialPlayer.Intersects(otherObstacles[i].Rect));
+                        }
                     }
 
-                }
-
-                //A; Left Direction
-                else if (SingleKeyPress(Keys.A, curState, prevState))
-                {
-                    potentialPlayer.X -= potentialPlayer.Width;
-
-                    if (!potentialPlayer.Intersects(otherObstacle.Rect))
+                    //A; Left Direction
+                    else if (SingleKeyPress(Keys.A, curState, prevState))
                     {
-                        player.IsHiding = false;
+                        potentialPlayer.X -= potentialPlayer.Width;
 
-                        player.X -= otherObstacle.Rect.Width;
+                        if (!potentialPlayer.Intersects(otherObstacles[i].Rect))
+                        {
+                            System.Diagnostics.Debug.WriteLine("Player is NOT hiding");
+                            System.Diagnostics.Debug.WriteLine("Intersection: " +
+                                potentialPlayer.Intersects(otherObstacles[i].Rect));
+                            player.IsHiding = false;
+                            player.Rect = potentialPlayer;
+                        }
+                        else
+                        {
+                            System.Diagnostics.Debug.WriteLine("Intersection: " +
+                                potentialPlayer.Intersects(otherObstacles[i].Rect));
+                        }
                     }
-                }
 
-                //S; Down Direction
-                else if (SingleKeyPress(Keys.S, curState, prevState))
-                {
-                    potentialPlayer.Y += potentialPlayer.Height;
-
-                    if (!potentialPlayer.Intersects(otherObstacle.Rect))
+                    //S; Down Direction
+                    else if (SingleKeyPress(Keys.S, curState, prevState))
                     {
-                        player.IsHiding = false;
+                        potentialPlayer.Y += potentialPlayer.Height;
 
-                        player.Y += otherObstacle.Rect.Height;
+                        if (!potentialPlayer.Intersects(otherObstacles[i].Rect))
+                        {
+                            player.IsHiding = false;
+                            player.Rect = potentialPlayer;
+                        }
+                        else
+                        {
+                            System.Diagnostics.Debug.WriteLine("Intersection: " +
+                                potentialPlayer.Intersects(otherObstacles[i].Rect));
+                        }
                     }
-                }
 
-                //D; Right Direction
-                else if (SingleKeyPress(Keys.D, curState, prevState))
-                {
-                    potentialPlayer.X += potentialPlayer.Width;
-
-                    if (!potentialPlayer.Intersects(otherObstacle.Rect))
+                    //D; Right Direction
+                    else if (SingleKeyPress(Keys.D, curState, prevState))
                     {
-                        player.X += otherObstacle.Rect.Height;
-                        player.IsHiding = false;
+                        potentialPlayer.X += potentialPlayer.Width;
+
+                        if (!potentialPlayer.Intersects(otherObstacles[i].Rect))
+                        {
+                            System.Diagnostics.Debug.WriteLine("Player is NOT hiding");
+                            System.Diagnostics.Debug.WriteLine("Intersection: {0} " +
+                                "\nPlayer Rectangle: {1} \nObstacleRectangle: {2}",
+                                potentialPlayer.Intersects(otherObstacles[i].Rect),
+                                potentialPlayer,
+                                otherObstacles[i].Rect);
+
+                            player.IsHiding = false;
+                            player.Rect = potentialPlayer;
+                        }
+                        else
+                        {
+                            System.Diagnostics.Debug.WriteLine("Intersection: " +
+                                potentialPlayer.Intersects(otherObstacles[i].Rect));
+                        }
                     }
-                }
+                } 
             }
         }
 
