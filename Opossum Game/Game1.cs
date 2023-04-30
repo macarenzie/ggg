@@ -28,7 +28,8 @@ namespace Opossum_Game
         GameLose,
         GameWin,
         Debug,
-        Instructions
+        Instructions,
+        Credits
     }
 
     //the state of the player
@@ -131,7 +132,7 @@ namespace Opossum_Game
         #endregion
 
         // font fields
-        private SpriteFont comicsans30;
+        private SpriteFont comicsans25;
 
         //literal window
         private int windowWidth;
@@ -476,7 +477,7 @@ namespace Opossum_Game
             instructionsPage.Add(instructionPage5);
 
             // temporary font
-            comicsans30 = Content.Load<SpriteFont>("comicsans30");
+            comicsans25 = Content.Load<SpriteFont>("comicsans30");
 
             // obstacle
             obstacleTexture = Content.Load<Texture2D>("obstacleTexture");
@@ -487,20 +488,20 @@ namespace Opossum_Game
             // level loading
             lvl1 = new Level(
                 level1,
-                collectibleTextures,       // collectible texture
-                obstacleTexture,         // obstacle texture
+                collectibleTextures,    // collectible texture
+                obstacleTexture,        // obstacle texture
                 pSprite,                // player texture
                 enemyTexture);          // enemy texture
             lvl2 = new Level(
                 level2,
-                collectibleTextures,       // collectible texture
-                obstacleTexture,         // obstacle texture
+                collectibleTextures,    // collectible texture
+                obstacleTexture,        // obstacle texture
                 pSprite,                // player texture
                 enemyTexture);          // enemy texture
             lvl3 = new Level(
                 level3,
-                collectibleTextures,       // collectible texture
-                obstacleTexture,         // obstacle texture
+                collectibleTextures,    // collectible texture
+                obstacleTexture,        // obstacle texture
                 pSprite,                // player texture
                 enemyTexture);          // enemy texture
 
@@ -556,13 +557,19 @@ namespace Opossum_Game
                 case GameState.Options:
 
                     // toggle debug mode
-                    if (SingleKeyPress(Keys.U, kbstate, previousKbState) && debug == false)
+                    if (SingleKeyPress(Keys.E, kbstate, previousKbState) && debug == false)
                     {
                         debug = true;
                     }
-                    else if (SingleKeyPress(Keys.U, kbstate, previousKbState) && debug == true)
+                    else if (SingleKeyPress(Keys.E, kbstate, previousKbState) && debug == true)
                     {
                         debug = false;
+                    }
+
+                    // go to the credits page
+                    if (SingleKeyPress(Keys.C, kbstate, previousKbState))
+                    {
+                        currentState = GameState.Credits;
                     }
 
                     // return to main menu
@@ -571,6 +578,17 @@ namespace Opossum_Game
                         currentState = GameState.Menu;
                     }
                     break;
+                #endregion
+                #region CREDITS SCREEN ------------------------------------------------------------
+                case GameState.Credits:
+                    
+                    // go back to the options
+                    if (SingleKeyPress(Keys.X, kbstate, previousKbState))
+                    {
+                        currentState = GameState.Options;
+                    }
+                    break;
+
                 #endregion
                 #region INSTRUCTIONS SCREEN -------------------------------------------------------
                 case GameState.Instructions:
@@ -817,9 +835,10 @@ namespace Opossum_Game
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Navy);
+            GraphicsDevice.Clear(Color.MidnightBlue);
 
             _spriteBatch.Begin();
+
             switch (currentState)
             {
                 #region MENU SCREEN ---------------------------------------------------------------
@@ -846,26 +865,29 @@ namespace Opossum_Game
 
                     // draw text for debug mode
                     _spriteBatch.DrawString(
-                        comicsans30,
-                        string.Format("Press 'U' to toggle erin mode!\nErin mode: " + debug),
-                        new Vector2(90, 700),
+                        comicsans25,
+                        string.Format("Press 'E' for erin mode\nPress 'C' for credits"),
+                        new Vector2(90, 720),
+                        Color.LightSteelBlue);
+                    break;
+                #endregion
+                #region CREDITS SCREEN ------------------------------------------------------------
+                case GameState.Credits:
+
+                    // go back to the options
+                    _spriteBatch.DrawString(
+                        comicsans25,
+                        string.Format("Press 'X' to go back to the options"),
+                        new Vector2(20, 20),
                         Color.LightSteelBlue);
 
-                    /*
-                    if (debug == true)
-                    {
-                        debugModeButtonOn.Draw(_spriteBatch);
-                    } 
-                    else
-                    {
-                        debugModeButtonOff.Draw(_spriteBatch);
-                    }
-                    */
                     break;
+
                 #endregion
                 #region INSTRUCTIONS SCREEN -------------------------------------------------------
                 case GameState.Instructions:
 
+                    // draw the correct instructions page
                     if (currentPage >= 0)
                     {
                         _spriteBatch.Draw(
@@ -874,6 +896,7 @@ namespace Opossum_Game
                             Color.White);
                     }
                    
+                    // buttons
                     nextButton.Draw(_spriteBatch);
                     backButton.Draw(_spriteBatch);
 
@@ -969,7 +992,7 @@ namespace Opossum_Game
 
                     //drawing the timer to the screen
                     _spriteBatch.DrawString(
-                        comicsans30,
+                        comicsans25,
                         string.Format("Time left: {0:0}", timer),
                         new Vector2(80, 5),
                         Color.White);
@@ -1003,6 +1026,16 @@ namespace Opossum_Game
                     exitWinButton.Draw(_spriteBatch);
                     break;
                     #endregion
+            }
+
+            // indicate that the player is in debug mode if turned on
+            if (debug)
+            {
+                _spriteBatch.DrawString(
+                    comicsans25, 
+                    String.Format("DEBUG ON"), 
+                    new Vector2(650, 10), 
+                    Color.Red);
             }
 
             _spriteBatch.End();
