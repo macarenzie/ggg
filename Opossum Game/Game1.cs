@@ -54,6 +54,8 @@ namespace Opossum_Game
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+        
+        #region fields
 
         #region Buttons
         // start menu and buttons
@@ -184,6 +186,8 @@ namespace Opossum_Game
 
         // DEBUG MODE
         private bool debug;
+
+        #endregion
 
         public Game1()
         {
@@ -1048,6 +1052,8 @@ namespace Opossum_Game
             }
         }
 
+        #region Player Methods
+
         /// <summary>
         /// Checks if the player is overlapping with any Obstacle object
         /// If the player is overlapping, then the player's position will be adjusted 
@@ -1262,6 +1268,9 @@ namespace Opossum_Game
             }
         }
 
+        #endregion
+
+        #region level and game advancement/reset methods
         /// <summary>
         /// transitions the current level to the next level
         /// worked on by mckenzie lam
@@ -1292,17 +1301,6 @@ namespace Opossum_Game
         void ResetLevel()
         {
             collectiblesList.Clear();
-            //if (collectiblesList.Count > 0)
-            //{
-            //    foreach (Collectible c in collectiblesList)
-            //    {
-            //        System.Diagnostics.Debug.WriteLine("c");
-            //    }
-            //}
-            //else
-            //{
-            //    System.Diagnostics.Debug.WriteLine("There is nothing in the list");
-            //}
             obstaclesList.Clear();
             enemyList.Clear();
         }
@@ -1313,11 +1311,14 @@ namespace Opossum_Game
         /// </summary>
         void ResetGame()
         {
-
             // reload the level content into the corresponding level objects
-            for (int i = 0; i <= levelCount; i++)
+            for (int i = 0; i < lvls.Count; i++)
             {
-                lvls[i].LoadLevel(levelStrings[i]);
+                // only fill the game object lists if there is objects in them
+                if (lvls[i].CollectiblesList.Count == 0)
+                {
+                    lvls[i].LoadLevel(levelStrings[i]);
+                }
             }
 
             // reset the level counter
@@ -1339,5 +1340,7 @@ namespace Opossum_Game
             frozenTimer.Stop();
             frozenTimer.Reset();
         }
+
+        #endregion
     }
 }
