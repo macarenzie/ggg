@@ -416,6 +416,12 @@
 /processorParam:TextureFormat=Color
 /build:quitRollOver.PNG
 
+#begin ringing_at_midnight-144085.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:ringing_at_midnight-144085.mp3
+
 #begin startButtonBase.PNG
 /importer:TextureImporter
 /processor:TextureProcessor

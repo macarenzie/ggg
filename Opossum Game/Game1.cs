@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using Microsoft.Xna.Framework.Media;
 using System.Runtime.CompilerServices;
 
 namespace Opossum_Game
@@ -192,6 +193,8 @@ namespace Opossum_Game
         private Texture2D debugBox;
         private Button debugButtonTrue;
         private Button debugButtonFalse;
+
+        private Song gameMusic;
 
         #endregion
 
@@ -542,6 +545,11 @@ namespace Opossum_Game
             {
                 foodLeft += l.CollectiblesList.Count;
             }
+
+            //game music
+            gameMusic = Content.Load<Song>("ringing_at_midnight-144085");
+            MediaPlayer.Play(gameMusic);
+            MediaPlayer.IsRepeating = true;
         }
 
         protected override void Update(GameTime gameTime)
