@@ -68,6 +68,18 @@
 /processorParam:TextureFormat=Compressed
 /build:comicsans30.spritefont
 
+#begin debugBox.PNG
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:debugBox.PNG
+
 #begin debugModeBase.PNG
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -91,6 +103,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:debugModeRollOver.PNG
+
+#begin debugX.PNG
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:debugX.PNG
 
 #begin enemyTexture.PNG
 /importer:TextureImporter
@@ -272,7 +296,7 @@
 /processorParam:TextureFormat=Color
 /build:optionButtonRollOver.PNG
 
-#begin optionsScreenFixedAgain.PNG
+#begin optionsScreenAgain.PNG
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -282,7 +306,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:optionsScreenFixedAgain.PNG
+/build:optionsScreenAgain.PNG
 
 #begin playAgainBase.PNG
 /importer:TextureImporter

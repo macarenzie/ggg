@@ -81,12 +81,6 @@ namespace Opossum_Game
 
         private Texture2D environmentalArt;
 
-        // debug mode 
-        private Texture2D debugModeBase;
-        private Texture2D debugModeRollOver;
-        private Button debugModeButtonOff;
-        private Button debugModeButtonOn;
-
         //exit button
         private Texture2D exitBase;
         private Texture2D exitRollOver;
@@ -187,6 +181,10 @@ namespace Opossum_Game
 
         // DEBUG MODE
         private bool debug;
+        private Texture2D debugX;
+        private Texture2D debugBox;
+        private Button debugButtonTrue;
+        private Button debugButtonFalse;
 
         #endregion
 
@@ -307,30 +305,29 @@ namespace Opossum_Game
                 );
 
             //debug mode button
-            debugModeBase =
-                Content.Load<Texture2D>("debugModeBase");
-            debugModeRollOver =
-                Content.Load<Texture2D>("debugModeRollOver");
-            debugModeButtonOn = new Button(
-                debugModeBase,
+            debugBox =
+                Content.Load<Texture2D>("debugBox");
+            debugX =
+                Content.Load<Texture2D>("debugX");
+            debugButtonTrue = new Button(
+                debugBox,
                 new Rectangle(
-                    (windowWidth / 2) - (optionsButtonBase.Width / 4) - 160,
-                    (windowHeight / 2) + (optionsButtonBase.Height / 4) + 190,
-                    optionsButtonBase.Width / 2,
-                    optionsButtonBase.Height / 2
-                    ),
-                debugModeBase
+                     190,
+                     680,
+                     debugBox.Width,
+                     debugBox.Height),
+                debugBox
                 );
-            debugModeButtonOff = new Button(
-                debugModeRollOver,
+            debugButtonFalse = new Button(
+                debugBox,
                 new Rectangle(
-                    (windowWidth / 2) - (optionsButtonBase.Width / 4) - 160,
-                    (windowHeight / 2) + (optionsButtonBase.Height / 4) + 190,
-                    optionsButtonBase.Width / 2,
-                    optionsButtonBase.Height / 2
-                    ),
-                debugModeRollOver
+                     550,
+                     675,
+                     debugBox.Width,
+                     debugBox.Height),
+                debugBox
                 );
+
 
             //exit from main menu button
             exitBase =
@@ -454,7 +451,7 @@ namespace Opossum_Game
             menuScreen = Content.Load<Texture2D>("startScreen");
 
             //optionScreen
-            optionScreen = Content.Load<Texture2D>("optionsScreenFixedAgain");
+            optionScreen = Content.Load<Texture2D>("optionsScreenAgain");
 
             //winScreen
             winScreen = Content.Load<Texture2D>("winScreen");
@@ -556,20 +553,20 @@ namespace Opossum_Game
                 #region OPTIONS SCREEN ------------------------------------------------------------
                 case GameState.Options:
 
-                    // toggle debug mode
-                    if (SingleKeyPress(Keys.E, kbstate, previousKbState) && debug == false)
-                    {
-                        debug = true;
-                    }
-                    else if (SingleKeyPress(Keys.E, kbstate, previousKbState) && debug == true)
-                    {
-                        debug = false;
-                    }
-
                     // go to the credits page
                     if (SingleKeyPress(Keys.C, kbstate, previousKbState))
                     {
                         currentState = GameState.Credits;
+                    }
+
+                    //
+                    if (debugButtonTrue.MouseClick() && debugButtonTrue.MouseContains() && !debug)
+                    {
+                        debug = true;
+                    }
+                    if (debugButtonFalse.MouseClick() && debugButtonFalse.MouseContains() && debug)
+                    {
+                        debug = false;
                     }
 
                     // return to main menu
@@ -863,12 +860,33 @@ namespace Opossum_Game
                     // draw the exit button
                     xMarkButton.Draw(_spriteBatch);
 
-                    // draw text for debug mode
-                    _spriteBatch.DrawString(
-                        comicsans25,
-                        string.Format("Press 'E' for erin mode\nPress 'C' for credits"),
-                        new Vector2(90, 720),
-                        Color.LightSteelBlue);
+                    //Draw the debug buttons
+                    debugButtonTrue.Draw(_spriteBatch);
+                    debugButtonFalse.Draw(_spriteBatch);
+
+                    //Indication checkmarks
+                    if (debug)
+                    {
+                        _spriteBatch.Draw(debugX,
+                            new Rectangle(
+                                190,
+                                680,
+                                debugX.Width,
+                                debugX.Height
+                                ),
+                            Color.White);
+                    } else
+                    {
+                        _spriteBatch.Draw(debugX,
+                            new Rectangle(
+                                550,
+                                675,
+                                debugX.Width,
+                                debugX.Height
+                                ),
+                            Color.White);
+                    }
+
                     break;
                 #endregion
                 #region CREDITS SCREEN ------------------------------------------------------------
@@ -1028,15 +1046,6 @@ namespace Opossum_Game
                     #endregion
             }
 
-            // indicate that the player is in debug mode if turned on
-            if (debug)
-            {
-                _spriteBatch.DrawString(
-                    comicsans25, 
-                    String.Format("DEBUG ON"), 
-                    new Vector2(650, 10), 
-                    Color.Red);
-            }
 
             _spriteBatch.End();
 
