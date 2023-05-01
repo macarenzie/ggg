@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.CompilerServices;
 
 namespace Opossum_Game
 {
@@ -103,6 +104,11 @@ namespace Opossum_Game
         private Button playAgainButton;
         private Button exitWinButton;
 
+        // credits
+        private Texture2D creditsBase;
+        private Texture2D creditsRollOver;
+        private Button creditsButton;
+
         #endregion
 
         #region Collectibles
@@ -137,6 +143,7 @@ namespace Opossum_Game
         private Texture2D optionScreen;
         private Texture2D winScreen;
         private Texture2D loseScreen;
+        private Texture2D creditsScreen;
 
         private GameState currentState;
 
@@ -413,6 +420,8 @@ namespace Opossum_Game
                     ),
                 nextBase
                 );
+
+            // back button
             backButton = new Button(
                 backBase,
                 new Rectangle(
@@ -423,6 +432,24 @@ namespace Opossum_Game
                     ),
                 backBase
                 );
+
+            //credits button
+            creditsBase =
+                Content.Load<Texture2D>("creditsBase");
+            creditsRollOver =
+                Content.Load<Texture2D>("creditsRollOver");
+            creditsButton = new Button(
+                creditsBase,
+                new Rectangle(
+                    (windowWidth / 2) - (optionsButtonBase.Width / 4),
+                    (windowHeight / 2) + (optionsButtonBase.Height / 4) + 300,
+                    optionsButtonBase.Width / 2,
+                    optionsButtonBase.Height / 2
+                    ),
+                creditsRollOver
+                );
+               
+            
 
             #endregion
 
@@ -458,6 +485,9 @@ namespace Opossum_Game
 
             //loseScreen
             loseScreen = Content.Load<Texture2D>("gameOverScreen");
+
+            //credits screen
+            creditsScreen = Content.Load<Texture2D>("creditsScreen");
             #endregion
 
             // instruction pages
@@ -554,7 +584,7 @@ namespace Opossum_Game
                 case GameState.Options:
 
                     // go to the credits page
-                    if (SingleKeyPress(Keys.C, kbstate, previousKbState))
+                    if (creditsButton.MouseClick() && creditsButton.MouseContains())
                     {
                         currentState = GameState.Credits;
                     }
@@ -580,7 +610,7 @@ namespace Opossum_Game
                 case GameState.Credits:
                     
                     // go back to the options
-                    if (SingleKeyPress(Keys.X, kbstate, previousKbState))
+                    if (xMarkButton2.MouseClick() && xMarkButton2.MouseContains())
                     {
                         currentState = GameState.Options;
                     }
@@ -887,17 +917,17 @@ namespace Opossum_Game
                             Color.White);
                     }
 
+                    creditsButton.Draw(_spriteBatch);
+
                     break;
                 #endregion
                 #region CREDITS SCREEN ------------------------------------------------------------
                 case GameState.Credits:
 
                     // go back to the options
-                    _spriteBatch.DrawString(
-                        comicsans25,
-                        string.Format("Press 'X' to go back to the options"),
-                        new Vector2(20, 20),
-                        Color.LightSteelBlue);
+                    
+                    _spriteBatch.Draw(creditsScreen, new Rectangle(0, 0, 900, 900), Color.White);
+                    xMarkButton2.Draw(_spriteBatch);
 
                     break;
 
