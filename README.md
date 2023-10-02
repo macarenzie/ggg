@@ -1,2 +1,2 @@
-# ggg
-girls! gays! games!
+# Girls! Gays! Games!
+Also known as GGG, Girls! Gays! Games! is a group made up of members Ariel Cthwe, Hui Lin Khouw, McKenzie Lam, Julia Rissberger, and Jamie Zheng. In their first spring semester at the Rochester Institute of Technology, they were tasked to make a game using C# in the MonoGame framework. What came about was "Opposum Parenthood," a top-down stealth collection game where the player is a mother opossum weaving through obstacles and pesky humans in the quest to collect food for her children.
